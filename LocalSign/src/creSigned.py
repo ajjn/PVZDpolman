@@ -1,6 +1,7 @@
 from __future__ import print_function
 import base64, bz2
 import requests
+import re
 
 __author__ = 'r2h2'
 
@@ -29,7 +30,12 @@ def creSigRequ(data):
 
     r = requests.post('http://localhost:3495/http-security-layer-request',
                       data={'XMLRequest': sigRequ})
-    return r.text
+    # strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root
+
+
+    r1 = re.sub(r'<sl:CreateXMLSignatureResponse [^>]*>', '', r.text)
+    r2 = re.sub(r'</sl:CreateXMLSignatureResponse>', '', r1)
+    return r2
 
 
 if __name__ == '__main__':
