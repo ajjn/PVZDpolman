@@ -1,0 +1,64 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1637666 (0x18fd22)
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=AT, O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH, OU=a-sign-Premium-Sig-02, CN=a-sign-Premium-Sig-02
+        Validity
+            Not Before: Jul 10 10:24:13 2015 GMT
+            Not After : Jul 10 08:24:13 2020 GMT
+        Subject: C=AT, CN=Rainer H\xC3\xB6rbe, SN=H\xC3\xB6rbe, GN=Rainer/serialNumber=891348061310
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub: 
+                    04:8a:d3:81:84:45:f3:0c:62:75:57:d8:9d:23:74:
+                    6f:98:79:78:83:91:58:4e:a0:74:b2:9f:8a:72:f6:
+                    f0:10:58:35:6e:b8:8e:ad:e1:a3:db:35:cd:38:e8:
+                    44:cc:cf:a6:0e:58:ee:0a:fe:43:ed:09:07:94:70:
+                    a4:d4:4b:dc:dc
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                41:DC:B5:05:3F:05:AE:E2
+            X509v3 Key Usage: critical
+                Digital Signature, Non Repudiation
+            X509v3 Authority Key Identifier: 
+                keyid:4D:DF:E1:FF:4B:D9:C9:DF
+
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Authority Information Access: 
+                CA Issuers - URI:http://www.a-trust.at/certs/a-sign-Premium-Sig-02a.crt
+                OCSP - URI:http://ocsp.a-trust.at/ocsp
+
+            X509v3 Certificate Policies: 
+                Policy: 1.2.40.0.17.1.11
+                  CPS: http://www.a-trust.at/docs/cp/a-sign-Premium
+                Policy: 0.4.0.1456.1.1
+
+            qcStatements: critical
+                0.0......F..0
+..+.......
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:ldap://ldap.a-trust.at/ou=a-sign-Premium-Sig-02,o=A-Trust,c=AT?certificaterevocationlist?base?objectclass=eidCertificationAuthority
+
+    Signature Algorithm: sha1WithRSAEncryption
+         d3:c0:c5:1f:15:34:d6:58:47:9f:1f:f9:b3:f9:fe:51:ef:cb:
+         51:01:4d:2d:a4:f1:41:86:e6:2a:e4:36:cd:d8:89:04:8d:f7:
+         4d:0a:6d:30:24:10:21:31:99:bc:92:41:79:30:60:1a:0b:95:
+         bb:9e:78:ef:e0:5d:9f:1a:27:c9:42:f0:f8:69:1f:06:a4:74:
+         64:17:12:ed:e8:c4:c7:db:a3:46:74:d9:75:46:0d:01:79:13:
+         32:79:36:e5:80:00:5f:80:c3:82:6d:c2:1d:5f:39:d0:b5:54:
+         b7:ef:a8:7d:a6:20:ce:ff:87:35:23:c6:be:ed:e0:0f:7a:86:
+         a7:ab:49:d6:79:67:b3:44:95:08:83:01:13:e2:c7:16:1f:bd:
+         94:18:c2:1c:29:8f:5a:8b:1f:11:c0:af:da:f4:a6:2f:f3:e4:
+         40:6b:57:2a:17:a0:50:f9:e7:00:91:73:0e:a2:b8:c6:b4:66:
+         de:e8:f9:dd:35:d9:c1:d5:b3:61:45:98:79:48:20:9e:fc:dc:
+         93:9b:14:40:2b:46:94:52:e4:6a:20:2f:4b:87:6d:9d:2f:43:
+         b9:1b:aa:f3:69:2a:cc:7a:13:4d:26:fa:85:67:15:0a:85:41:
+         c7:83:ac:c2:83:97:78:5e:b1:85:a0:a6:ee:86:0b:e9:0f:5f:
+         3e:2d:73:09

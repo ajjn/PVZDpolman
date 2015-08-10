@@ -1,0 +1,28 @@
+# CMS aus xml extrahieren (BK-Signatur hat einen XML-Wrapper)
+xmlstarlet sel -t -v '/sl:CreateCMSSignatureResponse' x.xml > x.cms
+
+
+# CMS ist vom Tooling nicht so gut unterstützt wie XMLDSig (ASN.1 dump etc.)
+# Daher besser mit XMLDSig weitermachen. 
+# SAML-EDs werden als base64-codierte strings signiert. Das ist einfach und es gibt keine partiellen Signaturen.
+
+# Bei der Signaturprüfung des SAML-ED ist zu prüfen:
+# 1. Ist es eine gültige BK-Signatur?
+# 2. Ist der Public Key des Signators in der Liste der Portaladministratoren
+# 3. Sind die Domainnamen der Endpoint-URLs für die Organisation der Portaladministrators erlaubt?
+
+
+## XML-signatur mit der Bürgerkarte von der Command Line erzeugen
+## (Enveloping Signature, zu SignedContent ist komprimiert und base64 codiert, MIME-Type=text/plain)
+creSigRequ.sh
+
+## Extraktion des SignedContent aus der enveloping Signature:
+xmlstarlet sel -t -c '//dsig:Object[1]/text()' idp5_valid.xml_sig.xml |base64 --decode | bzcat > idp5_valid.xml.orig
+
+# Anmerkung: base64 -d entsprich unter OS X base64 -D -> --decode verwendent!
+
+## Public Key aus einer BK XML-Signatur extrahieren
+openssl x509 -pubkey -in rhoerbe_ecard_qcert_cer.pem -noout | grep -v '^---'
+
+
+

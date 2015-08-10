@@ -1,0 +1,9 @@
+      </sl:XMLContent>
+    </sl:DataObject>
+    <sl:TransformsInfo>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>text/plain</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+</sl:CreateXMLSignatureRequest> 

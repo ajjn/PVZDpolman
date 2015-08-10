@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest 
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="enveloping">
+    <sl:DataObject>
+      <sl:XMLContent>
