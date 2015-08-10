@@ -92,6 +92,24 @@ class Test04_broken_input_for_validation(unittest.TestCase):
                 adminman.run_me(cliClient)
 
 
+class Test05_sigver(unittest.TestCase):
+    def runTest(self):
+        print('== Test 05: test calling signature verification (java class)')
+        # OSX: pyjnius requires dyblib setting, e.g.:
+        # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(/usr/libexec/java_home)/jre/lib/server
+        from jnius import autoclass
+
+        # set classpath to include MOA-SS
+        PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.PvzdVerfiySig');
+        verifier = PvzdVerfiySig(
+            "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
+            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
+            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
+
+        response  = verifier.verify();
+        self.assertEqual(response.pvzdCode, 'OK')
+
+
 class Test_end(unittest.TestCase):
     def runTest(self):
         print('== Tests completed')
