@@ -17,9 +17,9 @@ public class verfiySigTest {
                 "conf/log4j.properties",
                 "testdata/idp5_valid.xml_sig.xml");
         PvzdVerifySigResponse response  = verifier.verify();
-        assertEquals("Expected OK for messageID", response.pvzdCode, "OK");
+        assertEquals("Expected OK for messageID", "OK", response.pvzdCode);
         String cert_b64 = new String(Files.readAllBytes(Paths.get("testdata/r2h2_ecard_qcert.b64")));
-        assertEquals("Certificate mismatch", response.signerCertificateEncoded, cert_b64);
+        assertEquals("Certificate mismatch", cert_b64, response.signerCertificateEncoded);
     }
 
     @Test
@@ -29,6 +29,6 @@ public class verfiySigTest {
                 "conf/log4j.properties",
                 "testdata/idp5_invalid.xml_sig.xml");
         PvzdVerifySigResponse response  = verifier.verify();
-        assertEquals("Expected NOK for messageID", response.pvzdCode, "NOK");
+        assertEquals("Expected NOK for messageID", "NOK", response.pvzdCode);
     }
 }
