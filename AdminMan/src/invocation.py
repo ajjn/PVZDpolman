@@ -11,7 +11,9 @@ class CLIInvocation(AbstractInvocation):
         self._parser = argparse.ArgumentParser(description='Manage admin privileges')
         self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='AODS file')
         self._parser.add_argument('-d', '--debug', dest='debug', action="store_true")
+        self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json', help='file containing json-array of PEM-formatted certificates trusted to sign the aods')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
+        self._parser.add_argument('-x', '--xmlsign', action="store_true", help='sign using citizen card)')
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
         # create the parser for the "create" command
         self._parser_create = _subparsers.add_parser('create', help='create an AODS')

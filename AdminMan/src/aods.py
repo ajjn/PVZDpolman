@@ -2,23 +2,50 @@ from __future__ import print_function
 import base64, datetime, hashlib, os, sys
 from aodsStruct import *
 from userExceptions import *
+from creSignedXML import creSignedXML
+from jnius import autoclass
+import xml.etree.ElementTree as ET
 __author__ = 'r2h2'
 
 
 class AODSFileHandler():
     def __init__(self, cliClient):
         self._aodsFile = cliClient.args.aods
+        if cliClient.args.xmlsign and self._aodsFile[-4:] != '.xml':
+            self._aodsFile += '.xml'
+        if not cliClient.args.xmlsign and self._aodsFile[-5:] != '.json':
+            self._aodsFile += '.json'
+        self.trustCertsFile = os.path.abspath(cliClient.args.trustedcerts)
 
-    def create(self, s):
+    def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
-            print('Must remove existing %1 before creating a new AODS')
+            print('Must remove existing %s before creating a new AODS' % self._aodsFile)
             sys.exit(1)
-        _f = open(self._aodsFile, 'w')
-        _f.write(json.dumps(s))
+        f = open(self._aodsFile, 'w')
+        if xmlsign:
+            f.write(creSignedXML(json.dumps(s)))
+        else:
+            f.write(json.dumps(s))
 
     def readFile(self):
-        _f = open(self._aodsFile, 'r')
-        return json.loads(_f.read())
+        if self._aodsFile[-4:] == '.xml':
+            PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.PvzdVerfiySig');
+            verifier = PvzdVerfiySig(
+                "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
+                "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
+                "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
+            response  = verifier.verify()
+            assert 'OK' == response.pvzdCode
+                   #, "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
+            trustCerts = json.loads(open(self.trustCertsFile).read())
+            assert response.signerCertificateEncoded in trustCerts #,                   "Signature certificate not in trusted list. Signature cert is\n" + response.signerCertificateEncoded
+            tree = ET.parse(self.trustCerts)
+            sigval = tree.find('{http://www.w3.org/2000/09/xmldsig#}SignatureValue').text
+            assert len(sigval) > 0, "AODS contained in XML signature value is empty"
+            return sigval
+        else:  # must be json
+            f = open(self._aodsFile, 'r')
+            return json.loads(f.read())
 
     def removeFile(self):
         ''' remove file but ignore if it does not exist '''
@@ -28,10 +55,13 @@ class AODSFileHandler():
             if e.errno != 2:
                 raise e
 
-    def save(self, s):
-        _f = open(self._aodsFile, 'w')
-        _f.truncate()
-        _f.write(json.dumps(s))
+    def save(self, s, xmlsign):
+        f = open(self._aodsFile, 'w')
+        f.truncate()
+        if xmlsign:
+            f.write(creSignedXML(json.dumps(s)))
+        else:
+            f.write(json.dumps(s))
 
 
 class WrapStruct():
@@ -48,8 +78,7 @@ class WrapStruct():
 
     def validateWrap(self, prevHash):
         ''' validate hash chain
-        :param lastHash: hash value of previous record in aods
-        :param verbose: boolean
+        :param prevHash: hash value of previous record in aods
         :return: True if valid
         '''
         wrapStruct = [self.hash, self.seq, self.deleteflag, self.record]
@@ -78,7 +107,7 @@ class AODS():
         self._lastHash = None
         self._prevHash = None
 
-    def aods_append(self, aodsHandler, inputfile):
+    def aods_append(self, aodsHandler, inputfile, trustedcerts, xmlsign=False):
         try:
             inputdataJSON = inputfile.read()
         except (OSError, IOError) as e:
@@ -90,18 +119,18 @@ class AODS():
             raise JSONdecodeError
         appendData = AppendRecord(inputDataRaw)
         if self._verbose: print("input: rectype=%s pk=%s" % (appendData.rectype, appendData.primarykey))
-        directory = self.aods_read(aodsHandler) # does validation as well
+        directory = self.aods_read(aodsHandler, trustedcerts) # does validation as well
         appendData.validate(directory)
         aods = aodsHandler.readFile()
         lastHash = aods['AODS'][self._lastSeq][0]
         aods['AODS'].append(appendData.makeWrap(self._lastSeq + 1, lastHash, self._verbose))
-        aodsHandler.save(aods)
+        aodsHandler.save(aods, xmlsign)
 
-    def aods_create(self, aodsHandlder):
+    def aods_create(self, aodsHandlder, xmlsign=False):
         initRecord = InitRecord()
-        aodsHandlder.create({"AODS": [initRecord.creatInitRec()]})
+        aodsHandlder.create({"AODS": [initRecord.creatInitRec()]}, xmlsign)
 
-    def aods_read(self, aodsHandlder, jsondump=False, output=None):
+    def aods_read(self, aodsHandlder, trustedcerts, jsondump=False, output=None):
         '''   read aods from input file and transform into directory structure '''
         aods = aodsHandlder.readFile()
         assert aods['AODS'][0][3][0] == 'header', 'Cannot locate aods header record'

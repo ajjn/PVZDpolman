@@ -6,7 +6,7 @@ import re
 __author__ = 'r2h2'
 
 
-def creSigRequ(data):
+def creSignedXML(data):
     ''' compress, b64-encode and sign-envelop the data and return it '''
 
     dataPacked = base64.b64encode(bz2.compress(data))

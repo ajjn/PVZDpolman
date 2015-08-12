@@ -5,6 +5,7 @@ from invocation import CLIInvocation
 from userExceptions import *
 import adminman
 __author__ = 'r2h2'
+''' all tests not requiring citizen card signature '''
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 
@@ -13,7 +14,7 @@ class Test00_cli(unittest.TestCase):
     def runTest(self):
         print('testing CLI interface for create subcommand .. ', end='')
         try:
-            cliClient = CLIInvocation(['-d', '-a', 'aods.json', 'create', ]);
+            cliClient = CLIInvocation(['-d', '-x', '-a', 'aods.json', 'create', ]);
             self.assertEqual(cliClient.args.subcommand, 'create')
             self.assertEqual(cliClient.args.aods, 'aods.json')
         except SystemExit:
@@ -107,7 +108,7 @@ class Test05_sigver(unittest.TestCase):
             "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
 
         response  = verifier.verify();
-        self.assertEqual(response.pvzdCode, 'OK')
+        self.assertEqual('OK', response.pvzdCode)
 
 
 class Test_end(unittest.TestCase):
