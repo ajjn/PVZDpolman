@@ -35,7 +35,7 @@ class Record():
             if not isinstance(self.attr[2], basestring): raise InputFormatError('role (3rd attribute of user privilege record) must be of type string')
             if not self.attr[2] in ('admin', 'verifier', 'manager'): raise InputFormatError('role (3rd attribute of user privilege record) must be of type string')
             if len(self.attr) == 4 and not isinstance(self.attr[3], basestring): raise InputFormatError("role must be one of 'admin', 'verifier', 'manager'")
-            if self.attr[0] not in dir['organization']: raise InputValueError('adding user privilege record referencing non-existing organization, orgid = %s' % self.attr[0])
+            if self.attr[0] not in dir['organization']: raise InputValueError('adding user privilege record referencing non-existing organization, pk=%s, orgid=%s' % (self.primarykey, self.attr[0]))
 
     def __str__(self):
         return self.rectype + ' ' + self.primarykey
@@ -45,6 +45,8 @@ class AppendRecord():
     ''' Handle a record to be appended '''
 
     def __init__(self, appendData):
+        assert isinstance(appendData, dict), 'input record to be appended must be of type dict'
+        assert 'record' in appendData, 'input record dict must have the key "record"'
         self.rec = Record(appendData['record'])
         self.deleteflag = appendData['delete']
         assert isinstance(self.deleteflag, bool)

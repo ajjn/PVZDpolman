@@ -24,5 +24,6 @@ xmlstarlet sel -t -c '//dsig:Object[1]/text()' idp5_valid.xml_sig.xml |base64 --
 ## Public Key aus einer BK XML-Signatur extrahieren
 openssl x509 -pubkey -in rhoerbe_ecard_qcert_cer.pem -noout | grep -v '^---'
 
-
+## Signature aus CreateSignatureRequest extrahieren:
+# geht nicht mit etree, weil die Namespace Prefixes verändert werden. RegExp sind OK.
 

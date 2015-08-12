@@ -1,16 +1,18 @@
 from __future__ import print_function
-import base64, datetime, hashlib, os, sys
+import base64, bz2, datetime, os, sys
+from jnius import autoclass
+import xml.etree.ElementTree as ET
 from aodsStruct import *
 from userExceptions import *
 from creSignedXML import creSignedXML
-from jnius import autoclass
-import xml.etree.ElementTree as ET
 __author__ = 'r2h2'
 
 
 class AODSFileHandler():
     def __init__(self, cliClient):
         self._aodsFile = cliClient.args.aods
+        self.verbose = cliClient.args.verbose
+
         if cliClient.args.xmlsign and self._aodsFile[-4:] != '.xml':
             self._aodsFile += '.xml'
         if not cliClient.args.xmlsign and self._aodsFile[-5:] != '.json':
@@ -23,26 +25,33 @@ class AODSFileHandler():
             sys.exit(1)
         f = open(self._aodsFile, 'w')
         if xmlsign:
-            f.write(creSignedXML(json.dumps(s)))
+            j = json.dumps(s)
+            x = creSignedXML(j, self.verbose)
+            f.write(x.encode("utf-8"))
         else:
             f.write(json.dumps(s))
 
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
+            # verify xmldsig and extract content
             PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.PvzdVerfiySig');
             verifier = PvzdVerfiySig(
-                "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
-                "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
-                "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
+                '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',
+                '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
+                self._aodsFile)
             response  = verifier.verify()
-            assert 'OK' == response.pvzdCode
-                   #, "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
+            assert 'OK' == response.pvzdCode, \
+                "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
+            assert os.path.isfile(self.trustCertsFile), \
+                'Trust certs file not found: %s' % self.trustCertsFile
             trustCerts = json.loads(open(self.trustCertsFile).read())
-            assert response.signerCertificateEncoded in trustCerts #,                   "Signature certificate not in trusted list. Signature cert is\n" + response.signerCertificateEncoded
-            tree = ET.parse(self.trustCerts)
-            sigval = tree.find('{http://www.w3.org/2000/09/xmldsig#}SignatureValue').text
-            assert len(sigval) > 0, "AODS contained in XML signature value is empty"
-            return sigval
+            assert response.signerCertificateEncoded in trustCerts, \
+                "Signature certificate not in trusted list. Signature cert is\n" + response.signerCertificateEncoded
+            tree = ET.parse(self._aodsFile)
+            content =  tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
+            assert len(content) > 0, 'AODS contained in XML signature value is empty'
+            if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
+            return json.loads(bz2.decompress(base64.b64decode(content)))
         else:  # must be json
             f = open(self._aodsFile, 'r')
             return json.loads(f.read())
@@ -107,35 +116,46 @@ class AODS():
         self._lastHash = None
         self._prevHash = None
 
-    def aods_append(self, aodsHandler, inputfile, trustedcerts, xmlsign=False):
+    def aods_append(self, aodsHandler, inputfile, trustedcerts=None, xmlsign=False):
+        '''
+        :param aodsHandler:
+        :param inputfile: arrray of records.
+        :param trustedcerts: need to verify the existing AODS
+        :param xmlsign: indicate whether new file will be signed
+        '''
         try:
             inputdataJSON = inputfile.read()
         except (OSError, IOError) as e:
             print('could not read inputfile, because: %s' %(repr(e)))
             sys.exit(1)
         try:
-            inputDataRaw = json.loads(inputdataJSON)
+            appendList = json.loads(inputdataJSON)
         except Exception, e:
+            print("reading from " + inputfile.name)
             raise JSONdecodeError
-        appendData = AppendRecord(inputDataRaw)
-        if self._verbose: print("input: rectype=%s pk=%s" % (appendData.rectype, appendData.primarykey))
-        directory = self.aods_read(aodsHandler, trustedcerts) # does validation as well
-        appendData.validate(directory)
-        aods = aodsHandler.readFile()
-        lastHash = aods['AODS'][self._lastSeq][0]
-        aods['AODS'].append(appendData.makeWrap(self._lastSeq + 1, lastHash, self._verbose))
-        aodsHandler.save(aods, xmlsign)
+        self.aods = aodsHandler.readFile() # does validation as well
+        for inputDataRaw in appendList:
+            appendData = AppendRecord(inputDataRaw)
+            if self._verbose: print("input: rectype=%s pk=%s" % (appendData.rec.rectype, appendData.rec.primarykey))
+            directory = self.aods_read(None)
+            appendData.validate(directory)
+            lastHash = self.aods['AODS'][self._lastSeq][0]
+            self.aods['AODS'].append(appendData.makeWrap(self._lastSeq + 1, lastHash, self._verbose))
+        aodsHandler.save(self.aods, xmlsign)
 
     def aods_create(self, aodsHandlder, xmlsign=False):
         initRecord = InitRecord()
         aodsHandlder.create({"AODS": [initRecord.creatInitRec()]}, xmlsign)
 
-    def aods_read(self, aodsHandlder, trustedcerts, jsondump=False, output=None):
-        '''   read aods from input file and transform into directory structure '''
-        aods = aodsHandlder.readFile()
-        assert aods['AODS'][0][3][0] == 'header', 'Cannot locate aods header record'
+    def aods_read(self, aodsHandlder, trustedcerts=None, jsondump=False, output=None):
+        '''   read aods from input file and transform into directory structure
+              if no aodsHandler is given, then the aods is already loaded  (used to refresh the dictionary)
+        '''
+        if not hasattr(self, 'aods'):
+            self.aods = aodsHandlder.readFile()
+        assert self.aods['AODS'][0][3][0] == 'header', 'Cannot locate aods header record'
         directory = {"domain": {}, "organization": {}, "userprivilege": {}}
-        for w in aods['AODS']:
+        for w in self.aods['AODS']:
             wrap = WrapStruct(w)
             rec = Record(wrap.record)
             self._prevHash = self._lastHash

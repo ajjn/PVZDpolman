@@ -5,10 +5,11 @@ import requests
 __author__ = 'r2h2'
 
 
-def creSigRequ(data):
+def creSigRequ(data, verbose=False):
     ''' compress, b64-encode and sign-envelop the data and return it '''
 
     dataPacked = base64.b64encode(bz2.compress(data))
+    if verbose: print('\n%s\n' % dataPacked)
 
     sigRequ = '''\
 <?xml version="1.0" encoding="UTF-8"?>

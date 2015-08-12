@@ -36,12 +36,11 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         adminman.run_me(cliClient)
         print('OK.')
 
-        for i in range(1, 10):
-            inputfile = cwd + '/testdata/a%d.json' % i
-            print('appending input file %s .. ' % inputfile, end='')
-            cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
-            adminman.run_me(cliClient)
-            print('OK.')
+        inputfile = cwd + '/testdata/a1.json'
+        print('appending input file %s .. ' % inputfile, end='')
+        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
+        adminman.run_me(cliClient)
+        print('OK.')
 
         print('reading aods file, writing directory .. ', end='')
         cliClient = CLIInvocation(['-d', '-a', aodsfile, 'read', \
@@ -69,10 +68,10 @@ class Test02_broken_hash_chain(unittest.TestCase):
 
 class Test03_broken_input_for_append(unittest.TestCase):
     def runTest(self):
-        print('== Test 03: handle broken input for append')
+        print('== Test 03: handle broken json input for append')
         aodsfile = cwd + '/work/aods_01.json'
         inputfile = cwd + '/testdata/test03_a1_broken.json'
-        print('appending broken input file %s .. ' % inputfile, end='')
+        print('appending broken input file %s .. ' % inputfile)
         sys.stdout.flush()
         cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
         with self.assertRaises(JSONdecodeError) as context:
@@ -89,7 +88,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
             print('appending invalid input file ' + inputfile)
             sys.stdout.flush()
             cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
-            with self.assertRaises(InputFormatOrValueError) as context:
+            with self.assertRaises(AssertionError) as context:
                 adminman.run_me(cliClient)
 
 
