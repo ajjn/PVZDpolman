@@ -1,9 +1,9 @@
 from __future__ import print_function
 import difflib, os, sys
 import unittest
-from invocation import CLIInvocation
+from invocation import CliPmpInvocation
 from userExceptions import *
-import adminman
+import PMP
 __author__ = 'r2h2'
 ''' all tests not requiring citizen card signature '''
 
@@ -14,7 +14,7 @@ class Test00_cli(unittest.TestCase):
     def runTest(self):
         print('testing CLI interface for create subcommand .. ', end='')
         try:
-            cliClient = CLIInvocation(['-d', '-x', '-a', 'aods.json', 'create', ]);
+            cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ]);
             self.assertEqual(cliClient.args.subcommand, 'create')
             self.assertEqual(cliClient.args.aods, 'aods.json')
         except SystemExit:
@@ -27,25 +27,25 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         print('== Test 01: happy cycle: create, append, read, verify')
         aodsfile = cwd + '/work/aods_01.json'
         print('removing existing aods file .. ', end='')
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'scratch']);
-        adminman.run_me(cliClient)
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch']);
+        PMP.run_me(cliClient)
         print('OK.')
 
         print('creating aods file .. ', end='')
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'create']);
-        adminman.run_me(cliClient)
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'create']);
+        PMP.run_me(cliClient)
         print('OK.')
 
         inputfile = cwd + '/testdata/a1.json'
         print('appending input file %s .. ' % inputfile, end='')
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
-        adminman.run_me(cliClient)
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        PMP.run_me(cliClient)
         print('OK.')
 
         print('reading aods file, writing directory .. ', end='')
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'read', \
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', \
                                    '--jsondump', cwd + '/work/dir_01.json']);
-        adminman.run_me(cliClient)
+        PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
         diff = difflib.ndiff(open(cwd + '/work/dir_01.json').readlines(),
@@ -60,9 +60,9 @@ class Test02_broken_hash_chain(unittest.TestCase):
         aodsfile = cwd + '/testdata/aods_02.json'
         print('reading aods file with broken hash chain .. ', end='')
         sys.stdout.flush()
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'read']);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read']);
         with self.assertRaises(HashChainError) as context:
-            adminman.run_me(cliClient)
+            PMP.run_me(cliClient)
         print('OK.')
 
 
@@ -73,9 +73,9 @@ class Test03_broken_input_for_append(unittest.TestCase):
         inputfile = cwd + '/testdata/test03_a1_broken.json'
         print('appending broken input file %s .. ' % inputfile)
         sys.stdout.flush()
-        cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
         with self.assertRaises(JSONdecodeError) as context:
-            adminman.run_me(cliClient)
+            PMP.run_me(cliClient)
         print('OK.')
 
 
@@ -83,13 +83,12 @@ class Test04_broken_input_for_validation(unittest.TestCase):
     def runTest(self):
         print('== Test 04: handle broken input for append/validation')
         aodsfile = cwd + '/work/aods_01.json'
-        for i in range(1, 6):
-            inputfile = cwd + '/testdata/test04_a0%s.json' % i
-            print('appending invalid input file ' + inputfile)
-            sys.stdout.flush()
-            cliClient = CLIInvocation(['-d', '-a', aodsfile, 'append', inputfile]);
-            with self.assertRaises(AssertionError) as context:
-                adminman.run_me(cliClient)
+        inputfile = cwd + '/testdata/test04_a01.json'
+        print('appending invalid input file ' + inputfile)
+        sys.stdout.flush()
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        with self.assertRaises(AssertionError) as context:
+            PMP.run_me(cliClient)
 
 
 class Test05_sigver(unittest.TestCase):
@@ -107,8 +106,8 @@ class Test05_sigver(unittest.TestCase):
             "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
 
         response  = verifier.verify();
-        self.assertEqual('OK', response.pvzdCode)
-
+        if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)
+        self.assertEqual('OK', response.pvzdCode, msg=response.pvzdMessage)
 
 class Test_end(unittest.TestCase):
     def runTest(self):

@@ -3,14 +3,15 @@ __author__ = 'r2h2'
 
 
 class AbstractInvocation():
+    ''' Allow invocations from CLI/test runner, GUI '''
     pass
 
 
-class CLIInvocation(AbstractInvocation):
+class CliPmpInvocation(AbstractInvocation):
+    ''' define CLI invocation for PMP. Test runner can use this by passing testargs '''
     def __init__(self, testargs=None):
-        self._parser = argparse.ArgumentParser(description='Manage admin privileges')
+        self._parser = argparse.ArgumentParser(description='Policy Management Point')
         self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='AODS file')
-        self._parser.add_argument('-d', '--debug', dest='debug', action="store_true")
         self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json', help='file containing json-array of PEM-formatted certificates trusted to sign the aods')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         self._parser.add_argument('-x', '--xmlsign', action="store_true", help='sign using citizen card)')
@@ -37,9 +38,23 @@ class CLIInvocation(AbstractInvocation):
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
 
-        if self.args.debug:
-            pass
-        elif self.args.verbose:
-            sys.tracebacklimit = 1
+        if not self.args.verbose:
+            sys.tracebacklimit = 2
+
+
+class CliPepInvocation(AbstractInvocation):
+    ''' define CLI invocation for PEP. Test runner can use this by passing testargs '''
+    def __init__(self, testargs=None):
+        self._parser = argparse.ArgumentParser(description='Policy Enforement Point')
+        self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='AODS file')
+        self._parser.add_argument('-r', '--pubrequ', dest='pubrequ', default='pub_requests', help='root path of git repo containing the publication request')
+        self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json', help='file containing json-array of PEM-formatted certificates trusted to sign the aods')
+        self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
+
+        if (testargs):
+            self.args = self._parser.parse_args(testargs)
         else:
-            sys.tracebacklimit = 0
+            self.args = self._parser.parse_args()  # regular case: use sys.argv
+
+        if not self.args.verbose:
+            sys.tracebacklimit = 2
