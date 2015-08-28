@@ -7,7 +7,7 @@
       </configuration>
     </facet>
     <facet type="Python" name="Python">
-      <configuration sdkName="" />
+      <configuration sdkName="Python 2.7.10 virtualenv at ~/.virtualenvs/pvzd" />
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -19,5 +19,6 @@
     <orderEntry type="module" module-name="VerifySigAPI" />
     <orderEntry type="jdk" jdkName="Python 3.4.3 virtualenv at ~/.virtualenvs/pvzd34" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Python 2.7.10 virtualenv at ~/.virtualenvs/pvzd interpreter library" level="application" />
   </component>
 </module>

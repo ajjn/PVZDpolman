@@ -34,7 +34,7 @@ class AODSFileHandler():
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
             # verify xmldsig and extract content
-            PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.PvzdVerfiySig');
+            PvzdVerfiySig = autoclass('PvzdVerifySig')
             verifier = PvzdVerfiySig(
                 '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',
                 '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
@@ -51,7 +51,8 @@ class AODSFileHandler():
             content =  tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
             assert len(content) > 0, 'AODS contained in XML signature value is empty'
             if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
-            return json.loads(bz2.decompress(base64.b64decode(content)))
+            j = bz2.decompress(base64.b64decode(content.encode('UTF-8')))
+            return json.loads(j.decode('UTF-8'))
         else:  # must be json
             f = open(self._aodsFile, 'r')
             return json.loads(f.read())
@@ -60,7 +61,7 @@ class AODSFileHandler():
         ''' remove file but ignore if it does not exist '''
         try:
             os.remove(self._aodsFile)
-        except OSError, e:
+        except OSError as e:
             if e.errno != 2:
                 raise e
 
