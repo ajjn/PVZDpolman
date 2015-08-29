@@ -16,7 +16,7 @@ class RecordWrapper():
             self.seq = rawStruct[1]
             self.deleteflag = rawStruct[2]
             self.record = rawStruct[3]
-        except Exception, e:
+        except Exception as e:
             print(str(self), file=sys.stderr)
             raise e
 
@@ -59,7 +59,7 @@ class AodsList():
             sys.exit(1)
         try:
             appendList = json.loads(inputdataJSON)
-        except Exception, e:
+        except Exception as e:
             print("reading from " + inputfile.name)
             raise JSONdecodeError
         self.aods = aodsHandler.readFile() # does validation as well
@@ -103,7 +103,7 @@ class AodsList():
             else:
                 try:
                     policyDict[rec.rectype].update({rec.primarykey: rec.attr})
-                except KeyError, e:
+                except KeyError as e:
                     print(str(wrap) + ' ' + str(rec), file=sys.stderr)
                     raise e
         if jsondump:

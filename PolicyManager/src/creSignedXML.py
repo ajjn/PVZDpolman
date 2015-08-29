@@ -32,7 +32,7 @@ def creSignedXML(data, verbose=False):
     try:
         r = requests.post('http://localhost:3495/http-security-layer-request',
                           data={'XMLRequest': sigRequ})
-    except requests.exceptions.ConnectionError, e:
+    except requests.exceptions.ConnectionError as e:
         print("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
         raise
     assert r.text.find('sl:ErrorResponse') < 0, "Security Layer responed with error message."

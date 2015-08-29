@@ -96,9 +96,9 @@ class Test05_sigver(unittest.TestCase):
         print('== Test 05: test calling signature verification (java class)')
         # OSX: pyjnius requires dyblib setting, e.g.:
         # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(/usr/libexec/java_home)/jre/lib/server
-        print('CLASSPATH=' + os.environ['CLASSPATH'])
-        print('PYTHONPATH=' + os.environ['PYTHONPATH'])
-        print('DYLD_LIBRARY_PATH=' + os.environ['DYLD_LIBRARY_PATH'] + '\n')
+        #print('CLASSPATH=' + os.environ['CLASSPATH'])
+        #print('PYTHONPATH=' + os.environ['PYTHONPATH'])
+        #print('DYLD_LIBRARY_PATH=' + os.environ['DYLD_LIBRARY_PATH'] + '\n')
         from jnius import autoclass
 
         # set classpath to include MOA-SS

@@ -27,3 +27,22 @@ openssl x509 -pubkey -in rhoerbe_ecard_qcert_cer.pem -noout | grep -v '^---'
 ## Signature aus CreateSignatureRequest extrahieren:
 # geht nicht mit etree, weil die Namespace Prefixes verändert werden. RegExp sind OK.
 
+## Python - Java Integration
+# Unter OSX muss man vor dem "import jnius" noch den DYLD_LIBRARY_PATH setzen, z.B.:
+export DYLD_LIBRARY_PATH=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/server
+
+Problem: jnius geht nicht mehr seit ca. 16.8.; Version vom 15.8. ist OK -> Rollback, Ursache suchen
+PvzdVerfiySig = autoclass('PvzdVerifySig');
+JavaException: Class not found 'PvzdVerifySig'
+- Refactoring in spearates package verifysigapi
+- Problem ist unabhängig von Python 2.7 und 3.4
+- CLASSPATH ist in beiden Configs äquivalent
+- Problem war fehlende make-Abhängigkeit zwischen den Modulen, nach refactoring fehlten die .class files
+
+junit test PvzdVerifySigTest geht nicht mehr - returns code 2203. 
+Die Signaturpruefung hat folgenden Fehler geliefert:
+Fehlercode: 2203
+Fehlernachricht: TrustProfileID unbekannt: MOAIDBuergerkarteAuthentisierungsDaten
+Was ist das? -> Doku moa-sp nachsehen wenn wieder on-line - möglicherweise weil test off-line ist
+
+Umstellung auf python3.4 unvollständig, weiter mit 2.7 (str/bytes, str does not support buffer interface)

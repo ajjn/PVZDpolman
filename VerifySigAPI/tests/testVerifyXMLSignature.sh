@@ -20,7 +20,7 @@ export CLASSPATH="/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Hom
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:\
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:\
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/ext/zipfs.jar:\
-/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/bin:\
+/Users/admin/devl/java/rhoerbe/PVZD/bin/test/VerifySigAPI:\
 /Users/admin/devl/java/rhoerbe/PVZD/lib/moa-spss-lib-2.0.3/moa-spss.jar:\
 /Users/admin/devl/java/rhoerbe/PVZD/lib/moa-spss-lib-2.0.3/moa-common.jar:\
 /Users/admin/devl/java/rhoerbe/PVZD/lib/moa-spss-lib-2.0.3/lib/mail-1.4.7.jar:\
@@ -66,7 +66,7 @@ export CLASSPATH="/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Hom
 /Users/admin/devl/java/rhoerbe/PVZD/lib/moa-spss-lib-2.0.3/ext/iaik_Pkcs11Wrapper.jar:\
 /Users/admin/devl/java/rhoerbe/PVZD/lib/moa-spss-lib-2.0.3/ext/iaik_Pkcs11Provider.jar"
 
-java at.wien.ma14.pvzd.VerifyXMLSignature \
-    /opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml \
-    /Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties \
+java at.wien.ma14.pvzd.verifysigapitest.VerifyXMLSignature \
+    /Users/admin/devl/java/rhoerbe/PVZD/bin/production/VerifySigAPI/MOASPSSConfiguration.xml \
+    /Users/admin/devl/java/rhoerbe/PVZD/bin/production/VerifySigAPI/log4j.properties \
     /Users/admin/devl/java/rhoerbe/PVP_md_tools/testdata/idp5_valid.xml_sig.xml
