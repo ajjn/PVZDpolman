@@ -1,5 +1,6 @@
 from __future__ import print_function
-from aodsFileHandler import *
+import sys
+#from aodsFileHandler import *
 from aodsRecord import *
 from userExceptions import *
 __author__ = 'r2h2'
@@ -25,10 +26,11 @@ class RecordWrapper():
         :param prevHash: hash value of previous record in aods
         :return: True if valid
         '''
+        assert isinstance(prevHash, str) # TODO enable in py34
         wrapStruct = [self.hash, self.seq, self.deleteflag, self.record]
         digestInput = prevHash + json.dumps(wrapStruct[1:], separators=(',', ':'))
-        digest = base64.b64encode(hashlib.sha256(digestInput.encode('UTF-8')).digest())
-        return (digest == self.hash)
+        digest_bytes = base64.b64encode(hashlib.sha256(digestInput.encode('ascii')).digest())
+        return (digest_bytes.decode('ascii') == self.hash)
 
     def __str__(self):
         return str(self.seq) + ' ' + self.hash
@@ -59,22 +61,30 @@ class AodsList():
             sys.exit(1)
         try:
             appendList = json.loads(inputdataJSON)
-        except Exception as e:
+        except Exception:
             print("reading from " + inputfile.name)
             raise JSONdecodeError
         self.aods = aodsHandler.readFile() # does validation as well
+        inputRecSeq = 0
         for inputDataRaw in appendList:
             appendData = InputRecord(inputDataRaw)
-            if self._verbose: print("input: rectype=%s pk=%s" % (appendData.rec.rectype, appendData.rec.primarykey))
+            inputRecSeq += 1
+            if self._verbose: print("aods_append: %d rectype=%s pk=%s" % (inputRecSeq, appendData.rec.rectype, appendData.rec.primarykey))
             policyDict = self.aods_read(None)
             appendData.validate(policyDict)
             lastHash = self.aods['AODS'][self._lastSeq][0]
+            if self._verbose: print("aods_append %d lastHash: " % inputRecSeq + lastHash)
             self.aods['AODS'].append(appendData.makeWrap(self._lastSeq + 1, lastHash, self._verbose))
         aodsHandler.save(self.aods, xmlsign)
 
     def aods_create(self, aodsHandlder, xmlsign=False):
-        initRecord = InitRecord()
-        aodsHandlder.create({"AODS": [initRecord.creatInitRec()]}, xmlsign)
+        inputDataRaw = {"record": ["header", "", "columns: hash, seq, delete, [rectype, pk, a1, a2, ..]]" ], "delete": False}
+        headerData = InputRecord(inputDataRaw)
+        seedRaw = str(datetime.datetime.now())
+        seedRaw = "fixed val" # TODO Test only
+        seedVal_bytes = base64.b64encode(hashlib.sha256(seedRaw.encode('ascii')).digest())
+        if self._verbose: print("aods_create: 0 seedVal: " + seedVal_bytes.decode('ascii'))
+        aodsHandlder.create({"AODS": [headerData.makeWrap(0, seedVal_bytes.decode('ascii'), self._verbose)]}, xmlsign)
 
     def aods_read(self, aodsHandlder, trustedcerts=None, jsondump=False, output=None):
         '''   read aods from input file and transform into policyDict structure
@@ -86,7 +96,7 @@ class AodsList():
         policyDict = {"domain": {}, "organization": {}, "userprivilege": {}}
         for w in self.aods['AODS']:
             wrap = RecordWrapper(w)
-            rec = Record(wrap.record)
+            rec = ContentRecord(wrap.record)
             self._prevHash = self._lastHash
             self._lastHash = wrap.hash
             self._lastSeq = wrap.seq

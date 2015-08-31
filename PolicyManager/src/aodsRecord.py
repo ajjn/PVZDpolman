@@ -6,14 +6,14 @@ __author__ = 'r2h2'
 
 ''' Classes in this source file encapsulate the structure of record types '''
 
-class Record():
+class ContentRecord():
     ''' Handle a single content record, agnostic of the record type: create an object and access the attributes '''
     recordTypes = ["domain", "organization", "userprivilege", "header"]
 
     def __init__(self, rawRec):
         self.raw = rawRec
         self.rectype = rawRec[0]
-        if self.rectype not in Record.recordTypes: raise InputValueError('invalid record type: %s' % self.rectype)
+        if self.rectype not in ContentRecord.recordTypes: raise InputValueError('invalid record type: %s' % self.rectype)
         self.primarykey = rawRec[1]
         self.attr = rawRec[2:]
 
@@ -41,11 +41,12 @@ class Record():
         return self.rectype + ' ' + self.primarykey
 
 
-class InitRecord():
-    ''' Define the header record '''
-    def creatInitRec(self):
-        seedVal = base64.b64encode(hashlib.sha256(str(datetime.datetime.now()).encode('utf-8')).digest())
-        return [seedVal, 0, False, ["header", "", "columns: hash, seq, delete, [rectype, pk, a1, a2, ..]]" ]]
+# class InitRecord():
+#     ''' Define the header record '''
+#     def creatInitRec(self):
+#         inputDataRaw = {"record": ["header", "", "columns: hash, seq, delete, [rectype, pk, a1, a2, ..]]" ], "delete": False}
+#         seedVal = base64.b64encode(hashlib.sha256(str(datetime.datetime.now()).encode('utf-8')).digest())
+#         return [seedVal, 0, False, ]
 
 
 class InputRecord():
@@ -54,12 +55,16 @@ class InputRecord():
     def __init__(self, appendData):
         assert isinstance(appendData, dict), 'input record to be appended must be of type dict'
         assert 'record' in appendData, 'input record dict must have the key "record"'
-        self.rec = Record(appendData['record'])
+        self.rec = ContentRecord(appendData['record'])
         self.deleteflag = appendData['delete']
         assert isinstance(self.deleteflag, bool)
 
     def validate(self, dir):
-        self.rec.validateRec(dir, self.deleteflag)
+        try:
+            self.rec.validateRec(dir, self.deleteflag)
+        except (InputValueError, InputFormatError) as e:
+            print('Validation failed in record with pk=' + getattr(self, 'primarykey', '<empty>'))
+            raise e
 
     def makeWrap(self, newSeq, lastHash, verbose):
         ''' compute hash: take last hash and append the representation of the wrapped structure
@@ -69,8 +74,10 @@ class InputRecord():
         :param verbose: boolean
         :return: wrapped structure to be appended to aods including hash
         '''
-        if verbose: print("lastHash: " + lastHash)
+        #assert isinstance(lastHash, str)
+        if verbose: print("makeWrap %d lastHash: " % newSeq + lastHash)
         wrapStruct = ["placeholder_for_digest", newSeq, self.deleteflag, self.rec.raw]
-        digestInput = lastHash + json.dumps(wrapStruct[1:], separators=(',', ':'))
-        digest = base64.b64encode(hashlib.sha256(digestInput.encode('utf-8')).digest())
-        return [digest] + wrapStruct[1:]
+        wrapStructJson = json.dumps(wrapStruct[1:], separators=(',', ':'))
+        digestInput_bytes = (lastHash + wrapStructJson).encode('utf-8')
+        digest_str = base64.b64encode(hashlib.sha256(digestInput_bytes).digest()).decode('ascii')
+        return [digest_str] + wrapStruct[1:]
