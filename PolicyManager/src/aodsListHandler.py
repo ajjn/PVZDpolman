@@ -119,6 +119,7 @@ class AodsList():
         if jsondump:
             output = sys.stdout if output is None else output
             output.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
+            output.close()
         return policyDict
 
     def aods_scratch(self, aodsHandlder):
