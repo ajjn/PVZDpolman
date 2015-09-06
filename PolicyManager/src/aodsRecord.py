@@ -29,24 +29,14 @@ class ContentRecord():
             if len(self.attr) != 1: raise InputFormatError('organization record must have exactly 1 attribute (the org-id)')
             if not isinstance(self.attr[0], str): raise InputFormatError('org-name (first attribute of organization record) must be of type string')
         elif self.rectype == "userprivilege":
-            if len(self.attr) not in range(3,5): raise InputFormatError('user privilege record must have 3 or 4 attributes (name, pubkey, role [, ssid])')
+            if self.primarykey[0:6] != '{cert}': raise InputFormatError('primary key of userprivilege must start with {cert}')
+            if len(self.attr) != 2: raise InputFormatError('user privilege record must have 2 attributes (org-id, name')
             if not isinstance(self.attr[0], str): raise InputFormatError('org-id (first attribute of user privilege record) must be of type string')
             if not isinstance(self.attr[1], str): raise InputFormatError('cert (2nd attribute of user privilege record) must be of type string')
-            if not isinstance(self.attr[2], str): raise InputFormatError('role (3rd attribute of user privilege record) must be of type string')
-            if not self.attr[2] in ('admin', 'verifier', 'manager'): raise InputFormatError('role (3rd attribute of user privilege record) must be of type string')
-            if len(self.attr) == 4 and not isinstance(self.attr[3], str): raise InputFormatError("role must be one of 'admin', 'verifier', 'manager'")
             if self.attr[0] not in dir['organization']: raise InputValueError('adding user privilege record referencing non-existing organization, pk=%s, orgid=%s' % (self.primarykey, self.attr[0]))
 
     def __str__(self):
         return self.rectype + ' ' + self.primarykey
-
-
-# class InitRecord():
-#     ''' Define the header record '''
-#     def creatInitRec(self):
-#         inputDataRaw = {"record": ["header", "", "columns: hash, seq, delete, [rectype, pk, a1, a2, ..]]" ], "delete": False}
-#         seedVal = base64.b64encode(hashlib.sha256(str(datetime.datetime.now()).encode('utf-8')).digest())
-#         return [seedVal, 0, False, ]
 
 
 class InputRecord():
@@ -74,7 +64,7 @@ class InputRecord():
         :param verbose: boolean
         :return: wrapped structure to be appended to aods including hash
         '''
-        #assert isinstance(lastHash, str)
+        assert isinstance(lastHash, str)
         if verbose: print("makeWrap %d lastHash: " % newSeq + lastHash)
         wrapStruct = ["placeholder_for_digest", newSeq, self.deleteflag, self.rec.raw]
         wrapStructJson = json.dumps(wrapStruct[1:], separators=(',', ':'))

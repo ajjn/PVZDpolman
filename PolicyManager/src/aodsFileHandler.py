@@ -36,7 +36,7 @@ class AODSFileHandler():
             # verify xmldsig and extract content
             PvzdVerfiySig = autoclass('PvzdVerifySig')
             verifier = PvzdVerfiySig(
-                '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',
+                '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml', # TODO: relative path to project root
                 '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
                 self._aodsFile)
             response  = verifier.verify()

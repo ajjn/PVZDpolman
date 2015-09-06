@@ -26,7 +26,7 @@ class RecordWrapper():
         :param prevHash: hash value of previous record in aods
         :return: True if valid
         '''
-        assert isinstance(prevHash, str) # TODO enable in py34
+        assert isinstance(prevHash, str)
         wrapStruct = [self.hash, self.seq, self.deleteflag, self.record]
         digestInput = prevHash + json.dumps(wrapStruct[1:], separators=(',', ':'))
         digest_bytes = base64.b64encode(hashlib.sha256(digestInput.encode('ascii')).digest())

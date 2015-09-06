@@ -48,9 +48,9 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
-        diff = difflib.ndiff(open(cwd + '/work/dir_01.json').readlines(),
+        diff = difflib.unified_diff(open(cwd + '/work/dir_01.json').readlines(),
                              open(cwd + '/testdata/dir_01.json').readlines())
-        assert sys.stdout.writelines(diff) is None, ' not equal reference data'
+        assert ''.join(diff) == '', ' result is not equal to reference data'
         print('OK.')
 
 
