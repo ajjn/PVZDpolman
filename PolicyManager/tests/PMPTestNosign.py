@@ -38,7 +38,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
 
         inputfile = cwd + '/testdata/a1.json'
         print('=== appending input file %s .. ' % inputfile, end='')
-        cliClient = CliPmpInvocation(['-v', tent'-a', aodsfile, 'append', inputfile]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
         PMP.run_me(cliClient)
         print('=== append done.')
 
