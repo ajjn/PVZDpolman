@@ -12,7 +12,7 @@ cwd = os.path.dirname(os.path.realpath(__file__))
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):
-        print('testing CLI interface for create subcommand .. ', end='')
+        print('== Test 00: testing CLI interface for create subcommand .. ', end='')
         try:
             cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ]);
             self.assertEqual(cliClient.args.subcommand, 'create')
@@ -26,23 +26,23 @@ class Test01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         print('== Test 01: happy cycle: create, append, read, verify')
         aodsfile = cwd + '/work/aods_01.json'
-        print('removing existing aods file .. ', end='')
+        print('=== removing existing aods file .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch']);
         PMP.run_me(cliClient)
-        print('OK.')
+        print('=== done.')
 
-        print('creating aods file .. ', end='')
+        print('=== creating aods file .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'create']);
         PMP.run_me(cliClient)
-        print('OK.')
+        print('=== create done.')
 
         inputfile = cwd + '/testdata/a1.json'
-        print('appending input file %s .. ' % inputfile, end='')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        print('=== appending input file %s .. ' % inputfile, end='')
+        cliClient = CliPmpInvocation(['-v', tent'-a', aodsfile, 'append', inputfile]);
         PMP.run_me(cliClient)
-        print('OK.')
+        print('=== append done.')
 
-        print('reading aods file, writing directory .. ', end='')
+        print('=== reading aods file, dumping policy directory .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', \
                                    '--jsondump', cwd + '/work/dir_01.json']);
         PMP.run_me(cliClient)
@@ -51,13 +51,13 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         diff = difflib.unified_diff(open(cwd + '/work/dir_01.json').readlines(),
                              open(cwd + '/testdata/dir_01.json').readlines())
         assert ''.join(diff) == '', ' result is not equal to reference data'
-        print('OK.')
+        print('=== read/compare done.')
 
 
 class Test02_broken_hash_chain(unittest.TestCase):
     def runTest(self):
         print('== Test 02: detect broken hash chain')
-        aodsfile = cwd + '/testdata/aods_02.json'
+        aodsfile = cwd + '/testdata/aods_02_broken_hashchain.json'
         print('reading aods file with broken hash chain .. ', end='')
         sys.stdout.flush()
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read']);

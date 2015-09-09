@@ -1,8 +1,9 @@
 from __future__ import print_function
 import base64, bz2, datetime, os, sys
+import simplejson as json
 from jnius import autoclass
 import xml.etree.ElementTree as ET
-from aodsRecord import *
+from wrapperRecord import *
 from userExceptions import *
 from creSignedXML import creSignedXML
 __author__ = 'r2h2'

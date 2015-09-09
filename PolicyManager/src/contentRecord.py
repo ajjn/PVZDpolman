@@ -1,12 +1,10 @@
 from __future__ import print_function
-import base64, hashlib, datetime
-import simplejson as json
 from userExceptions import *
 __author__ = 'r2h2'
 
 ''' Classes in this source file encapsulate the structure of record types '''
 
-class ContentRecord():
+class ContentRecord:
     ''' Handle a single content record, agnostic of the record type: create an object and access the attributes '''
     recordTypes = ["domain", "organization", "userprivilege", "header"]
 
@@ -37,37 +35,3 @@ class ContentRecord():
 
     def __str__(self):
         return self.rectype + ' ' + self.primarykey
-
-
-class InputRecord():
-    ''' Handle a record to be appended '''
-
-    def __init__(self, appendData):
-        assert isinstance(appendData, dict), 'input record to be appended must be of type dict'
-        assert 'record' in appendData, 'input record dict must have the key "record"'
-        self.rec = ContentRecord(appendData['record'])
-        self.deleteflag = appendData['delete']
-        assert isinstance(self.deleteflag, bool)
-
-    def validate(self, dir):
-        try:
-            self.rec.validateRec(dir, self.deleteflag)
-        except (InputValueError, InputFormatError) as e:
-            print('Validation failed in record with pk=' + getattr(self, 'primarykey', '<empty>'))
-            raise e
-
-    def makeWrap(self, newSeq, lastHash, verbose):
-        ''' compute hash: take last hash and append the representation of the wrapped structure
-        of json.dumps in compact representaion
-        :param newSeq: Sequence number to be assigned to the new record
-        :param lastHash: hash value of last record in aods
-        :param verbose: boolean
-        :return: wrapped structure to be appended to aods including hash
-        '''
-        assert isinstance(lastHash, str)
-        if verbose: print("makeWrap %d lastHash: " % newSeq + lastHash)
-        wrapStruct = ["placeholder_for_digest", newSeq, self.deleteflag, self.rec.raw]
-        wrapStructJson = json.dumps(wrapStruct[1:], separators=(',', ':'))
-        digestInput_bytes = (lastHash + wrapStructJson).encode('utf-8')
-        digest_str = base64.b64encode(hashlib.sha256(digestInput_bytes).digest()).decode('ascii')
-        return [digest_str] + wrapStruct[1:]

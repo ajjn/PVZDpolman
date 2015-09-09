@@ -3,6 +3,7 @@ from jnius import autoclass
 from invocation import *
 from aodsListHandler import *
 from aodsFileHandler import *
+
 __author__ = 'r2h2'
 
 ''' The PEP (Policy Enforcement Point) performs for each invocation:
@@ -20,49 +21,86 @@ __author__ = 'r2h2'
         signer authorized to use domain names in entityID, endpoints and certificate CN
 '''
 
-def getPolicyDict(invocation):
-    aodsHandlder = AODSFileHandler(invocation)
-    aods = AodsList(invocation.args.verbose)
-    return aods.aods_read(aodsHandlder)
 
-def getSAMLEntityDescriptors(pubreq):
+def getPolicyDict(invocation) -> dict:
+    aodsFileHandler = AODSFileHandler(invocation)
+    aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
+    return aodsListHandler.aods_read()
+
+
+def getSAMLEntityDescriptors(pubreq) -> str:
     '''
     :param pubreq: path of git repo containing publication requests
     :return: list of file names in the git repository given in pubreq
     '''
     repo = git.Git(pubreq)
-    return repo.ls_files().split('\n')
+    return repo.ls_files('request_queue').split('\n')
 
-def validateXSD(file):
+
+def validateXSD(filename_abs):
     XmlValidator = autoclass('at.wien.ma14.pvzd.validateXSD')
     validator = XmlValidator('ValidateXSD/SAML_MD_Schema')
-    validator.validateXmlAgainstXsds(file)
+    validator.validateXmlAgainstXsds(filename_abs)
 
-def validateSignature(fileName):
-    # verify xmldsig
-    PvzdVerfiySig = autoclass('PvzdVerifySig')
+
+def validateSchematron(filename_abs):
+    pass  # TODO: implement
+
+
+def validateSignature(filename_abs) -> str:
+    PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
     verifier = PvzdVerfiySig(
-        '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml', # TODO: relative path to project root
+        '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',  # TODO: relative path to project root
         '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
-        fileName)
+        filename_abs)
     response = verifier.verify()
     assert 'OK' == response.pvzdCode, \
         "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
     return response.signerCertificateEncoded
 
-def lookupSignerCert(signerCert, policyDict):
-    access = policyDict["userprivilege"] attr[0]
+
+def getAllowedDomains(signerCert, policyDict) -> list:
+    assert policyDict["userprivilege"].get(signerCert, None) != None, 'Signer certificate not found in policy directory'
+    org_id = policyDict["userprivilege"][signerCert][0]
+    allowedDomains = []
+    for dn in pd["domain"].keys():
+        if pd["domain"][dn][0] == org_id:
+            allowedDomains.append(dn)
+    return allowedDomains
+
+
+def validateDomainName(filename_abs, allowedDomains):
+    print('allowed domains: ' + ', '.join(allowedDomains))
+    pass  # TODO implement rest
+
+def move_to_rejected(file):
+    print('rejected ' + file)
+    pass  # TODO implement
+
+
+def move_to_accepted(file):
+    print('accepted ' + file)
+    pass  # TODO implement
+
 
 def run_me(testrunnerInvocation=None):
-    if (testrunnerInvocation):
+    if testrunnerInvocation:
         invocation = testrunnerInvocation
     else:
         invocation = CliPepInvocation()
 
     policyDict = getPolicyDict(invocation)
-    for file in getSAMLEntityDescriptors(invocation.args.pubrequ):
-        signerCert = validateSignature(file)
-        lookupSignerCert(signerCert, policyDict)
+    for filename in getSAMLEntityDescriptors(invocation.args.pubrequ):
+        filename_abs = invocation.args.pubrequ + '/' + filename
+        try:
+            # validateXSD(filename_abs)
+            # validateSchematron(filename_abs)
+            signerCert = validateSignature(filename_abs)
+            getAllowedDomains(signerCert, policyDict)
+            validateDomainName(filename_abs, signerCert, policyDict)
+        except AssertionError as e:
+            move_to_rejected(filename)
+        move_to_accepted(filename)
 
 
 if __name__ == '__main__':

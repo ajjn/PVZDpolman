@@ -9,21 +9,18 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
     else:
         invocation = CliPmpInvocation()
-    aodsHandlder = AODSFileHandler(invocation)
-    aodsList = AodsList(invocation.args.verbose);
+
+    aodsFileHandlder = AODSFileHandler(invocation)
+    aodsListHandler = AodsListHandler(aodsFileHandlder, invocation.args)
+
     if (invocation.args.subcommand == 'append'):
-        aodsList.aods_append(aodsHandlder,
-                         invocation.args.input,
-                         xmlsign=invocation.args.xmlsign)
+        aodsListHandler.aods_append()
     elif (invocation.args.subcommand == 'create'):
-        aodsList.aods_create(aodsHandlder,
-                         xmlsign=invocation.args.xmlsign)
+        aodsListHandler.aods_create()
     elif (invocation.args.subcommand == 'read'):
-        aodsList.aods_read(aodsHandlder,
-                       jsondump=invocation.args.jsondump,
-                       output=invocation.args.output)
+        aodsListHandler.aods_read()
     elif (invocation.args.subcommand == 'scratch'):
-        aodsList.aods_scratch(aodsHandlder)
+        aodsListHandler.aods_scratch()
 
 if __name__ == '__main__':
     run_me()
