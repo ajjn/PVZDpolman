@@ -1,9 +1,10 @@
 import git
+from os import path
 from jnius import autoclass
 from invocation import *
 from aodsListHandler import *
 from aodsFileHandler import *
-
+from gitHandler import GitHandler
 __author__ = 'r2h2'
 
 ''' The PEP (Policy Enforcement Point) performs for each invocation:
@@ -26,15 +27,6 @@ def getPolicyDict(invocation) -> dict:
     aodsFileHandler = AODSFileHandler(invocation)
     aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
     return aodsListHandler.aods_read()
-
-
-def getSAMLEntityDescriptors(pubreq) -> str:
-    '''
-    :param pubreq: path of git repo containing publication requests
-    :return: list of file names in the git repository given in pubreq
-    '''
-    repo = git.Git(pubreq)
-    return repo.ls_files('request_queue').split('\n')
 
 
 def validateXSD(filename_abs):
@@ -73,15 +65,6 @@ def validateDomainName(filename_abs, allowedDomains):
     print('allowed domains: ' + ', '.join(allowedDomains))
     pass  # TODO implement rest
 
-def move_to_rejected(file):
-    print('rejected ' + file)
-    pass  # TODO implement
-
-
-def move_to_accepted(file):
-    print('accepted ' + file)
-    pass  # TODO implement
-
 
 def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
@@ -90,17 +73,25 @@ def run_me(testrunnerInvocation=None):
         invocation = CliPepInvocation()
 
     policyDict = getPolicyDict(invocation)
-    for filename in getSAMLEntityDescriptors(invocation.args.pubrequ):
+    gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
+    for filename in gitHandler.getRequestQueueItems():
         filename_abs = invocation.args.pubrequ + '/' + filename
+        filename_base = os.path.basename(filename)
         try:
+            if invocation.args.verbose: print('\n== processing ' + filename_base + '\nvalidating XML schema')
             # validateXSD(filename_abs)
             # validateSchematron(filename_abs)
+            if invocation.args.verbose: print('validating signature')
             signerCert = validateSignature(filename_abs)
+            if invocation.args.verbose: print('validating signer cert')
             getAllowedDomains(signerCert, policyDict)
-            validateDomainName(filename_abs, signerCert, policyDict)
+            if invocation.args.verbose: print('validating signer\'s privileges to use domain names')
+            validateDomainName(filename_abs, policyDict)
+            gitHandler.move_to_accepted(filename)
         except AssertionError as e:
-            move_to_rejected(filename)
-        move_to_accepted(filename)
+            if invocation.args.verbose: print(str(e))
+            gitHandler.move_to_rejected(filename)
+            gitHandler.add_reject_message(filename_base, str(e))
 
 
 if __name__ == '__main__':

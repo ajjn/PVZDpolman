@@ -1,14 +1,12 @@
-from __future__ import print_function
-import sys
 import simplejson as json
-import base64, hashlib
+import base64, hashlib, sys
 from inputRecord import InputRecord
 from contentRecord import ContentRecord
 from wrapperRecord import WrapperRecord
 from userExceptions import *
 from datetime import datetime
 __author__ = 'r2h2'
-
+assert sys.version_info >= (3,4), 'modules used here support unicode and require python 3. Tested version is 3.4.3'
 
 class AodsListHandler:
     ''' The append-only data structure is agnostic of the record type, which is defined in as content record. Its

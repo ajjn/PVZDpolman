@@ -54,5 +54,15 @@ XMLValidator.java missing -> timemachine backup @home
 # PEP:look up portaladmin via PubKey  OK
 
 # struct OK, starting unittest with sigval
+# add date to wrapper; return contentrecord as namedtuple
+# refactor wrapper -> header, content -> body
 
-Umstellung auf python3.4 unvollständig, weiter mit 2.7 (str/bytes, str does not support buffer interface)
+# PEP:
+- XSD Validation (source fehlt, von Backup holen)
+- Schematron validation (später)
+- Domainname check
+- Revocation check
+- Revocation record type implementieren
+- GUI
+
+# PolicyManager/create STP/AWP SAML MD
