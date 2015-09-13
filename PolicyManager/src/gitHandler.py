@@ -26,10 +26,10 @@ class GitHandler:
         self.repo.index.move([file, self.rejectpath])
 
     def add_reject_message(self, filename_base, errortext):
-        errfilename = self.rejectpath + filename_base + '.err'
+        errfilename = os.path.join(self.rejectpath, filename_base + '.err')
         with open(errfilename, 'w') as errorfile:
             errorfile.write(errortext)
-        self.repo.index.add(errfilename)
+        self.repo.index.add([errfilename])
         self.repo.index.commit('accepted')
 
     def reset_repo(self, testdata, repo_dir):

@@ -7,7 +7,7 @@ import PMP
 __author__ = 'r2h2'
 ''' all tests not requiring citizen card signature '''
 
-cwd = os.path.dirname(os.path.realpath(__file__))
+#cwd = os.path.dirname(os.path.realpath(__file__))
 
 
 class Test00_cli(unittest.TestCase):
@@ -25,7 +25,7 @@ class Test00_cli(unittest.TestCase):
 class Test01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         print('== Test 01: happy cycle: create, append, read, verify')
-        aodsfile = cwd + '/work/aods_01.json'
+        aodsfile = os.path.abspath('work/aods_01.json')
         print('=== removing existing aods file .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch']);
         PMP.run_me(cliClient)
@@ -36,7 +36,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
         print('=== create done.')
 
-        inputfile = cwd + '/testdata/a1.json'
+        inputfile = os.path.abspath('testdata/a1.json')
         print('=== appending input file %s .. ' % inputfile, end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
         PMP.run_me(cliClient)
@@ -44,12 +44,12 @@ class Test01_basic_happy_cycle(unittest.TestCase):
 
         print('=== reading aods file, dumping policy directory .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', \
-                                   '--jsondump', cwd + '/work/dir_01.json']);
+                                   '--jsondump', os.path.abspath('work/dir_01.json')]);
         PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
-        diff = difflib.unified_diff(open(cwd + '/work/dir_01.json').readlines(),
-                             open(cwd + '/testdata/dir_01.json').readlines())
+        diff = difflib.unified_diff(open(os.path.abspath('work/dir_01.json')).readlines(),
+                             open(os.path.abspath('testdata/dir_01.json')).readlines())
         assert ''.join(diff) == '', ' result is not equal to reference data'
         print('=== read/compare done.')
 
@@ -57,7 +57,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
 class Test02_broken_hash_chain(unittest.TestCase):
     def runTest(self):
         print('== Test 02: detect broken hash chain')
-        aodsfile = cwd + '/testdata/aods_02_broken_hashchain.json'
+        aodsfile = os.path.abspath('testdata/aods_02_broken_hashchain.json')
         print('reading aods file with broken hash chain .. ', end='')
         sys.stdout.flush()
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read']);
@@ -69,8 +69,8 @@ class Test02_broken_hash_chain(unittest.TestCase):
 class Test03_broken_input_for_append(unittest.TestCase):
     def runTest(self):
         print('== Test 03: handle broken json input for append')
-        aodsfile = cwd + '/work/aods_01.json'
-        inputfile = cwd + '/testdata/test03_a1_broken.json'
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test03_a1_broken.json')
         print('appending broken input file %s .. ' % inputfile)
         sys.stdout.flush()
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
@@ -82,8 +82,8 @@ class Test03_broken_input_for_append(unittest.TestCase):
 class Test04_broken_input_for_validation(unittest.TestCase):
     def runTest(self):
         print('== Test 04: handle broken input for append/validation')
-        aodsfile = cwd + '/work/aods_01.json'
-        inputfile = cwd + '/testdata/test04_a01.json'
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test04_a01.json')
         print('appending invalid input file ' + inputfile)
         sys.stdout.flush()
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
