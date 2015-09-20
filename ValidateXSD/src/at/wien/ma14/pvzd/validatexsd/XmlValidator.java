@@ -40,20 +40,26 @@ public class XmlValidator {
      * Validate provided XML against the XSD schema files in a given directory.
      *
      * @param xmlFilePath    Path/name of XML file to be validated;
+     * @return error message. If null then file is valid
      */
-    public  void validateSchema(final String xmlFilePath) throws IOException, SAXException {
+    public String validateSchema(final String xmlFilePath) {
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         final StreamSource[] xsdSources = generateStreamSourcesFromXsdPaths(xsdFiles);
-        assertTrue(new File(xmlFilePath).exists());
-        try {
-            final Schema schema = schemaFactory.newSchema(xsdSources);
-            final Validator validator = schema.newValidator();
-            if (_verbose) out.println("Validating " + xmlFilePath + " against XSDs " + Arrays.toString(xsdFiles) + "...");
-            validator.validate(new StreamSource(new File(xmlFilePath)));
-        } catch (IOException | SAXException e) {
-            out.println("ERROR: Unable to validate " + xmlFilePath + "\n" + e);
-            throw e;
+        String retval = null;
+        if (! new File(xmlFilePath).exists()) {
+            retval = "File to be validated not found: " + xmlFilePath;
+        } else {
+            try {
+                final Schema schema = schemaFactory.newSchema(xsdSources);
+                final Validator validator = schema.newValidator();
+                if (_verbose) out.println("Validating " + xmlFilePath + " against XSDs " + Arrays.toString(xsdFiles) + "...");
+                validator.validate(new StreamSource(new File(xmlFilePath)));
+            } catch (IOException | SAXException e) {
+                if (_verbose) out.println("ERROR: Unable to validate " + xmlFilePath + "\n" + e);
+                retval = "File to be validated not found: " + xmlFilePath;
+            }
         }
+        return retval;
     }
 
     /**

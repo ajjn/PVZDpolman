@@ -16,6 +16,11 @@ class GitHandler:
         ''' :return: list of file names in the git repository given in pubreq  '''
         return self.gitcmd.ls_files(GIT_REQUESTQUEUE).split('\n')
 
+    def remove_from_accepted(self, file):
+        if self.verbose: print('removing file from request_queue and accept directory ')
+        self.repo.index.move([file, self.acceptpath]) # TODO implement
+        self.repo.index.commit('accepted')
+
     def move_to_accepted(self, file):
         if self.verbose: print('moving to accept directory ')
         self.repo.index.move([file, self.acceptpath])

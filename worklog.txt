@@ -57,6 +57,12 @@ XMLValidator.java missing -> timemachine backup @home
 # add date to wrapper; return contentrecord as namedtuple
 # refactor wrapper -> header, content -> body
 
+gitPython: repo.index.add benötigt immer ein Liste, sonst kommt die Meldung
+ValueError: Absolute path '/' is not in git repository at '<repo root path>'
+
+
+
+Tickets
 # PEP:
 - XSD Validation (source fehlt, von Backup holen)
 - Schematron validation (später)
@@ -64,5 +70,8 @@ XMLValidator.java missing -> timemachine backup @home
 - Revocation check
 - Revocation record type implementieren
 - GUI
+- get valid cert issuers from external file; distinguish between STP and AWP
 
 # PolicyManager/create STP/AWP SAML MD
+
+# HSM-Config mit eToken Pro

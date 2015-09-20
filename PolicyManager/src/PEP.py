@@ -4,6 +4,7 @@ from jnius import autoclass
 from invocation import *
 from aodsListHandler import *
 from aodsFileHandler import *
+from constants import *
 from gitHandler import GitHandler
 __author__ = 'r2h2'
 
@@ -24,21 +25,29 @@ class PEP:
             certificated is not blacklisted
     '''
 
+    def __init__(self):
+        projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+        self.projdir_abs = os.path.abspath(projdir_rel)
+
+    def isDeletionRequest(self, filename_abs):
+        return os.path.getsize(filename_abs) == 0    # TODO: replace with test for signed request with custom delete attribute
+
     def getPolicyDict(self, invocation) -> dict:
         aodsFileHandler = AODSFileHandler(invocation)
         aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
         return aodsListHandler.aods_read()
 
     def validateXSD(self, filename_abs):
-        XmlValidator = autoclass('at.wien.ma14.pvzd.validateXSD')
-        validator = XmlValidator('ValidateXSD/SAML_MD_Schema')
-        validator.validateXmlAgainstXsds(filename_abs)
+        XmlValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XmlValidator')
+        validator = XmlValidator(os.path.join(self.projdir_abs, 'ValidateXSD/SAML_MD_Schema'), False)
+        validator.validateSchema(filename_abs)
 
     def validateSchematron(self, filename_abs):
         pass  # TODO: implement
 
     def validateSignature(self, filename_abs) -> str:
         PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
+        #PvzdVerfiySig = autoclass('PvzdVerifySig')
         verifier = PvzdVerfiySig(
             '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',  # TODO: relative path to project root
             '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
@@ -68,9 +77,19 @@ class PEP:
 
     def validateDomainNames(self, filename_abs, allowedDomains):
         print('allowed domains: ' + ', '.join(allowedDomains))
+        return True
 
-    def checkCertsNotInBlacklist(self):
-        pass
+    def getCerts(self):
+        pass  # TODO implement
+
+    def checkCerts(self):
+        for cert_pem in self.getCerts():
+            cert = X509cert(cert_pem)
+            assert cert.isNotExpired(), 'certificate has a notValidAfter date in the past'
+            assert cert.getIssuer_str in VALIDCERTISSUERS, 'certificate was not issuer by a accredited CA'
+
+
+
 
 def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
@@ -85,17 +104,21 @@ def run_me(testrunnerInvocation=None):
         filename_abs = invocation.args.pubrequ + '/' + filename
         filename_base = os.path.basename(filename)
         try:
-            if invocation.args.verbose: print('\n== processing ' + filename_base + '\nvalidating XML schema')
-            # pep.validateXSD(filename_abs)
-            # pep.validateSchematron(filename_abs)
-            if invocation.args.verbose: print('validating signature')
-            signerCert = pep.validateSignature(filename_abs)
-            if invocation.args.verbose: print('validating signer cert')
-            pep.getAllowedDomains(signerCert, policyDict)
-            if invocation.args.verbose: print('validating signer\'s privileges to use domain names')
-            pep.validateDomainNames(filename_abs, policyDict)
-            if invocation.args.verbose: print('validating certificate(s) not balcklisted')
-            pep.checkCertsNotInBlacklist(filename_abs, policyDict)
+            if invocation.args.verbose: print('\n== processing ' + filename_base)
+            if pep.isDeletionRequest(filename_abs):
+                gitHandler.remove_from_accepted(filename)
+            else:
+                if invocation.args.verbose: print('validating XML schema')
+                pep.validateXSD(filename_abs)
+                pep.validateSchematron(filename_abs)
+                if invocation.args.verbose: print('validating signature')
+                signerCert = pep.validateSignature(filename_abs)
+                if invocation.args.verbose: print('validating signer cert, loading allowed domains')
+                pep.getAllowedDomains(signerCert, policyDict)
+                if invocation.args.verbose: print('validating signer\'s privileges to use domain names in URLs')
+                pep.validateDomainNames(filename_abs, policyDict)
+                if invocation.args.verbose: print('validating certificate(s) not expired or blacklisted and issuer is valid ')
+                pep.checkCerts(filename_abs, policyDict)
             gitHandler.move_to_accepted(filename)
         except AssertionError as e:
             if invocation.args.verbose: print(str(e))

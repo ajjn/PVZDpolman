@@ -1,0 +1,8 @@
+cffi==1.2.1
+gitdb==0.6.4
+GitPython==1.0.1
+pyjnius==1.4.0
+pyOpenSSL==0.15.1
+pytz==2015.4
+requests==2.7.0
+simplejson==3.8.0

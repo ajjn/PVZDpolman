@@ -1,4 +1,4 @@
-package at.hoerbe;
+package at.wien.ma14.pvzd.validatexsd.unittest;
 
 
 import at.wien.ma14.pvzd.validatexsd.XmlValidator;
@@ -19,7 +19,7 @@ public class RunVerifyXSD {
         }
 
         final String samlmdFileOK = "ValidateXSD/testdata/idp5_valid.xml";
-        XmlValidator validator = new XmlValidator("ValidateXSD/SAML_MD_Schema");
+        XmlValidator validator = new XmlValidator("ValidateXSD/SAML_MD_Schema", true);
         validator.validateSchema(samlmdFileOK);    }
 
     public static void main(String[] argv) throws Exception {

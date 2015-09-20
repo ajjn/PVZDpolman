@@ -112,25 +112,10 @@ class Test05_sigver(unittest.TestCase):
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)
         self.assertEqual('OK', response.pvzdCode, msg=response.pvzdMessage)
 
-
-class Test07_basic_happy_cycle(unittest.TestCase):
+class Test_end(unittest.TestCase):
     def runTest(self):
-        import PEP
-        from gitHandler import GitHandler
-        from invocation import CliPepInvocation
-        print('== Test07: PEP happy cycle')
-        print('CLASSPATH=' + os.environ['CLASSPATH'])
-        repo_dir = 'work/policyDirectory'
-        cliClient = CliPepInvocation(['--verbose',
-                                      '--aods', os.path.abspath('testdata/aods_peptest.json'),
-                                      '--pubreq', os.path.abspath(repo_dir),
-                                      '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
-        print('=== creating fresh git repo in ' + repo_dir)
-        gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-        gitHandler.reset_repo('testdata/policyDirectory', repo_dir)
-        print('=== processing request queue')
-        PEP.run_me(cliClient)
-        # TODO validate result
+        print('== Tests completed')
+        sys.stdout.flush()
 
 
 if __name__ == '__main__':
