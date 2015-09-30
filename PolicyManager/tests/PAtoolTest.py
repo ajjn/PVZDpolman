@@ -13,9 +13,11 @@ class Test01_createED(unittest.TestCase):
 class Test02_signED(unittest.TestCase):
     def runTest(self):
         print('== Test 02: sign EntityDescriptor')
-        entitydescriptor_file = os.path.abspath('testdata/idpExampleOrg_unsigned.xml')
+        entitydescriptor_file = os.path.abspath('testdata/idpExampleOrg.xml')
+        entitydescriptor_signed_file = os.path.abspath('work/idpExampleOrg_signed.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
-        cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file, 'signED', entitydescriptor_file])
+        cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file, '-s', entitydescriptor_signed_file, 'signED',
+                                         entitydescriptor_file])
         PAtool.run_me(cliClient)
 
 

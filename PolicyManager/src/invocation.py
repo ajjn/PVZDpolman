@@ -79,6 +79,8 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser.add_argument('-m', '--metadatacerts', dest='metadatacerts', default='metadatacerts.json',
                                   help='file containing json-array of PEM-formatted certificates trusted to sign the metadata aggregate')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
+        self._parser.add_argument('-s', '--signed_output', dest='signed_output',
+                                  help='signED output file (default: s/(inputfile).xml/\1_signed.xml/)')
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
 
         # create the parser for the "createED" command
@@ -87,7 +89,7 @@ class CliPAtoolInvocation(AbstractInvocation):
 
         # create the parser for the "signED" command
         self._parser_sign = _subparsers.add_parser('signED', help='sign an EntityDescriptor using the Citizen Card')
-        self._parser_sign.add_argument('input', type=argparse.FileType('r'),help='file containing the Entitydescriptor')
+        self._parser_sign.add_argument('input', type=argparse.FileType('r'),help='file containing the EntityDescriptor')
 
         # create the parser for the "extractED" command
         self._parser_extract = _subparsers.add_parser('extractED', help='extract certificate from EntityDescriptors in metadata')
