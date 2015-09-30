@@ -16,7 +16,7 @@ class Test01_valxsd(unittest.TestCase):
         XmlValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XmlValidator')
         validator = XmlValidator(os.path.join(projdir_abs, 'ValidateXSD/SAML_MD_Schema'), True)
         print('=== testing with valid file')
-        m = validator.validateSchema(os.path.abspath('testdata/idp5_valid.xml'))
+        m = validator.validateSchema(os.path.abspath('testdata/idp5_valid_xml_unsigned.xml'))
         self.assertIsNone(m, 'expected empty message, but received: ' + str(m))
         print('=== testing with invalid file')
         m = validator.validateSchema(os.path.abspath('testdata/idp5_invalid_xml.xml'))
@@ -35,7 +35,7 @@ class Test02_basic_happy_cycle(unittest.TestCase):
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         print('=== creating fresh git repo in ' + repo_dir)
         gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-        gitHandler.reset_repo('testdata/policyDirectory', repo_dir)
+        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory', repo_dir)
         print('=== processing request queue')
         PEP.run_me(cliClient)
 

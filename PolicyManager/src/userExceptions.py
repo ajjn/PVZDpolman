@@ -19,3 +19,7 @@ class InputValueError(InputFormatOrValueError):
 
 class InputFormatError(InputFormatOrValueError):
     pass
+
+class SecurityLayerUnavailable(Exception):
+    """ Security Layer (MOCCA etc.) is inactive (local port 3495 not open) """
+    pass

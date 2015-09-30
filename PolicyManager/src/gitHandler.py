@@ -37,7 +37,7 @@ class GitHandler:
         self.repo.index.add([errfilename])
         self.repo.index.commit('accepted')
 
-    def reset_repo(self, testdata, repo_dir):
+    def reset_repo_with_defined_testdata(self, testdata, repo_dir):
         '''  create a new repo with test data (used for unit testing) '''
         repo_dir_abs = os.path.abspath(repo_dir)
         shutil.rmtree(repo_dir)

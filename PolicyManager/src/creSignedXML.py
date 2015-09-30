@@ -1,14 +1,23 @@
-from __future__ import print_function
-import base64, bz2
+import base64, bz2, sys
 import requests
 import re
+import socket
+from userExceptions import SecurityLayerUnavailable
 
 __author__ = 'r2h2'
+
+def failIfSecurityLayerUnavailable():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    addr = ('127.0.0.1', 3495)
+    if sock.connect_ex(addr) != 0:
+        sys.tracebacklimit = 0
+        raise SecurityLayerUnavailable(SecurityLayerUnavailable.__doc__)
 
 
 def creSignedXML(data, verbose=False):
     ''' compress, b64-encode and sign-envelop the data and return it '''
 
+    failIfSecurityLayerUnavailable()
     dataPacked = base64.b64encode(bz2.compress(data))
     if verbose: print('packed data:\n%s\n' % dataPacked)
 

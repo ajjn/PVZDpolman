@@ -106,7 +106,7 @@ class Test05_sigver(unittest.TestCase):
         verifier = PvzdVerfiySig(
             "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
             "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
-            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
+            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid_sig_untrusted_signer.xml")
 
         response  = verifier.verify();
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)

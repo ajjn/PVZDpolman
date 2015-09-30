@@ -14,7 +14,7 @@ class Test00_cli(unittest.TestCase):
     def runTest(self):
         print('== Test 00: testing CLI interface for create subcommand .. ', end='')
         try:
-            cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ]);
+            cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ])
             self.assertEqual(cliClient.args.subcommand, 'create')
             self.assertEqual(cliClient.args.aods, 'aods.json')
         except SystemExit:
@@ -27,24 +27,23 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         print('== Test 01: happy cycle: create, append, read, verify')
         aodsfile = os.path.abspath('work/aods_01.json')
         print('=== removing existing aods file .. ', end='')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch']);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch'])
         PMP.run_me(cliClient)
         print('=== done.')
 
         print('=== creating aods file .. ', end='')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'create']);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'create'])
         PMP.run_me(cliClient)
         print('=== create done.')
 
         inputfile = os.path.abspath('testdata/a1.json')
         print('=== appending input file %s .. ' % inputfile, end='')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         PMP.run_me(cliClient)
         print('=== append done.')
 
         print('=== reading aods file, dumping policy directory .. ', end='')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', \
-                                   '--jsondump', os.path.abspath('work/dir_01.json')]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--jsondump', os.path.abspath('work/dir_01.json')])
         PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
@@ -60,7 +59,7 @@ class Test02_broken_hash_chain(unittest.TestCase):
         aodsfile = os.path.abspath('testdata/aods_02_broken_hashchain.json')
         print('reading aods file with broken hash chain .. ', end='')
         sys.stdout.flush()
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read']);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read'])
         with self.assertRaises(HashChainError) as context:
             PMP.run_me(cliClient)
         print('OK.')
@@ -73,7 +72,7 @@ class Test03_broken_input_for_append(unittest.TestCase):
         inputfile = os.path.abspath('testdata/test03_a1_broken.json')
         print('appending broken input file %s .. ' % inputfile)
         sys.stdout.flush()
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(JSONdecodeError) as context:
             PMP.run_me(cliClient)
         print('OK.')
@@ -86,7 +85,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         inputfile = os.path.abspath('testdata/test04_a01.json')
         print('appending invalid input file ' + inputfile)
         sys.stdout.flush()
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile]);
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(AssertionError) as context:
             PMP.run_me(cliClient)
 
@@ -102,35 +101,15 @@ class Test05_sigver(unittest.TestCase):
         from jnius import autoclass
 
         # set classpath to include MOA-SS
-        PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig');
+        PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
         verifier = PvzdVerfiySig(
             "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
             "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
-            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_valid.xml_sig.xml")
+            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_signed_untrusted_signer.xml")
 
-        response  = verifier.verify();
+        response  = verifier.verify()
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)
         self.assertEqual('OK', response.pvzdCode, msg=response.pvzdMessage)
-
-
-class Test07_basic_happy_cycle(unittest.TestCase):
-    def runTest(self):
-        import PEP
-        from gitHandler import GitHandler
-        from invocation import CliPepInvocation
-        print('== Test07: PEP happy cycle')
-        print('CLASSPATH=' + os.environ['CLASSPATH'])
-        repo_dir = 'work/policyDirectory'
-        cliClient = CliPepInvocation(['--verbose',
-                                      '--aods', os.path.abspath('testdata/aods_peptest.json'),
-                                      '--pubreq', os.path.abspath(repo_dir),
-                                      '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
-        print('=== creating fresh git repo in ' + repo_dir)
-        gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-        gitHandler.reset_repo('testdata/policyDirectory', repo_dir)
-        print('=== processing request queue')
-        PEP.run_me(cliClient)
-        # TODO validate result
 
 
 if __name__ == '__main__':
