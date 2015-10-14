@@ -7,9 +7,6 @@ import PMP
 __author__ = 'r2h2'
 ''' all tests not requiring citizen card signature '''
 
-#cwd = os.path.dirname(os.path.realpath(__file__))
-
-
 class Test00_cli(unittest.TestCase):
     def runTest(self):
         print('== Test 00: testing CLI interface for create subcommand .. ', end='')
@@ -93,19 +90,21 @@ class Test04_broken_input_for_validation(unittest.TestCase):
 class Test05_sigver(unittest.TestCase):
     def runTest(self):
         print('== Test 05: test calling signature verification (java class)')
-        # OSX: pyjnius requires dyblib setting, e.g.:
+        # OSX: pyjnius requires dyldlib setting, e.g.:
         # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(/usr/libexec/java_home)/jre/lib/server
         #print('CLASSPATH=' + os.environ['CLASSPATH'])
         #print('PYTHONPATH=' + os.environ['PYTHONPATH'])
         #print('DYLD_LIBRARY_PATH=' + os.environ['DYLD_LIBRARY_PATH'] + '\n')
         from jnius import autoclass
 
-        # set classpath to include MOA-SS
+        projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+        projdir_abs = os.path.abspath(projdir_rel)
+
         PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
         verifier = PvzdVerfiySig(
-            "/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml",
-            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties",
-            "/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/testdata/idp5_signed_untrusted_signer.xml")
+            os.path.join(projdir_abs, "lib/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml"),
+            os.path.join(projdir_abs, "VerifySigAPI/conf/log4j.properties"),
+            os.path.join(projdir_abs, "VerifySigAPI/testdata/idp5_signed_untrusted_signer.xml"))
 
         response  = verifier.verify()
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)

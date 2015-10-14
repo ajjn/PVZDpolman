@@ -2,6 +2,7 @@ import base64, bz2, sys
 import requests
 import re
 import socket
+from constants import DATA_HEADER_B64BZIP
 from userExceptions import SecurityLayerUnavailable
 
 __author__ = 'r2h2'
@@ -18,7 +19,7 @@ def creSignedXML(data, verbose=False):
     ''' compress, b64-encode and sign-envelop the data and return it '''
 
     failIfSecurityLayerUnavailable()
-    dataPacked = base64.b64encode(bz2.compress(data))
+    dataPacked = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data)).decode('ascii')
     if verbose: print('packed data:\n%s\n' % dataPacked)
 
     sigRequ = '''\

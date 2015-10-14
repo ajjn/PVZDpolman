@@ -1,5 +1,6 @@
 from invocation import *
 from aodsFileHandler import *
+from x509cert import X509cert
 __author__ = 'r2h2'
 
 class PAtool:
@@ -14,8 +15,39 @@ class PAtool:
         #projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
         #self.projdir_abs = os.path.abspath(projdir_rel)
 
-    def createED(self):
+    def extractX509SubjectCN(self) -> str:
         pass
+
+    def getEntityId(self,x509cert) -> str:
+        entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
+        if hasattr(self.args, 'entityid_suffix') and len(self.args.entityid_suffix) > 0:
+            if self.args.entityid_suffix[0:1] != '/':
+                entityId += '/'
+            entityId += self.args.entityid_suffix
+        return entityId
+
+
+    def createED(self):
+        if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
+        x509cert = X509cert(self.args.cert.read())
+        entityId = self.getEntityId(x509cert)
+        entityDescriptor = '''\
+<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <md{samlrole}SSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+{pem}
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+  </md:{samlrole}SSODescriptor>
+</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str(), samlrole=self.args.samlrole)
+        if self.args.verbose: print('writing ED to ' + self.args.output.name)
+        self.args.output.write(entityDescriptor)
+
 
     def signED(self):
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'

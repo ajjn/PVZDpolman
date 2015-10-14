@@ -1,5 +1,5 @@
 from __future__ import print_function
-import base64, bz2, datetime, os, sys
+import base64, bz2, datetime, os, re, sys
 import simplejson as json
 from jnius import autoclass
 import xml.etree.ElementTree as ET
@@ -52,7 +52,8 @@ class AODSFileHandler():
             content =  tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
             assert len(content) > 0, 'AODS contained in XML signature value is empty'
             if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
-            j = bz2.decompress(base64.b64decode(content.encode('UTF-8')))
+            content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
+            j = bz2.decompress(base64.b64decode(content_body))
             return json.loads(j.decode('UTF-8'))
         else:  # must be json
             f = open(self._aodsFile, 'r')

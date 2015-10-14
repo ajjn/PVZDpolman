@@ -27,7 +27,7 @@ class TestS01_basic_happy_cycle(unittest.TestCase):
         cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json',
                                    '-a', aodsfile, '-x', 'append', inputfile])
         PMP.run_me(cliClient)
-        print('OK.')                                                                   os.path.abspath(
+        print('OK.')
 
         print('reading aods file, writing directory .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json', '-a', aodsfile, '-x', 'read', \

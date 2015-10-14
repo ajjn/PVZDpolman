@@ -1,4 +1,5 @@
 import argparse, getpass, sys
+#from userException import
 __author__ = 'r2h2'
 
 
@@ -76,15 +77,22 @@ class CliPAtoolInvocation(AbstractInvocation):
     ''' define CLI invocation for PAtool. Test runner can use this by passing testargs  '''
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
+        self._parser.add_argument('-e', '--entityid', dest='entityid', help="overwrite default entityId generated from "
+                                                                            "the certificate's subject-CN and role type")
         self._parser.add_argument('-m', '--metadatacerts', dest='metadatacerts', default='metadatacerts.json',
-                                  help='file containing json-array of PEM-formatted certificates trusted to sign the metadata aggregate')
+                                  help='file containing json-array of PEM-formatted certificates trusted to sign the'
+                                       ' metadata aggregate')
+        self._parser.add_argument('-r', '--samlrole', dest='samlrole', default="")
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         self._parser.add_argument('-s', '--signed_output', dest='signed_output',
                                   help='signED output file (default: s/(inputfile).xml/\1_signed.xml/)')
+        self._parser.add_argument('-S', '--entityidSuffix', dest='entityid_suffix', default="",
+                                  help="used to distinguish multiple entities with a single FQDN")
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
 
         # create the parser for the "createED" command
         self._parser_create = _subparsers.add_parser('createED', help='create an EntityDescriptor from a certificate')
+        self._parser_create.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate)')
         self._parser_create.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
 
         # create the parser for the "signED" command
@@ -95,10 +103,15 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_extract = _subparsers.add_parser('extractED', help='extract certificate from EntityDescriptors in metadata')
         self._parser_extract.add_argument('input', type=argparse.FileType('r'), help='file containing the metadata aggregate')
 
-        if (testargs):
+        if testargs:
             self.args = self._parser.parse_args(testargs)
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
+
+        if self.args.subcommand == 'createED':
+            assert self.args.samlrole in ('IDP', 'SP'), "samlrole must be one of ('IDP', 'SP')"
+            if self.args.entityid is not None:
+                assert self.args.entityid[0:8] == 'https://', "entityId must start with https://"
 
         if not self.args.verbose:
             sys.tracebacklimit = 2
