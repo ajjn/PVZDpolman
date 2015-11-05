@@ -47,10 +47,9 @@ class PEP:
 
     def validateSignature(self, filename_abs) -> str:
         PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
-        #PvzdVerfiySig = autoclass('PvzdVerifySig')
         verifier = PvzdVerfiySig(
-            '/opt/java/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml',  # TODO: relative path to project root
-            '/Users/admin/devl/java/rhoerbe/PVZD/VerifySigAPI/conf/log4j.properties',
+            os.path.join(PROJDIR_ABS, 'conf/moa-spss/MOASPSSConfiguration.xml'),
+            os.path.join(PROJDIR_ABS, 'conf/log4j.properties'),
             filename_abs)
         response = verifier.verify()
         assert 'OK' == response.pvzdCode, \

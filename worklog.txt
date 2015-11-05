@@ -61,7 +61,7 @@ gitPython: repo.index.add benötigt immer ein Liste, sonst kommt die Meldung
 ValueError: Absolute path '/' is not in git repository at '<repo root path>'
 
 # VerifySignature: moa-spss config file local ins Projectdir zu kopieren reicht nicht ("TrustProfileId unbekannt);
-# statt dessen munssman das gesamte moa-spss/conf directory aus moa-id-auth-2.2.1 kopieren
+# statt dessen muss man das gesamte moa-spss/conf directory aus moa-id-auth-2.2.1 kopieren
 
 Tickets
 # PEP:
@@ -79,3 +79,5 @@ Tickets
 # PolicyManager/create STP/AWP SAML MD
 
 # HSM-Config mit eToken Pro
+
+# funktionierende Konfig für eCard auf VMWare Fusion OSX Guest: USB2.0 (hub), "Gemalto USB Smartcard Reader"
