@@ -6,3 +6,5 @@ https://joinup.ec.europa.eu/asset/moa-idspss/asset_release/moa-id-221
 (Test was performed with version 2.2.1)
 
 From the unpacked MOA-DI directory copy the moa-spss subdirectory here
+
+Finally, the symlink moa-spss must point to the downlaoded library - check it.
