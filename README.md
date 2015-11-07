@@ -96,10 +96,10 @@ gemeldet sind.
 
 Es gibt vier Recordtypen die zu erfassen sind:
 
-a. **"domain"** (enthält eine Domain unter der Portale betrieben werden, z.B. bmi.gv.at oder pvawp.bmi.gv.at
-b. **"organization"** (der Portalbetreiber)
-c. **"revocation"** (ein gesperrtes Zertifikat eines Portals)
-d. **"userprivilege"** (das Zertifikat einer Person der Zugriffsrechte eingeräumt werden)
+1. **"domain"** (enthält eine Domain unter der Portale betrieben werden, z.B. bmi.gv.at oder pvawp.bmi.gv.at
+2. **"organization"** (der Portalbetreiber)
+3. **"revocation"** (ein gesperrtes Zertifikat eines Portals)
+4. **"userprivilege"** (das Zertifikat einer Person der Zugriffsrechte eingeräumt werden)
 
 Die Erfassung erfolgt mit „Input Records“ die in JSON notiert sind. Ein
 Input File besteht aus einem Array mit aus folgender JSON-Struktur:
@@ -149,8 +149,6 @@ Das Journal wird in einer Datei vom PMP immer in folgender Weise gespeichert:
 ![](PolicyManager%20Doku-Dateien/image002.png)
 Wrapper: Hash Chain, delete flag, datestamp, userstamp
 
-\
-
 ** **
 
 4       PEP
@@ -165,19 +163,18 @@ Der PEP führt folgende Prüfungen pro Meldung durch:
 2. Die Meldung ist konform zu den PVP2-Regeln (Schematron)
 3. Die Meldung hat eine gültige Bürgerkarten-Signatur
 4. Über den Public Key des Signators muss ein gültiger Portaladministrator gemeldet sein
-5.    Der Portaladministrator muss berechtigt sein die im
+5. er Portaladministrator muss berechtigt sein die im
 EntityDescriptor enthaltenen Domänen zu verwalten. Dazu ist die
 Beziehung userprivilege \<-\> organization \<-\> domain zu verwenden. Im
 Detail ist zu prüfen, dass die Domain Namen in URLs von SAML
 EntityDescriptors (EntitiyID, Endpoints) mit den berechtigten Domains
 übereinstimmt. Als Übereinstimmung gilt, wenn der FQHN aus der
 Berechtigung ganz oder teilweise im zu prüfenden FQHN enthalten ist.
-6.    In der Meldung enthaltene Zertifikate müssen folgende Bedingungen
-erfüllen:
-  a. Nicht in der Sperrliste enthalten;
-  b. CN-Komponente des x509subject Attributes ist eine Domäne die der Portaladministrator verwalten darf[[1]](#_ftn1);
-  c. Der in x509NotValidAfter angegeben Zeitpunkt liegt in der Zukunft;
-  d. Issuer in der Liste der akkreditierten CAs getrennt für STP/IDP und AWP/SP.
+6. In der Meldung enthaltene Zertifikate müssen folgende Bedingungen erfüllen:
+  * Nicht in der Sperrliste enthalten;
+  * CN-Komponente des x509subject Attributes ist eine Domäne die der Portaladministrator verwalten darf[[1]](#_ftn1);
+  * Der in x509NotValidAfter angegeben Zeitpunkt liegt in der Zukunft;
+  * Issuer in der Liste der akkreditierten CAs getrennt für STP/IDP und AWP/SP.
 
 4.2      Schnittstelle für den Import und Weiterverarbeitung
 ------------------------------------------------------------
@@ -186,10 +183,9 @@ Die Kommunikation passiert über ein Git-Repository. Im Repository gibt
 es drei Verzeichnisse, die jeweils dem Verarbeitungsstatus einer Meldung
 entsprechen:
 
--  request\_queue (hier werden die XML-Dateien vom Depositar
-eingestellt)
--       rejected (abgelehnte Meldungen plus Fehlermeldung)
--       accepted (aus diesem Verzeichnis erstellt der MD Aggregator das Aggregat)
+-  request\_queue (hier werden die XML-Dateien vom Depositar eingestellt)
+-  rejected (abgelehnte Meldungen plus Fehlermeldung)
+-  accepted (aus diesem Verzeichnis erstellt der MD Aggregator das Aggregat)
 
 Es werden 3 Instanzen des Repositories erstellt:
 - Master (bare) zur Synchronisation
@@ -208,8 +204,6 @@ Namen hochgeladen werden.
 Für die Löschung einer Meldung muss eine EntityDescriptor hochgeladen
 werden, der im Root-Element das Attribut
 http://pvp.egov.gv.at:disposition = „True“ gesetzt hat.
-
-\
 
 * * * * *
 
