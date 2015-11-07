@@ -30,10 +30,9 @@ widerrufen)
 ===============
 
 Der PolicyManager Stelle drei Funktionen bereit:
-
-​a. PMP – Policy Management Point für die Rechteverwaltung,
-​b. PEP – Policy Enforcement Point für die Rechteprüfung und
-​c. PA-Tool – Portaladmin Tool für Signatur von Metadaten und Extraktion
+​1. PMP – Policy Management Point für die Rechteverwaltung,
+​2. PEP – Policy Enforcement Point für die Rechteprüfung und
+​3. PA-Tool – Portaladmin Tool für Signatur von Metadaten und Extraktion
 von Zertifikaten.
 
 Der PMP erstellt ein Policy Directory und der PEP liest es um damit
@@ -44,9 +43,9 @@ ihrer Rechte und wird durch den Depositar (oder seinen Vertreter)
 gepflegt.
 
 PATool hat drei Funktionen
-a. createED: Erstellt aus einem X.509 Zertifikat einen EntityDescriptor (-\> R-Profil)
-b. signED: Signiert einen EntityDescriptor (Xades enveloped)
-c. extractED: extrahiert Zertifikate aus einem Metadaten-Aggregat
+1. createED: Erstellt aus einem X.509 Zertifikat einen EntityDescriptor (-\> R-Profil)
+2. signED: Signiert einen EntityDescriptor (Xades enveloped)
+3. extractED: extrahiert Zertifikate aus einem Metadaten-Aggregat
 
 ** **
 
@@ -63,8 +62,8 @@ bestehende Einträge unverändert bleiben müssen.
 
 Im Programm kommt das Policy Directory in 2 Varianten vor:
 
-a. Journalisiert und signiert, (im Programm intern „aods“), und
-b. konsolidiert (ohne gelöschte und aktualisierte Einträge, nach Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
+1. Journalisiert und signiert, (im Programm intern „aods“), und
+2. konsolidiert (ohne gelöschte und aktualisierte Einträge, nach Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
 
 3.2      Abläufe
 ----------------
