@@ -31,36 +31,22 @@ widerrufen)
 
 Der PolicyManager Stelle drei Funktionen bereit:
 
-​a) PMP – Policy Management Point für die Rechteverwaltung,
-
-​b) PEP – Policy Enforcement Point für die Rechteprüfung und
-
-​c) PA-Tool – Portaladmin Tool für Signatur von Metadaten und Extraktion
+​a. PMP – Policy Management Point für die Rechteverwaltung,
+​b. PEP – Policy Enforcement Point für die Rechteprüfung und
+​c. PA-Tool – Portaladmin Tool für Signatur von Metadaten und Extraktion
 von Zertifikaten.
-
-
 
 Der PMP erstellt ein Policy Directory und der PEP liest es um damit
 Zugriffsentscheidungen zu treffen.
-
-
 
 Das Policy Directory enthält die Liste der Portaladministratoren und
 ihrer Rechte und wird durch den Depositar (oder seinen Vertreter)
 gepflegt.
 
-
-
 PATool hat drei Funktionen
-
--       createED: Erstellt aus einem X.509 Zertifikat einen
-EntityDescriptor (-\> R-Profil)
-
--       signED: Signiert einen EntityDescriptor (Xades enveloped)
-
--       extractED: extrahiert Zertifikate aus einem Metadaten-Aggregat
-
-\
+a. createED: Erstellt aus einem X.509 Zertifikat einen EntityDescriptor (-\> R-Profil)
+b. signED: Signiert einen EntityDescriptor (Xades enveloped)
+c. extractED: extrahiert Zertifikate aus einem Metadaten-Aggregat
 
 ** **
 
@@ -78,10 +64,9 @@ bestehende Einträge unverändert bleiben müssen.
 
 Im Programm kommt das Policy Directory in 2 Varianten vor:
 
-a)    Journalisiert und signiert, (im Programm intern „aods“), und
+a. Journalisiert und signiert, (im Programm intern „aods“), und
 
-b)    konsolidiert (ohne gelöschte und aktualisierte Einträge, nach
-Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
+b. konsolidiert (ohne gelöschte und aktualisierte Einträge, nach Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
 
 3.2      Abläufe
 ----------------
@@ -89,8 +74,6 @@ Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
 Im Policy Directory werden die Portalbetreiber, die von ihnen
 verwalteten Domänen und die Portaladministratoren eingetragen. Es werden
 folgende Abläufe unterstützt:
-
-
 
 1.    Erstellung eines leeren Policy Directory
 
@@ -113,57 +96,31 @@ gemeldet sind.
 
 Es gibt vier Recordtypen die zu erfassen sind:
 
-**"domain"** (enthält eine Domain unter der Portale betrieben werden,
-z.B. bmi.gv.at oder pvawp.bmi.gv.at
-
-**"organization"** (der Portalbetreiber)
-
-"**revocation**" (ein gesperrtes Zertifikat eines Portals)
-
-"**userprivilege**" (das Zertifikat einer Person der Zugriffsrechte
-eingeräumt werden)
-
-
+a. **"domain"** (enthält eine Domain unter der Portale betrieben werden, z.B. bmi.gv.at oder pvawp.bmi.gv.at
+b. **"organization"** (der Portalbetreiber)
+c. **"revocation"** (ein gesperrtes Zertifikat eines Portals)
+d. **"userprivilege"** (das Zertifikat einer Person der Zugriffsrechte eingeräumt werden)
 
 Die Erfassung erfolgt mit „Input Records“ die in JSON notiert sind. Ein
 Input File besteht aus einem Array mit aus folgender JSON-Struktur:
 
+    [{"record": [\<record-type\>, \<primary key\>, \<attribut liste\>], "delete": false}]
 
+    domain:
+        \<primary key\> Domain Name
+        Attribute 1: org-id (gvOuId der Organisation).
 
-[{"record": [\<record-type\>, \<primary key\>, \<attribut liste\>],
-"delete": false}]
+    organization:
+        \<primary key\> org-id.
+        Attribute 1: Name der Organisation
 
+    revocation:
+        \<primary key\> {Keytype} + Key. Implementiert ist KeyType = „cert“
 
-
-domain:
-
-\<primary key\> Domain Name
-
-Attribute 1: org-id (gvOuId der Organisation).
-
-
-
-organization:
-
-\<primary key\> org-id.
-
-Attribute 1: Name der Organisation
-
-
-
-revocation:
-
-\<primary key\> {Keytype} + Key. Implementiert ist KeyType = „cert“
-
-
-
-userprivilege:
-
-\<primary key\> {Keytype} + Key. Implementiert ist KeyType = „cert“
-
-Attribute 1:org-id
-
-Attribute 2: Name
+    userprivilege:
+        \<primary key\> {Keytype} + Key. Implementiert ist KeyType = „cert“
+        Attribute 1:org-id
+        Attribute 2: Name
 
 
 
@@ -172,44 +129,24 @@ Attribute 2: Name
 
 Die Speicherung mit Gewährleistung von Integrität und Authentizität
 erfolgt mit einer Journaldatei (append-only data structure). Sie ist
-hierarchisch aufgebaut, von innen nach außen wie folgt (siehe folgende
-Grafik):
+hierarchisch aufgebaut, von innen nach außen wie folgt:
+    
+- Content Record: Record Type und die zugehörigen Attribute
+- Wrapper Record: Hash Chain und Content Disposition.
+  - Die Hash Chain beinhaltet pro Record einen Hashwert, der aus dem 
+  JSON-codierten Content Record (UTF-8) und dem vorhergehenden Hashwert gebildet wird.
+  - Die Content Disposition enthält das Delete Flag. Ist es True, wird
+  ein vorhergehender Record mit dem gleichen Primary Key gelöscht, ist es False, 
+  wird der Datensatz eingefügt (wenn der Primary Key nicht
+  vorhanden ist) bzw. aktualisiert (wenn schon vorhanden).
+- Journal: Liste von Wrapper-Records, die durch die Hash-Chain nur am Ende erweiterbar ist.
 
--       Content Record: Record Type und die zugehörigen Attribute
-
--       Wrapper Record: Hash Chain und Content Disposition.
-
-o   Die Hash Chain beinhaltet pro Record einen Hashwert, der aus dem
-JSON-codierten Content Record (UTF-8) und dem vorhergehenden Hashwert
-gebildet wird.
-
-o   Die Content Disposition enthält das Delete Flag. Ist es True, wird
-ein vorhergehender Record mit dem gleichen Primary Key gelöscht, ist es
-False, wird der Datensatz eingefügt (wenn der Primary Key nicht
-vorhanden ist) bzw. aktualisiert (wenn schon vorhanden).
-
--       Journal: Liste von Wrapper-Records, die durch die Hash-Chain nur
-am Ende erweiterbar ist.
-
-
-
-Das Journal wird in einer Datei vom PMP immer in folgender Weise
-gespeichert:
-
--       Bzip2-Kompression
-
--       Base64-Encoding
-
--       Enveloping XML Signature
-
-
-
-
+Das Journal wird in einer Datei vom PMP immer in folgender Weise gespeichert:
+-  Bzip2-Kompression
+-  Base64-Encoding
+-  Enveloping XML Signature
 
 ![](PolicyManager%20Doku-Dateien/image002.png)
-
-
-
 Wrapper: Hash Chain, delete flag, datestamp, userstamp
 
 \
@@ -224,15 +161,10 @@ Wrapper: Hash Chain, delete flag, datestamp, userstamp
 
 Der PEP führt folgende Prüfungen pro Meldung durch:
 
-1.    Die Meldung (= SAML EntityDescriptor) ist konform zum XML Schema
-
-2.    Die Meldung ist konform zu den PVP2-Regeln (Schematron)
-
-3.    Die Meldung hat eine gültige Bürgerkarten-Signatur
-
-4.    Über den Public Key des Signators muss ein gültiger
-Portaladministrator gemeldet sein
-
+1. Die Meldung (= SAML EntityDescriptor) ist konform zum XML Schema
+2. Die Meldung ist konform zu den PVP2-Regeln (Schematron)
+3. Die Meldung hat eine gültige Bürgerkarten-Signatur
+4. Über den Public Key des Signators muss ein gültiger Portaladministrator gemeldet sein
 5.    Der Portaladministrator muss berechtigt sein die im
 EntityDescriptor enthaltenen Domänen zu verwalten. Dazu ist die
 Beziehung userprivilege \<-\> organization \<-\> domain zu verwenden. Im
@@ -240,20 +172,12 @@ Detail ist zu prüfen, dass die Domain Namen in URLs von SAML
 EntityDescriptors (EntitiyID, Endpoints) mit den berechtigten Domains
 übereinstimmt. Als Übereinstimmung gilt, wenn der FQHN aus der
 Berechtigung ganz oder teilweise im zu prüfenden FQHN enthalten ist.
-
 6.    In der Meldung enthaltene Zertifikate müssen folgende Bedingungen
 erfüllen:
-
-a.    nicht in der Sperrliste enthalten;
-
-b.    CN-Komponente des x509subject Attributes ist eine Domäne die der
-Portaladministrator verwalten darf[[1]](#_ftn1);
-
-c.     Der in x509NotValidAfter angegeben Zeitpunkt liegt in der
-Zukunft;
-
-d.    Issuer in der Liste der akkreditierten CAs getrennt für STP/IDP
-und AWP/SP.
+  a. Nicht in der Sperrliste enthalten;
+  b. CN-Komponente des x509subject Attributes ist eine Domäne die der Portaladministrator verwalten darf[[1]](#_ftn1);
+  c. Der in x509NotValidAfter angegeben Zeitpunkt liegt in der Zukunft;
+  d. Issuer in der Liste der akkreditierten CAs getrennt für STP/IDP und AWP/SP.
 
 4.2      Schnittstelle für den Import und Weiterverarbeitung
 ------------------------------------------------------------
@@ -262,44 +186,28 @@ Die Kommunikation passiert über ein Git-Repository. Im Repository gibt
 es drei Verzeichnisse, die jeweils dem Verarbeitungsstatus einer Meldung
 entsprechen:
 
--       request\_queue (hier werden die XML-Dateien vom Depositar
+-  request\_queue (hier werden die XML-Dateien vom Depositar
 eingestellt)
-
 -       rejected (abgelehnte Meldungen plus Fehlermeldung)
-
--       accepted (aus diesem Verzeichnis erstellt der MD Aggregator das
-Aggregat)
-
-
+-       accepted (aus diesem Verzeichnis erstellt der MD Aggregator das Aggregat)
 
 Es werden 3 Instanzen des Repositories erstellt:
-
--       Master (bare) zur Synchronisation
-
--       Web (Upload der Meldungen/Download der Verarbeitungsberichte)
-
--       Backend (Prüfung und Weitergabe an den MD-Aggregator)
+- Master (bare) zur Synchronisation
+- Web (Upload der Meldungen/Download der Verarbeitungsberichte)
+- Backend (Prüfung und Weitergabe an den MD-Aggregator)
 
 Die Synchronisation der Instanzen Web und Backend mit der Master-Instanz
 erfolgt über push/pull (Remote SSH)
 
-
-
 Die Weiterverarbeitung über den Metadatenaggregator erfolgt über das
 Verzeichnis „accepted“
-
-
 
 Für die Aktualisierung einer Meldung muss eine Datei mit dem gleichen
 Namen hochgeladen werden.
 
-
-
 Für die Löschung einer Meldung muss eine EntityDescriptor hochgeladen
 werden, der im Root-Element das Attribut
 http://pvp.egov.gv.at:disposition = „True“ gesetzt hat.
-
-
 
 \
 
