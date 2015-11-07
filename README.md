@@ -52,7 +52,6 @@ c. extractED: extrahiert Zertifikate aus einem Metadaten-Aggregat
 
 3       PMP
 ===========
-
 3.1      Datenmodell
 --------------------
 
@@ -65,7 +64,6 @@ bestehende Einträge unverändert bleiben müssen.
 Im Programm kommt das Policy Directory in 2 Varianten vor:
 
 a. Journalisiert und signiert, (im Programm intern „aods“), und
-
 b. konsolidiert (ohne gelöschte und aktualisierte Einträge, nach Suchschlüsseln sortiert) (im Programm intern „policyDict“ bezeichnet).
 
 3.2      Abläufe
@@ -76,19 +74,15 @@ verwalteten Domänen und die Portaladministratoren eingetragen. Es werden
 folgende Abläufe unterstützt:
 
 1.    Erstellung eines leeren Policy Directory
-
 2.    Anfügen neuer Datensätze (als JSON Struktur oder via GUI);
 Signieren mit der Bürgerkarte. Es können nur valide und gültig signierte
 Policy Directory gelesen werden.
-
 3.    Lesen und validieren des Policy Directory, Ausgabe als
 JSON-Struktur die für die Verifikation der Rechte von
 Portaladministratoren geeignet ist.
-
 4.    Übermittlung des Policy Directory an Portalverantwortliche, damit
 sie prüfen können welche Portaladministratoren aktuell bei ihnen
 gemeldet sind.
-
 
 
 3.3      Schnittstellen/Datenerfassung
@@ -122,8 +116,6 @@ Input File besteht aus einem Array mit aus folgender JSON-Struktur:
         Attribute 1:org-id
         Attribute 2: Name
 
-
-
 3.4      Speicherformat
 -----------------------
 
@@ -153,7 +145,6 @@ Wrapper: Hash Chain, delete flag, datestamp, userstamp
 
 4       PEP
 ===========
-
 4.1      Konzept
 ----------------
 
@@ -163,7 +154,7 @@ Der PEP führt folgende Prüfungen pro Meldung durch:
 2. Die Meldung ist konform zu den PVP2-Regeln (Schematron)
 3. Die Meldung hat eine gültige Bürgerkarten-Signatur
 4. Über den Public Key des Signators muss ein gültiger Portaladministrator gemeldet sein
-5. er Portaladministrator muss berechtigt sein die im
+5. Der Portaladministrator muss berechtigt sein die im
 EntityDescriptor enthaltenen Domänen zu verwalten. Dazu ist die
 Beziehung userprivilege \<-\> organization \<-\> domain zu verwenden. Im
 Detail ist zu prüfen, dass die Domain Namen in URLs von SAML
@@ -201,7 +192,7 @@ Verzeichnis „accepted“
 Für die Aktualisierung einer Meldung muss eine Datei mit dem gleichen
 Namen hochgeladen werden.
 
-Für die Löschung einer Meldung muss eine EntityDescriptor hochgeladen
+Für die Löschung einer Meldung muss ein EntityDescriptor hochgeladen
 werden, der im Root-Element das Attribut
 http://pvp.egov.gv.at:disposition = „True“ gesetzt hat.
 
