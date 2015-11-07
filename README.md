@@ -138,7 +138,7 @@ Das Journal wird in einer Datei vom PMP immer in folgender Weise gespeichert:
 -  Base64-Encoding
 -  Enveloping XML Signature
 
-![](PolicyManager%20Doku-Dateien/image002.png)
+<img href="doc/ZD_Rechte_AODS.svg" width="500">
 Wrapper: Hash Chain, delete flag, datestamp, userstamp
 
 ** **
