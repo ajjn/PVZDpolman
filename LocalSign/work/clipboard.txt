@@ -1,1 +1,0 @@
-curl --data @/tmp/creSegRequ8721/creSigRequ.xml.urlenc http://localhost:3495/http-security-layer-request
