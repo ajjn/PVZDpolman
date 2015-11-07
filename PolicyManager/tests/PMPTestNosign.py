@@ -102,8 +102,8 @@ class Test05_sigver(unittest.TestCase):
 
         PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
         verifier = PvzdVerfiySig(
-            os.path.join(projdir_abs, "lib/moa-id-auth-2.2.1/conf/moa-spss/MOASPSSConfiguration.xml"),
-            os.path.join(projdir_abs, "VerifySigAPI/conf/log4j.properties"),
+            os.path.join(projdir_abs, "conf/moa-spss/MOASPSSConfiguration.xml"),
+            os.path.join(projdir_abs, "conf/log4j.properties"),
             os.path.join(projdir_abs, "VerifySigAPI/testdata/idp5_signed_untrusted_signer.xml"))
 
         response  = verifier.verify()
