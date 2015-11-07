@@ -74,8 +74,12 @@ class PEP:
                 break
         return isInAllowed
 
-    def validateDomainNames(self, filename_abs, allowedDomains):
+    def validateDomainNames(self, filename_abs, allowedDomains): # TODO: implement
         print('allowed domains: ' + ', '.join(allowedDomains))
+        # extract used domain names from entity descriptor, i.e. endpoints and entityId
+        # verify that signer has privileges for all used domains. There are two possible path
+        #   signer-cert -> portaladmin -> org -> domain
+        #   signer-cert -> identity-link/ssid -> portaladmin -> org -> domain
         return True
 
     def getCerts(self):

@@ -27,6 +27,7 @@ class ContentRecord:
             if len(self.attr) != 1: raise InputFormatError('organization record must have exactly 1 attribute (the org-id)')
             if not isinstance(self.attr[0], str): raise InputFormatError('org-name (first attribute of organization record) must be of type string')
         elif self.rectype == "userprivilege":
+            #if self.primarykey[0:6] not in ('cert', '{ssid}'): raise InputFormatError('primary key of userprivilege must start with {cert} or {ssid}') # bPK (=ssid) nicht implementiert
             if self.primarykey[0:6] != '{cert}': raise InputFormatError('primary key of userprivilege must start with {cert}')
             if len(self.attr) != 2: raise InputFormatError('user privilege record must have 2 attributes (org-id, name')
             if not isinstance(self.attr[0], str): raise InputFormatError('org-id (first attribute of user privilege record) must be of type string')
