@@ -19,7 +19,7 @@ def creSignedXML(data, verbose=False):
     ''' compress, b64-encode and sign-envelop the data and return it '''
 
     failIfSecurityLayerUnavailable()
-    dataPacked = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data)).decode('ascii')
+    dataPacked = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data.encode('utf-8'))).decode('ascii')
     if verbose: print('packed data:\n%s\n' % dataPacked)
 
     sigRequ = '''\
