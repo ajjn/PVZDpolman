@@ -22,9 +22,9 @@ public class PvzdVerifySigTest {
 
     @Test
     public void testVerifyGood() throws Exception {
-        final File xmlFileOK = new File("testdata/idp5_valid.xml_sig.xml");
+        final File xmlFileOK = new File("tests/testdata/idp5_valid.xml_sig.xml");
         assert xmlFileOK.exists() : "not found: " + xmlFileOK.getAbsolutePath();
-        final File signerCert = new File("testdata/r2h2_ecard_qcert.b64");
+        final File signerCert = new File("tests/testdata/r2h2_ecard_qcert.b64");
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         System.out.println("Projdir: " + projdir);
 

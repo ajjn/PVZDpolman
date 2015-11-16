@@ -10,8 +10,7 @@ import at.gv.egovernment.moa.spss.api.xmlverify.VerifySignatureLocation;
 import at.gv.egovernment.moa.spss.api.xmlverify.VerifyXMLSignatureRequest;
 import at.gv.egovernment.moa.spss.api.xmlverify.VerifyXMLSignatureResponse;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -45,6 +44,7 @@ public class PvzdVerifySig {
             System.err.println("XML-Dokument mit zu pruefender Signatur nicht gefunden: " + sigDocFileName);
             System.exit(-1);
         }
+
         SPSSFactory spssFac = SPSSFactory.getInstance();
         SignatureVerificationService sigVerifyService = SignatureVerificationService.getInstance();
         Content sigDocContent = spssFac.createContent(sigDocFIS, null);
@@ -63,6 +63,19 @@ public class PvzdVerifySig {
                 null,    // Signaturmanifest-Pruefung soll nicht durchgefuehrt werden
                 false,   // Hash-Inputdaten, d.h. tatsaechlich signierte Daten werden nicht zurueckgeliefert
                 "MOAIDBuergerkarteAuthentisierungsDaten");
+
+        // suppress stdout to get rid of distracting IAIK lib startup licence messages
+        File file = new File("/dev/null");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        PrintStream ps = new PrintStream(fos);
+        System.setOut(ps);
+        System.setErr(ps);
 
         // pruefen
         VerifyXMLSignatureResponse verifyResponse = null;
