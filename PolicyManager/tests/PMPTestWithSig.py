@@ -5,7 +5,7 @@ from invocation import CliPmpInvocation
 from userExceptions import *
 import PMP
 __author__ = 'r2h2'
-''' all tests that reuqire citizen card signature '''
+''' all tests that require citizen card signature '''
 
 
 class TestS01_basic_happy_cycle(unittest.TestCase):
@@ -31,11 +31,11 @@ class TestS01_basic_happy_cycle(unittest.TestCase):
 
         print('reading aods file, writing directory .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json', '-a', aodsfile, '-x', 'read', \
-                                   '--jsondump', os.path.abspath('/work/dir_01.json')])
+                                   '--jsondump', os.path.abspath('/work/dir_02.json')])
         PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
-        diff = difflib.ndiff(open(os.path.abspath('work/dir_01.json')).readlines(),
+        diff = difflib.ndiff(open(os.path.abspath('work/dir_02.json')).readlines(),
                              open(os.path.abspath('testdata/dir_01.json')).readlines())
         assert sys.stdout.writelines(diff) is None, ' not equal reference data'
         print('OK.')
