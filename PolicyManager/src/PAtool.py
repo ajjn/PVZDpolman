@@ -16,7 +16,7 @@ class PAtool:
         #self.projdir_abs = os.path.abspath(projdir_rel)
 
     def extractX509SubjectCN(self) -> str:
-        pass #TODO implement
+        pass # TODO implement
 
     def getEntityId(self,x509cert) -> str:
         entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
@@ -63,7 +63,7 @@ class PAtool:
             f.write(signed_contents)
 
     def extractED(self):
-        pass
+        pass  # TODO implement
 
 
 
