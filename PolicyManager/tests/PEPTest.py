@@ -33,7 +33,7 @@ class Test02_basic_happy_cycle(unittest.TestCase):
                                       '--aods', os.path.abspath('testdata/aods_peptest.json'),
                                       '--pubreq', os.path.abspath(repo_dir),
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
-        print('=== creating fresh git repo in ' + repo_dir)
+        print('=== creating fresh git repo in ' + repo_dir + ', adding test data')
         gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
         gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory', repo_dir)
         print('=== processing request queue')
