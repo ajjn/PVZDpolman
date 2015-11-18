@@ -5,14 +5,24 @@ __author__ = 'r2h2'
 
 class X509cert:
     def __init__(self, cert_str):
-        assert cert_str.startswith('-----BEGIN CERTIFICATE-----'), "PEM file must have '-----BEGIN CERTIFICATE-----' header"
-        assert re.findall(r'-----END CERTIFICATE-----\n*$', cert_str), "PEM file must have '-----END CERTIFICATE-----' trailer"
         self.cert = c.load_certificate(c.FILETYPE_PEM, cert_str)
         self.cert_str = cert_str
 
     def getPEM_str(self):
-        pem_no_header = re.sub(r'-----BEGIN CERTIFICATE-----\n', '', self.cert_str)
-        pem_str = re.sub(r'\n-----END CERTIFICATE-----\n*$', '\n', pem_no_header)
+        ''' from the multi-line string in self.cert_str extract text between -----BEGIN and END----- markers'''
+        begin = False
+        end = False
+        pem_str = ''
+        for l in self.cert_str.splitlines(True):
+            if l == '-----BEGIN CERTIFICATE-----\n':
+                begin = True
+            if begin:
+                if l.startswith('-----END CERTIFICATE-----'):
+                    end = True
+                    break
+                pem_str += l
+        assert begin, "PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468"
+        assert end, "PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468"
         return pem_str
 
     def getSubjectCN(self):
