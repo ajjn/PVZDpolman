@@ -4,8 +4,8 @@ source ./setProjEnv.sh
 MOD_HOME=$PROJ_HOME/PolicyManager
 
 echo '== Test 01: create EntitDescriptor from certificate'
-certificate_file="$MOD_HOME/tests/testdata/redmineIdentineticsCom-cer.pem"
-entitydescriptor_file="$MOD_HOME/tests/work/redmineIdentineticsOrg_ed.xml"
+certificate_file="$MOD_HOME/tests/testdata/gondorMagwienGvAt_2017-cer.pem"
+entitydescriptor_file="$MOD_HOME/tests/work/gondorMagwienGvAt_ed.xml"
 md_signingcerts_file="$MOD_HOME/tests//testdata/metadatasigningcerts.json"
 
 $py34 $MOD_HOME/src/PAtool.py -v \
