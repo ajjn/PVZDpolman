@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./setProjEnv.sh
+source ./setTestEnv.sh
 MOD_HOME=$PROJ_HOME/PolicyManager
 
 echo '== Test 01: create EntitDescriptor from certificate'
