@@ -104,7 +104,7 @@ class Test05_sigver(unittest.TestCase):
         verifier = PvzdVerfiySig(
             os.path.join(projdir_abs, "conf/moa-spss/MOASPSSConfiguration.xml"),
             os.path.join(projdir_abs, "conf/log4j.properties"),
-            os.path.join(projdir_abs, "VerifySigAPI/testdata/idp5_signed_untrusted_signer.xml"))
+            os.path.join(projdir_abs, "VerifySigAPI/tests/testdata/idp5_signed_untrusted_signer.xml"))
 
         response  = verifier.verify()
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)
