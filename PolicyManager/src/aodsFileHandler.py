@@ -50,7 +50,7 @@ class AODSFileHandler():
             assert response.signerCertificateEncoded in trustCerts, \
                 "Signature certificate not in trusted list. Signature cert is\n" + response.signerCertificateEncoded
             tree = ET.parse(self._aodsFile)
-            content =  tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
+            content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
             assert len(content) > 0, 'AODS contained in XML signature value is empty'
             if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
             content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
