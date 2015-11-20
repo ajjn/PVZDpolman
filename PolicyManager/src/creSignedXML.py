@@ -45,6 +45,7 @@ def creSignedXML(data, verbose=False):
     except requests.exceptions.ConnectionError as e:
         print("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
         raise
+    assert r.status_code == 200, "Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text)
     assert r.text.find('sl:ErrorResponse') < 0, "Security Layer responed with error message."
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:
