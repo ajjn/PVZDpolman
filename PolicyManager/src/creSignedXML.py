@@ -29,7 +29,7 @@ def creSignedXML(data, verbose=False):
   <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
   <sl:DataObjectInfo Structure="enveloping">
     <sl:DataObject>
-      <sl:XMLContent>%s</sl:XMLContent>
+      <sl:Base64Content>%s</sl:Base64Content>
     </sl:DataObject>
     <sl:TransformsInfo>
       <sl:FinalDataMetaInfo>
