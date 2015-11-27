@@ -28,7 +28,7 @@ class AODSFileHandler():
         f = open(self._aodsFile, 'w')
         if xmlsign:
             j = json.dumps(s)
-            x = creSignedXML(j, self.verbose)
+            x = creSignedXML(j, verbose=self.verbose)
             f.write(x.encode("utf-8"))
         else:
             f.write(json.dumps(s))

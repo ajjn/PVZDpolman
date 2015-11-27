@@ -103,7 +103,7 @@ if __name__ == '__main__':
     print("# args=" + str(len(sys.argv)) + "\n")
     if len(sys.argv) == 1:
         print("Enveloping signature\n")
-        print(creSignedXML('Teststring', 'envelopingB64BZIP', verbose=True))
+        print(creSignedXML('Teststring', verbose=True))
     if len(sys.argv) == 2:
         print("Enveloped signature\n")
         ed = '''\
@@ -122,4 +122,4 @@ if __name__ == '__main__':
             <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://gondor.magwien.gv.at/R-Profil-dummy"/>
           </md:IDPSSODescriptor>
         </md:EntityDescriptor>'''
-        print(creSignedXML(ed, 'enveloped', '/md:EntityDescriptor', verbose=True))
+        print(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))

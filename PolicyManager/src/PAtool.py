@@ -52,7 +52,7 @@ class PAtool:
     def signED(self):
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
         unsigned_contents = self.args.input.read()
-        signed_contents = creSignedXML(unsigned_contents, self.args.verbose)
+        signed_contents = creSignedXML(unsigned_contents, verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
             output_filename = self.args.signed_output
             if self.args.verbose: print('writing signed document ' + output_filename)
