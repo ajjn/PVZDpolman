@@ -9,7 +9,7 @@ public class PvzdVerifySigResponse {
 
         pvzdMessage explains pvzdCode
 
-        signerCertificateEncoded contains the PEM encode signer certificate
+        signerCertificateEncoded contains the PEM encoded signer certificate
     */
     public String pvzdCode;
     public String pvzdMessage;
