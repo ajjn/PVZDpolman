@@ -49,7 +49,7 @@ class PEP:
         aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
         return aodsListHandler.aods_read()
 
-    def validateXSD(self, filename_abs):
+    def validateSAMLmdXSD(self, filename_abs):
         XmlValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XmlValidator')
         validator = XmlValidator(os.path.join(self.projdir_abs, 'ValidateXSD/SAML_MD_Schema'), False)
         validator.validateSchema(filename_abs)
@@ -156,7 +156,7 @@ def run_me(testrunnerInvocation=None):
                 gitHandler.remove_from_accepted(filename)
             else:
                 if invocation.args.verbose: print('validating XML schema')
-                pep.validateXSD(filename_abs)
+                pep.validateSAMLmdXSD(filename_abs)
                 pep.validateSchematron(filename_abs)
                 if invocation.args.verbose: print('validating signature')
                 signerCert = pep.validateSignature(filename_abs)
