@@ -8,6 +8,7 @@ from aodsListHandler import *
 from constants import *
 from gitHandler import GitHandler
 from invocation import *
+from SAMLEntityDescriptor import *
 from x509cert import X509cert
 __author__ = 'r2h2'
 
@@ -33,7 +34,7 @@ class PEP:
                 certificated is not blacklisted, not expired and from a listed issuer
     '''
 
-    def __init__(self,cliClient):
+    def __init__(self, cliClient):
         projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
         self.projdir_abs = os.path.abspath(projdir_rel)
         self.verbose = cliClient.args.verbose
@@ -49,11 +50,6 @@ class PEP:
         aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
         return aodsListHandler.aods_read()
 
-    def validateSAMLmdXSD(self, filename_abs):
-        XmlValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XmlValidator')
-        validator = XmlValidator(os.path.join(self.projdir_abs, 'ValidateXSD/SAML_MD_Schema'), False)
-        validator.validateSchema(filename_abs)
-
     def validateSchematron(self, filename_abs):
         pass  # TODO: implement
 
@@ -66,6 +62,9 @@ class PEP:
         response = verifier.verify()
         assert 'OK' == response.pvzdCode, \
             "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
+        #if self.verbose:
+        #    cert = X509cert(response.signerCertificateEncoded, inform='DER') # TODO: check encoding
+        #    print('Subject CN: ' + cert.getIssuer_str)
         return response.signerCertificateEncoded
 
     def getAllowedDomains(self, signerCert, policyDict) -> list:
@@ -138,7 +137,8 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
     else:
         invocation = CliPepInvocation()
-
+    projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+    projdir_abs = os.path.abspath(projdir_rel)
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
     if invocation.args.verbose: print('   using repo ' + invocation.args.pubrequ)
@@ -156,7 +156,8 @@ def run_me(testrunnerInvocation=None):
                 gitHandler.remove_from_accepted(filename)
             else:
                 if invocation.args.verbose: print('validating XML schema')
-                pep.validateSAMLmdXSD(filename_abs)
+                ed = SAMLEntityDescriptor(filename_abs, projdir_abs)
+                ed.validateXSD()
                 pep.validateSchematron(filename_abs)
                 if invocation.args.verbose: print('validating signature')
                 signerCert = pep.validateSignature(filename_abs)
@@ -165,7 +166,7 @@ def run_me(testrunnerInvocation=None):
                 ed_str = pep.getEntityDescriptor(filename_abs)
                 if invocation.args.verbose: print('validating signer\'s privileges to use domain names in URLs')
                 pep.validateDomainNames(ed_str, policyDict)
-                if invocation.args.verbose: print('validating certificate(s) not expired or blacklisted and issuer is valid ')
+                if invocation.args.verbose: print('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed_str, 'IDP')
                 pep.checkCerts(ed_str, 'SP')
             gitHandler.move_to_accepted(filename)

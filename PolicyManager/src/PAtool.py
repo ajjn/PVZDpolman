@@ -26,7 +26,6 @@ class PAtool:
             entityId += self.args.entityid_suffix
         return entityId
 
-
     def createED(self):
         if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
@@ -48,7 +47,6 @@ class PAtool:
         if self.args.verbose: print('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
 
-
     def signED(self):
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
         unsigned_contents = self.args.input.read()
@@ -64,7 +62,6 @@ class PAtool:
 
     def extractED(self):
         pass  # TODO implement
-
 
 
 def run_me(testrunnerInvocation=None):
