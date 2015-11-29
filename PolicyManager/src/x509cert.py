@@ -4,8 +4,11 @@ from OpenSSL import crypto as c
 __author__ = 'r2h2'
 
 class X509cert:
-    def __init__(self, cert_str):
-        self.cert = c.load_certificate(c.FILETYPE_PEM, cert_str)
+    def __init__(self, cert_str, inform='PEM'):
+        if inform == 'PEM':
+            self.cert = c.load_certificate(c.FILETYPE_PEM, cert_str)
+        elif inform == 'DER':
+            self.cert = c.load_certificate(c.FILETYPE_ASN1, cert_str)
         self.cert_str = cert_str
 
     def getPEM_str(self):
