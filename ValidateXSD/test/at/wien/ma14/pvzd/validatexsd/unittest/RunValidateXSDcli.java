@@ -3,12 +3,11 @@ package at.wien.ma14.pvzd.validatexsd.unittest;
 
 import at.wien.ma14.pvzd.validatexsd.XmlValidator;
 
-import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 
-public class RunVerifyXSDcli {
+public class RunValidateXSDcli {
 
     public void testVerifyGood(String xmldoc) throws Exception {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
@@ -23,7 +22,7 @@ public class RunVerifyXSDcli {
     }
 
     public static void main(String[] argv) throws Exception {
-        RunVerifyXSDcli r = new RunVerifyXSDcli();
+        RunValidateXSDcli r = new RunValidateXSDcli();
         r.testVerifyGood(argv[0]);
     }
 

@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 
-public class RunVerifyXSD {
+public class RunValidateXSD {
 
     public void testVerifyGood() throws Exception {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
@@ -20,7 +20,7 @@ public class RunVerifyXSD {
         validator.validateSchema(samlmdFileOK);    }
 
     public static void main(String[] argv) throws Exception {
-        RunVerifyXSD r = new RunVerifyXSD();
+        RunValidateXSD r = new RunValidateXSD();
         r.testVerifyGood();
     }
 
