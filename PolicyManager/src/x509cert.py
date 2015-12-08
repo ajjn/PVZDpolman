@@ -19,6 +19,7 @@ class X509cert:
         for l in self.cert_str.splitlines(True):
             if l == '-----BEGIN CERTIFICATE-----\n':
                 begin = True
+                continue
             if begin:
                 if l.startswith('-----END CERTIFICATE-----'):
                     end = True
