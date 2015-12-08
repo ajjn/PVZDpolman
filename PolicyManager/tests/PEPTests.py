@@ -1,33 +1,37 @@
 import os
 import unittest
 from invocation import CliPepInvocation
+from SAMLEntityDescriptor import SAMLEntityDescriptor
 import PEP
 from gitHandler import GitHandler
+
 __author__ = 'r2h2'
 
 projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 projdir_abs = os.path.abspath(projdir_rel)
 
 
-class Test01_valxsd(unittest.TestCase):
+class Test01_xsdval_valid(unittest.TestCase):
     def runTest(self):
-        print('== Test 01: testing xsd validator (java class)')
-        from jnius import autoclass
-        XmlValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XmlValidator')
-        validator = XmlValidator(os.path.join(projdir_abs, 'ValidateXSD/SAML_MD_Schema'), True)
-        print('=== testing with valid file')
-        m = validator.validateSchema(os.path.abspath('testdata/idp5_valid_xml_unsigned.xml'))
-        self.assertIsNone(m, 'expected empty message, but received: ' + str(m))
-        print('=== testing with invalid file')
-        m = validator.validateSchema(os.path.abspath('testdata/idp5_invalid_xml.xml'))
-        self.assertIsNotNone(m, 'expected empty message, but received: ' + str(m))
+        print('== Test 01: test calling schema validation/expecting OK (using java SAX parser)')
+        filename_abs = os.path.abspath('testdata/idp5_valid_xml_unsigned.xml')
+        ed = SAMLEntityDescriptor(filename_abs, projdir_abs)
+        retmsg = ed.validateXSD()
+        self.assertIsNone(retmsg, msg=retmsg)
 
 
-class Test02_basic_happy_cycle(unittest.TestCase):
+class Test02_xsdval_invalid(unittest.TestCase):
     def runTest(self):
-        import PEP
-        from gitHandler import GitHandler
-        print('\n== Test02: PEP happy cycle')
+        print('== Test 02: test calling schema validation/expecting invalid schema(using java SAX parser)')
+        filename_abs = os.path.abspath('testdata/gondorMagwienGvAt_ed_invalid_xsd.xml')
+        ed = SAMLEntityDescriptor(filename_abs, projdir_abs)
+        retmsg = ed.validateXSD()
+        self.assertIsNotNone(retmsg, msg=retmsg)
+
+
+class Test03_basic_happy_cycle(unittest.TestCase):
+    def runTest(self):
+        print('\n== Test03: PEP happy cycle')
         repo_dir = 'work/policyDirectory'
         cliClient = CliPepInvocation(['--verbose',
                                       '--aods', os.path.abspath('testdata/aods_peptest.json'),
@@ -42,11 +46,10 @@ class Test02_basic_happy_cycle(unittest.TestCase):
         os.path.isfile(requ1_result)
         assert os.path.isfile(os.path.abspath(requ1_result)), 'expected %s in accept directory' % requ1_result
 
-class Test03_unauthorized_requests(unittest.TestCase):
+
+class Test04_unauthorized_requests(unittest.TestCase):
     def runTest(self):
-        import PEP
-        from gitHandler import GitHandler
-        print('\n== Test02: PEP happy cycle')
+        print('\n== Test04: PEP happy cycle')
         repo_dir = 'work/policyDirectory'
         cliClient = CliPepInvocation(['--verbose',
                                       '--aods', os.path.abspath('testdata/aods_peptest.json'),
@@ -63,6 +66,7 @@ class Test03_unauthorized_requests(unittest.TestCase):
         assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
         requ2_errmsg = 'Signer certificate not found in policy directory'
         assert open(requ2_result + '.err').read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
+
 
 if __name__ == '__main__':
     unittest.main()
