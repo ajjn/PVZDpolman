@@ -21,14 +21,17 @@ public class XSDValidatorCLI {
     }
 
     public static void main(String[] argv) throws Exception {
-        System.out.println("XSDValidatorCLI ..");
+        System.out.println("XSDValidatorCLI (" + argv.length + ")");
         XSDValidatorCLI r = new XSDValidatorCLI();
+        String default_xsd_dir = "/Users/admin/devl/java/rhoerbe/PVZD/ValidateXSD/SAML_MD_Schema";
         if (argv.length == 1) {
-            r.testVerifyGood(argv[0], "/Users/admin/devl/java/rhoerbe/PVZD/ValidateXSD/SAML_MD_Schema");
+            System.out.println("Validating " + argv[0] + "against xsd in " + default_xsd_dir);
+            r.testVerifyGood(argv[0], default_xsd_dir);
         } else if (argv.length == 2) {
+            System.out.println("Validating " + argv[0] + argv[1]);
             r.testVerifyGood(argv[0], argv[1]);
         } else {
-            System.out.println("XSDValidatorCLI <file-to-be-validated> [schema-dir]");
+            System.out.println("wrong number of arguments.\n Usage: XSDValidatorCLI <file-to-be-validated> [schema-dir]");
         }
     }
 
