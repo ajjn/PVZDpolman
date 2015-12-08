@@ -26,3 +26,7 @@ class SecurityLayerUnavailable(Exception):
 
 class InvalidArgumentValue(Exception):
     pass
+
+class EntityRoleNotSupported(Exception):
+    """ Only IDP and SP roles are implemented """
+    pass
