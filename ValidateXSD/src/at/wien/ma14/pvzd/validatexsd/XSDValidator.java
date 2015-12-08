@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 import static java.lang.System.out;
 import static org.junit.Assert.assertTrue;
 
-public class XmlValidator {
+public class XSDValidator {
     private String [] xsdFiles = null;
     private final boolean _verbose;
 
-    public XmlValidator(String schemaDir, boolean verbose) {
+    public XSDValidator(String schemaDir, boolean verbose) {
         final File samlMdSchemaDir = new File(schemaDir);
         _verbose = verbose;
         assertTrue("directory with SAML MD schema files not found: " + samlMdSchemaDir.getAbsolutePath(), samlMdSchemaDir.exists());
