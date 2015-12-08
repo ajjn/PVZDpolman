@@ -1,5 +1,6 @@
 import argparse, getpass, sys
-#from userException import
+from userExceptions import *
+
 __author__ = 'r2h2'
 
 
@@ -109,9 +110,11 @@ class CliPAtoolInvocation(AbstractInvocation):
             self.args = self._parser.parse_args()  # regular case: use sys.argv
 
         if self.args.subcommand == 'createED':
-            assert self.args.samlrole in ('IDP', 'SP'), "samlrole must be one of ('IDP', 'SP')"
+            if self.args.samlrole not in ('IDP', 'SP'):
+                raise ValidationFailure("samlrole must be one of ('IDP', 'SP')")
             if self.args.entityid is not None:
-                assert self.args.entityid[0:8] == 'https://', "entityId must start with https://"
+                if self.args.entityid[0:8] != 'https://':
+                    raise ValidationFailure('entityId must start with https://')
 
         if not self.args.verbose:
             sys.tracebacklimit = 2

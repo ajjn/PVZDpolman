@@ -61,7 +61,8 @@ class AodsListHandler:
         '''   read aods from input file and transform into policyDict structure  '''
         if not hasattr(self, 'aods'):
             self.aods = self.aodsFileHandler.readFile()
-        assert self.aods['AODS'][0][3][0] == 'header', 'Cannot locate aods header record'
+        if self.aods['AODS'][0][3][0] != 'header':
+            raise ValidationFailure('Cannot locate aods header record')
         policyDict = {"domain": {}, "organization": {}, "userprivilege": {}}
         for w in self.aods['AODS']:
             wrap = WrapperRecord('rawStruct', w, self.args)

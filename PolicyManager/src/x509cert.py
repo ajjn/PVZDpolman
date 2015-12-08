@@ -25,8 +25,10 @@ class X509cert:
                     end = True
                     break
                 pem_str += l
-        assert begin, "PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468"
-        assert end, "PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468"
+        if not begin:
+            raise ValidationFailure("PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468")
+        if not end:
+            raise ValidationFailure("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
         return pem_str
 
     def getSubjectCN(self):

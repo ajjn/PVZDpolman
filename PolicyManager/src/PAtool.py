@@ -11,6 +11,7 @@ class PAtool:
         1) create an EntityDescriptor from a certificate
         2) sign an EntityDescriptor
         3) extract certificate data from metadata
+        4) create an EntityDescriptor to revoke a certificate
     '''
 
     def __init__(self, args):
