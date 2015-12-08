@@ -37,7 +37,7 @@ public class XSDValidator {
     }
 
     /**
-     * Validate provided XML against the XSD schema files in a given directory.
+     * Validate provided XML against the XSD schema files in a directory provided with the constructor.
      *
      * @param xmlFilePath    Path/name of XML file to be validated;
      * @return error message. If null then file is valid
@@ -45,21 +45,24 @@ public class XSDValidator {
     public String validateSchema(final String xmlFilePath) {
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         final StreamSource[] xsdSources = generateStreamSourcesFromXsdPaths(xsdFiles);
-        String retval = null;
+        String retmsg = null;
         if (! new File(xmlFilePath).exists()) {
-            retval = "File to be validated not found: " + xmlFilePath;
+            retmsg = "File to be validated not found: " + xmlFilePath;
         } else {
             try {
                 final Schema schema = schemaFactory.newSchema(xsdSources);
                 final Validator validator = schema.newValidator();
                 if (_verbose) out.println("Validating " + xmlFilePath + " against XSDs " + Arrays.toString(xsdFiles) + "...");
                 validator.validate(new StreamSource(new File(xmlFilePath)));
-            } catch (IOException | SAXException e) {
+            } catch (IOException e) {
                 if (_verbose) out.println("ERROR: Unable to validate " + xmlFilePath + "\n" + e);
-                retval = "File to be validated not found: " + xmlFilePath;
+                retmsg = "File to be validated not be opened: " + xmlFilePath;
+            } catch (SAXException e) {
+                retmsg = "ERROR: Validation of " + xmlFilePath + " failed\n" + e;
+                if (_verbose && retmsg != null) out.println(retmsg);
             }
         }
-        return retval;
+        return retmsg;
     }
 
     /**
