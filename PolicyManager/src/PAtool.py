@@ -1,6 +1,9 @@
 from invocation import *
 from aodsFileHandler import *
+from SAMLEntityDescriptor import *
+from userExceptions import EntityRoleNotSupported
 from x509cert import X509cert
+
 __author__ = 'r2h2'
 
 class PAtool:
@@ -26,13 +29,15 @@ class PAtool:
             entityId += self.args.entityid_suffix
         return entityId
 
+
     def createED(self):
         if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
         entityId = self.getEntityId(x509cert)
-        entityDescriptor = '''\
+        if self.args.samlrole == 'IDP':
+            entityDescriptor = '''\
 <md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-  <md{samlrole}SSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo>
         <ds:X509Data>
@@ -42,13 +47,35 @@ class PAtool:
         </ds:X509Data>
       </ds:KeyInfo>
     </md:KeyDescriptor>
-  </md:{samlrole}SSODescriptor>
-</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str(), samlrole=self.args.samlrole)
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+        elif self.args.samlrole == 'SP':
+            entityDescriptor = '''\
+<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+{pem}
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/acs/unused" index="0" isDefault="true"/>
+    </md:KeyDescriptor>
+  </md:SPSSODescriptor>
+</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+        else:
+            raise EntityRoleNotSupported("Only IDP and SP entity roles implemented, but %s given" % self.args.samlrole)
+
         if self.args.verbose: print('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
 
-    def signED(self):
+    def signED(self, projdir_abs):
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
+        ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name), projdir_abs)
+        ed.validateXSD()
         unsigned_contents = self.args.input.read()
         signed_contents = creSignedXML(unsigned_contents, verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
@@ -69,12 +96,15 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
     else:
         invocation = CliPAtoolInvocation()
+    projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+    projdir_abs = os.path.abspath(projdir_rel)
+
 
     patool = PAtool(invocation.args)
     if (invocation.args.subcommand == 'createED'):
         patool.createED()
     elif (invocation.args.subcommand == 'signED'):
-        patool.signED()
+        patool.signED(projdir_abs)
     elif (invocation.args.subcommand == 'extractED'):
         patool.extractED()
 
