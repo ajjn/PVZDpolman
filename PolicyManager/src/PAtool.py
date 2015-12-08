@@ -1,7 +1,7 @@
 from invocation import *
 from aodsFileHandler import *
 from SAMLEntityDescriptor import *
-from userExceptions import EntityRoleNotSupported
+from userExceptions import *
 from x509cert import X509cert
 
 __author__ = 'r2h2'
@@ -75,7 +75,10 @@ class PAtool:
     def signED(self, projdir_abs):
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
         ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name), projdir_abs)
-        ed.validateXSD()
+        retmsg = ed.validateXSD()
+        if retmsg is not None:
+            sys.tracebacklimit = 1
+            raise InvalidSamlXmlSchema('File ' +  self.args.input.name + ' is not schema valid:\n' + retmsg)
         unsigned_contents = self.args.input.read()
         signed_contents = creSignedXML(unsigned_contents, verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
