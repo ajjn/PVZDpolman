@@ -83,7 +83,7 @@ class PEP:
         return allowedDomains
 
     def assertNameInAllowedDomains(self, dn, allowedDomains) -> bool:
-        '''  check if dn is identical to or a sub-domain of an allowed domain  '''
+        '''  check if dn is identical to or a sub-domain of an allowed domain '''
         isInAllowed = False
         for adn in allowedDomains:
             if dn == adn:

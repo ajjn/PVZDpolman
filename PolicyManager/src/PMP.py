@@ -16,7 +16,10 @@ def run_me(testrunnerInvocation=None):
     if (invocation.args.subcommand == 'append'):
         aodsListHandler.aods_append()
     elif (invocation.args.subcommand == 'create'):
-        aodsListHandler.aods_create()
+        try:
+            aodsListHandler.aods_create()
+        except InvalidArgumentValue as e:
+            print(e)
     elif (invocation.args.subcommand == 'read'):
         aodsListHandler.aods_read()
     elif (invocation.args.subcommand == 'scratch'):

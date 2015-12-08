@@ -3,7 +3,7 @@ import requests
 import re
 import socket
 from constants import DATA_HEADER_B64BZIP
-from userExceptions import SecurityLayerUnavailable
+from userExceptions import *
 
 __author__ = 'r2h2'
 
@@ -66,29 +66,29 @@ def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
 def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=False):
     ''' Create XAdES signature using AT Bürgerkarte/Security Layer
         two signature types:
-            envelopingB64BZIP: compress, b64-encode and sign-envelop the data
+            envelopingB64BZIP: compress, b64-encode and sign the data (enveloping)
             enveloped at specified position
     '''
 
-    assert sigType in ('envelopingB64BZIP', 'enveloped'), "Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sigType
+    if sigType not in ('envelopingB64BZIP', 'enveloped'):
+        raise ValidationFailure("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sigType)
     failIfSecurityLayerUnavailable()
     if sigType == 'envelopingB64BZIP':
         dataObject = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data.encode('utf-8'))).decode('ascii')
     else:
         dataObject = data
     if verbose: print('data to be signed:\n%s\n\n' % dataObject)
-
-    sigRequ = getSecLayRequestTemplate(sigType, sigPosition) % data
+    sigRequ = getSecLayRequestTemplate(sigType, sigPosition) % dataObject
     if verbose: print('SecLay request:\n%s\n' % sigRequ)
-
     try:
         r = requests.post('http://localhost:3495/http-security-layer-request',
                           data={'XMLRequest': sigRequ})
     except requests.exceptions.ConnectionError as e:
-        print("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
-        raise
-    assert r.status_code == 200, "Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text)
-    assert r.text.find('sl:ErrorResponse') < 0, "Security Layer responed with error message.\n" + r.text
+        raise ValidationFailure("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
+    if r.status_code != 200:
+        raise ValidationFailure("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
+    if r.text.find('sl:ErrorResponse') >= 0:
+        raise ValidationFailure("Security Layer responed with error message.\n" + r.text)
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:
     # (keeping namespace prefixes - otherwise the signature would break. Therefore not using etree.)

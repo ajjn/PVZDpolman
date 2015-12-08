@@ -24,14 +24,14 @@ class TestS01_basic_happy_cycle(unittest.TestCase):
 
         inputfile = os.path.abspath('testdata/a1.json')
         print('appending input file %s .. ' % inputfile, end='')
-        cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json',
-                                   '-a', aodsfile, '-x', 'append', inputfile])
+        cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json', '-a', aodsfile, '-x', 'append',
+                                      inputfile])
         PMP.run_me(cliClient)
         print('OK.')
 
         print('reading aods file, writing directory .. ', end='')
         cliClient = CliPmpInvocation(['-v', '-t', '../tests/testdata/trustedcerts.json', '-a', aodsfile, '-x', 'read', \
-                                   '--jsondump', os.path.abspath('/work/dir_02.json')])
+                                   '--jsondump', os.path.abspath('../tests/work/dir_02.json')])
         PMP.run_me(cliClient)
 
         print('comparing directory with reference data .. ', end='')
