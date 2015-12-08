@@ -30,11 +30,53 @@ class InvalidArgumentValue(Exception):
     pass
 
 
-class EntityRoleNotSupported(Exception):
+class InvalidSamlXmlSchema(Exception):
+    """ Invalid XML schmea for SAML metadata """
+    pass
+
+
+class ValidationFailure(Exception):
+    """ application-level validation failure """
+    pass
+
+
+class EntityRoleNotSupported(ValidationFailure):
     """ Only IDP and SP roles are implemented """
     pass
 
 
-class InvalidSamlXmlSchema(Exception):
-    """ Invalid XML schmea for SAML metadata """
+class EntityRoleMissingCert(ValidationFailure):
+    """ RoleDescriptor does not contain a certificate """
     pass
+
+
+class CertExpired(ValidationFailure):
+    """ certificate has a notValidAfter date in the pas """
+    pass
+
+
+class CertInvalidIssuer(ValidationFailure):
+    """ certificate was not issued by a accredited CA """
+    pass
+
+
+class InvalidFQDN(ValidationFailure):
+    """ The FQDN is not in the allowed domains """
+    pass
+
+
+class MissingRootElem(ValidationFailure):
+    """ Expected XML root element not found """
+    pass
+
+
+class UnauthorizedSigner(ValidationFailure):
+    """ Signer certificate not found not found in policy directory """
+    pass
+
+
+class SignatureVerificationFailed(ValidationFailure):
+    """ Signature verification failed """
+    pass
+
+

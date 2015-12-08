@@ -60,8 +60,9 @@ class PEP:
             os.path.join(PROJDIR_ABS, 'conf/log4j.properties'),
             filename_abs)
         response = verifier.verify()
-        assert 'OK' == response.pvzdCode, \
-            "Signature verification failed, code=" + response.pvzdCode + "; " + response.pvzdMessage
+        if response.pvzdCode != 'OK': \
+            raise SignatureVerificationFailed("Signature verification failed, code=" + \
+                                              response.pvzdCode + "; " + response.pvzdMessage)
         #if self.verbose:
         #    cert = X509cert(response.signerCertificateEncoded, inform='DER') # TODO: check encoding
         #    print('Subject CN: ' + cert.getIssuer_str)
@@ -72,7 +73,8 @@ class PEP:
                 signer-cert -> portaladmin -> org -> domain
                 signer-cert -> identity-link/ssid -> portaladmin -> org -> domain (not implemented)
         '''
-        assert policyDict["userprivilege"].get(signerCert, None) != None, 'Signer certificate not found in policy directory'
+        if policyDict["userprivilege"].get(signerCert, None) is None:
+            raise UnauthorizedSigner( 'Signer certificate not found in policy directory')
         org_id = policyDict["userprivilege"][signerCert][0]
         allowedDomains = []
         for dn in policyDict["domain"].keys():
@@ -93,7 +95,8 @@ class PEP:
         ''' extract the contents of the enveloping signature in filename_abs and uncompress and decode it '''
         tree = ET.parse(filename_abs)
         content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
-        assert len(content) > 0, 'EntityDescriptor contained in XML signature value is empty'
+        if len(content) == 0:
+            raise ValidationFailure('EntityDescriptor contained in XML signature value is empty')
         if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
         content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
         return bz2.decompress(base64.b64decode(content_body))
@@ -102,15 +105,17 @@ class PEP:
     def validateDomainNames(self, ed_str, allowedDomains) -> bool:
         ''' check that entityId and endpoints contain only hostnames from allowed domains'''
         ed_root = ET.fromstring(ed_str)
-        assert ed_root.tag == XMLNS_MD + 'EntityDescriptor', 'Request object must contain EntityDescriptor as root element'
+        if ed_root.tag != XMLNS_MD + 'EntityDescriptor':
+            raise MissingRootElem('Request object must contain EntityDescriptor as root element')
         entityID_url = ed_root.attrib['entityID']
         entityID_hostname = urlparse(entityID_url).hostname
-        assert entityID_hostname in allowedDomains, '%s not in allowed domains: %s' % (entityID_hostname, allowedDomains)
+        if entityID_hostname not in allowedDomains:
+            raise InvalidFQDN('%s not in allowed domains: %s' % (entityID_hostname, allowedDomains))
         if self.verbose: print('signer is allowed to use %s as entityID' % entityID_hostname)
         for element in ed_root.xpath('//[@location]'):
             location_hostname = urlparse(element.attrib['Location']).hostname
-            assert location_hostname in allowedDomains, '%s in %s not in allowed domains: %s' % \
-                                                        (location_hostname, element.tag, allowedDomains)
+            if location_hostname not in allowedDomains:
+                raise InvalidFQDN('%s in %s not in allowed domains: %s' % (location_hostname, element.tag, allowedDomains))
             if self.verbose: print('signer is allowed to use %s in %' % (location_hostname, element.tag.split('}')))
         return True
 
@@ -119,17 +124,24 @@ class PEP:
         certs = []
         if role == 'IDP': xp = 'md:IDPSSODescriptor//ds:X509Certificate'
         if role == 'SP': xp = 'md:SPSSODescriptor//ds:X509Certificate'
+        i = 0
         for elem in ed_root.xpath(xp, namespaces={'ds': 'http://www.w3.org/2000/09/xmldsig#',
                                                   'md': 'urn:oasis:names:tc:SAML:2.0:metadata'}):
-             certs.append(self, elem.text)
+            certs.append(self, elem.text)
+            i += 1
+        if i == 0:
+            raise EntityRoleMissingCert
         return certs
 
     def checkCerts(self, ed_str, role):
         ''' do certificate validation for singing and encryption certificates '''
+        # TODO: prüfung auf count(certs) > 0
         for cert_pem in self.getCerts(ed_str, role):
             cert = X509cert(cert_pem)
-            assert cert.isNotExpired(), 'certificate has a notValidAfter date in the past'
-            assert cert.getIssuer_str in VALIDCERTISSUERS[role], 'certificate was not issuer by a accredited CA'
+            if not cert.isNotExpired():
+                raise CertExpired('certificate has a notValidAfter date in the past')
+            if cert.getIssuer_str not in VALIDCERTISSUERS[role]:
+                raise CertInvalidIssuer('certificate was not issued by a accredited CA')
 
 
 def run_me(testrunnerInvocation=None):
@@ -171,7 +183,7 @@ def run_me(testrunnerInvocation=None):
                 pep.checkCerts(ed_str, 'SP')
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
-        except AssertionError as e:
+        except ValidationFailure as e:
             if invocation.args.verbose: print(str(e))
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
