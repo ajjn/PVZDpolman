@@ -1,7 +1,8 @@
 import difflib, os, sys
+import PAtool
 import unittest
 from invocation import CliPAtoolInvocation
-import PAtool
+from userExceptions import *
 __author__ = 'r2h2'
 
 
@@ -38,7 +39,8 @@ class Test03_signED_invalidXSD(unittest.TestCase):
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
                                          'signED',
                                          entitydescriptor_file])
-        PAtool.run_me(cliClient)
+        with self.assertRaises(InvalidSamlXmlSchema) as context:
+            PAtool.run_me(cliClient)
 
 
 if __name__ == '__main__':
