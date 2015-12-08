@@ -104,6 +104,17 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_extract = _subparsers.add_parser('extractED', help='extract certificate from EntityDescriptors in metadata')
         self._parser_extract.add_argument('input', type=argparse.FileType('r'), help='file containing the metadata aggregate')
 
+        # create the parser for the "deleteED" command
+        self._parser_delete = _subparsers.add_parser('deleteED', help='create an EntityDescriptor from a certificate to delete the entityDescriptor')
+        self._parser_delete.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate)')
+        self._parser_delete.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
+
+        # create the parser for the "revokeCert" command
+        self._parser_revoke = _subparsers.add_parser('revokeCert', help='revoke certificate')
+        self._parser_revoke.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate)')
+        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
+
+
         if testargs:
             self.args = self._parser.parse_args(testargs)
         else:
