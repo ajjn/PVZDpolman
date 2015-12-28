@@ -80,3 +80,7 @@ class SignatureVerificationFailed(ValidationFailure):
     pass
 
 
+class PMPInputRecNoDict(ValidationFailure):
+    """ Signature verification failed """
+    pass
+

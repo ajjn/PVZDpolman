@@ -38,9 +38,15 @@ class CliPmpInvocation(AbstractInvocation):
         self._parser_append.add_argument('-j', '--jsondump', action="store_true", help='dump policy dict as JSON)')
         self._parser_append.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None,
                                          help='dump policy dictionary file)')
+        # TODO: implement range and diff listings
         #self._parser_append.add_argument('-r', '--range', choices=['all', 'from', 'new'], default='all',
         #                                 help='read all (starting with the big bang), or new (what has changes since last time)')
         #self._parser_append.add_argument('-s', '--sequence', type=int, help='output from this record onwards')
+
+        # create the parser for the "revokeCert" command
+        self._parser_revoke = _subparsers.add_parser('revokeCert', help='revoke certificate')
+        self._parser_revoke.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate to be revoked')
+
 
         if (testargs):
             self._parser_append = _subparsers.add_parser('scratch', help='scratch the AODS')
@@ -105,14 +111,8 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_extract.add_argument('input', type=argparse.FileType('r'), help='file containing the metadata aggregate')
 
         # create the parser for the "deleteED" command
-        self._parser_delete = _subparsers.add_parser('deleteED', help='create an EntityDescriptor from a certificate to delete the entityDescriptor')
-        self._parser_delete.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate)')
+        self._parser_delete = _subparsers.add_parser('deleteED', help='create a request to delete an entityDescriptor')
         self._parser_delete.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
-
-        # create the parser for the "revokeCert" command
-        self._parser_revoke = _subparsers.add_parser('revokeCert', help='revoke certificate')
-        self._parser_revoke.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None, help='certificate)')
-        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
 
 
         if testargs:

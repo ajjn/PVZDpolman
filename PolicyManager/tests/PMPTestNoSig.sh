@@ -2,10 +2,11 @@
 # run tests without test runner (no signature creation)
 
 source ./setTestEnv.sh
+echo $CLASSPATH
 
 MOD_HOME=$PROJ_HOME/PolicyManager
 MOASPSS_LIB=$PROJ_HOME/lib/moa-spss-lib
-EXEC="$py34 $PROJ_HOME/PolicyManager/src/PMP.py -v"
+EXEC="$py3 $PROJ_HOME/PolicyManager/src/PMP.py -v"
 aodsfile=$MOD_HOME/tests/work/aods_01.json
 jsondump=$MOD_HOME/tests/work/dir_01.json
 

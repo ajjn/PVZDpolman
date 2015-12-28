@@ -1,6 +1,7 @@
 from __future__ import print_function
 import difflib, os, sys
 import unittest
+print('PYTHONPATH=' + os.environ['PYTHONPATH'])
 from invocation import CliPmpInvocation
 from userExceptions import *
 import PMP
@@ -77,15 +78,50 @@ class Test03_broken_input_for_append(unittest.TestCase):
 
 class Test04_broken_input_for_validation(unittest.TestCase):
     def runTest(self):
-        print('== Test 04: handle broken input for append/validation')
+        print('== Test 04/1: handle broken input for append/validation: JSON not an array')
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a01.json')
         print('appending invalid input file ' + inputfile)
         sys.stdout.flush()
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
-        with self.assertRaises(AssertionError) as context:
+        with self.assertRaises(PMPInputRecNoDict) as context:
             PMP.run_me(cliClient)
 
+        print('== Test 04/2: handle broken input for append/validation: JSON not an array')
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test04_a02.json')
+        print('appending invalid input file ' + inputfile)
+        sys.stdout.flush()
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
+        with self.assertRaises(InputValueError) as context:
+            PMP.run_me(cliClient)
+
+        print('== Test 04/3: handle broken input for append/validation: JSON not an array')
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test04_a03.json')
+        print('appending invalid input file ' + inputfile)
+        sys.stdout.flush()
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
+        with self.assertRaises(InputFormatError) as context:
+            PMP.run_me(cliClient)
+
+        print('== Test 04/4: handle broken input for append/validation: JSON not an array')
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test04_a04.json')
+        print('appending invalid input file ' + inputfile)
+        sys.stdout.flush()
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
+        with self.assertRaises(InputFormatError) as context:
+            PMP.run_me(cliClient)
+
+        print('== Test 04/5: handle broken input for append/validation: JSON not an array')
+        aodsfile = os.path.abspath('work/aods_01.json')
+        inputfile = os.path.abspath('testdata/test04_a05.json')
+        print('appending invalid input file ' + inputfile)
+        sys.stdout.flush()
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
+        with self.assertRaises(InputValueError) as context:
+            PMP.run_me(cliClient)
 
 class Test05_sigver(unittest.TestCase):
     def runTest(self):
@@ -104,7 +140,7 @@ class Test05_sigver(unittest.TestCase):
         verifier = PvzdVerfiySig(
             os.path.join(projdir_abs, "conf/moa-spss/MOASPSSConfiguration.xml"),
             os.path.join(projdir_abs, "conf/log4j.properties"),
-            os.path.join(projdir_abs, "VerifySigAPI/tests/testdata/idp5_signed_untrusted_signer.xml"))
+            os.path.abspath("testdata/idp5_signed_untrusted_signer.xml"))
 
         response  = verifier.verify()
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)

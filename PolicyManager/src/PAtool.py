@@ -16,14 +16,13 @@ class PAtool:
 
     def __init__(self, args):
         self.args = args
-        #projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-        #self.projdir_abs = os.path.abspath(projdir_rel)
 
-    def extractX509SubjectCN(self) -> str:
-        pass # TODO implement
+    #def extractX509SubjectCN(self) -> str:
+    #    pass # TODO implement
 
     def getEntityId(self,x509cert) -> str:
-        entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
+        entityId = self.args.entityid + '/' + self.args.samlrole.lower()
+        #entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
         if hasattr(self.args, 'entityid_suffix') and len(self.args.entityid_suffix) > 0:
             if self.args.entityid_suffix[0:1] != '/':
                 entityId += '/'
@@ -94,6 +93,39 @@ class PAtool:
     def extractED(self):
         pass  # TODO implement
 
+    def deleteED(self):
+        if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
+        x509cert = X509cert(self.args.cert.read())
+        entityId = self.getEntityId(x509cert)
+        entityDescriptor = '''\
+<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">  <!-- delete entity descriptor from metadata -->
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+{pem}
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+        if self.args.verbose: print('writing ED to ' + self.args.output.name)
+        self.args.output.write(entityDescriptor)
+
+    def revokeCert(self):
+        if self.args.verbose: print('reading certificate from ' + self.args.cert.name)
+        x509cert = X509cert(self.args.cert.read())
+        pmp_input = '[{"record": ["revocation", "{cert}%s"], "delete": false}]' % x509cert.getPEM_str()
+        if self.args.verbose: print('writing PMP input file to ' + self.args.output.name)
+        self.args.output.write(pmp_input)
+
 
 def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
@@ -111,6 +143,10 @@ def run_me(testrunnerInvocation=None):
         patool.signED(projdir_abs)
     elif (invocation.args.subcommand == 'extractED'):
         patool.extractED()
+    elif (invocation.args.subcommand == 'deleteED'):
+        patool.deleteED()
+    elif (invocation.args.subcommand == 'revokeCert'):
+        patool.revokeCert()
 
 
 if __name__ == '__main__':

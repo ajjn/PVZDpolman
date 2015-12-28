@@ -9,7 +9,7 @@ class InputRecord:
 
     def __init__(self, appendData):
         if not isinstance(appendData, dict):
-            raise ValidationFailure('input record to be appended must be of type dict')
+            raise PMPInputRecNoDict('input record to be appended must be of type dict')
         if 'record' not in appendData:
             raise ValidationFailure('input record dict must have the key "record"')
         self.rec = ContentRecord(appendData['record'])
