@@ -1,4 +1,5 @@
 import base64, bz2, sys
+import logging
 import requests
 import re
 import socket
@@ -77,9 +78,9 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
         dataObject = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data.encode('utf-8'))).decode('ascii')
     else:
         dataObject = data
-    if verbose: print('data to be signed:\n%s\n\n' % dataObject)
+    logging.debug('data to be signed:\n%s\n\n' % dataObject)
     sigRequ = getSecLayRequestTemplate(sigType, sigPosition) % dataObject
-    if verbose: print('SecLay request:\n%s\n' % sigRequ)
+    logging.debug('SecLay request:\n%s\n' % sigRequ)
     try:
         r = requests.post('http://localhost:3495/http-security-layer-request',
                           data={'XMLRequest': sigRequ})
@@ -92,7 +93,7 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:
     # (keeping namespace prefixes - otherwise the signature would break. Therefore not using etree.)
-    if verbose: print('security layer create signature response:\n%s\n' % r.text)
+    logging.debug('security layer create signature response:\n%s\n' % r.text)
     r1 = re.sub(r'<sl:CreateXMLSignatureResponse [^>]*>', '', r.text)
     r2 = re.sub(r'</sl:CreateXMLSignatureResponse>', '', r1)
     return r2
@@ -100,12 +101,12 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
 
 if __name__ == '__main__':
     ''' main for simlified command-line tests'''
-    print("# args=" + str(len(sys.argv)) + "\n")
+    logging.info("# args=" + str(len(sys.argv)) + "\n")
     if len(sys.argv) == 1:
-        print("Enveloping signature\n")
-        print(creSignedXML('Teststring', verbose=True))
+        logging.info("Enveloping signature\n")
+        logging.info(creSignedXML('Teststring', verbose=True))
     if len(sys.argv) == 2:
-        print("Enveloped signature\n")
+        logging.info("Enveloped signature\n")
         ed = '''\
         <md:EntityDescriptor entityID="https://gondor.magwien.gv.at/idp"
             xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
@@ -122,4 +123,4 @@ if __name__ == '__main__':
             <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://gondor.magwien.gv.at/R-Profil-dummy"/>
           </md:IDPSSODescriptor>
         </md:EntityDescriptor>'''
-        print(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))
+        logging.info(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))

@@ -1,4 +1,4 @@
-from __future__ import print_function
+import logging
 from contentRecord import ContentRecord
 from userExceptions import *
 __author__ = 'r2h2'
@@ -21,6 +21,6 @@ class InputRecord:
         try:
             self.rec.validateRec(dir, self.deleteflag)
         except (InputValueError, InputFormatError) as e:
-            print('Validation failed in record with pk=' + getattr(self, 'primarykey', '<empty>'))
+            logging.error('Validation of input record failed. ' + str(e))
             raise e
 

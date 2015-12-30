@@ -1,8 +1,11 @@
 from __future__ import print_function
 import base64, hashlib, datetime, sys
+import logging
 import simplejson as json
 #from inputRecord import InputRecord
 __author__ = 'r2h2'
+
+#logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 ''' Classes in this source file encapsulate the structure of record types '''
 
@@ -25,7 +28,7 @@ class WrapperRecord:
                 self.registrant = self.args.registrant
                 self.submitter = self.args.submitter
             except Exception as e:
-                print(str(self), file=sys.stderr)
+                logger.error(str(self))
                 raise e
         elif argtype == 'rawStruct':
             rawStruct = args[0]
@@ -40,7 +43,7 @@ class WrapperRecord:
                 self.registrant = rawStruct[5]
                 self.submitter = rawStruct[6]
             except Exception as e:
-                print(str(self), file=sys.stderr)
+                logger.error(str(self))
                 raise e
         else: raise Exception
 
@@ -53,7 +56,7 @@ class WrapperRecord:
         wrapRec = [self.hash, self.seq, self.deleteflag, self.record,
                    self.datetimestamp, self.registrant, self.submitter]
         digestBase = prevHash + json.dumps(wrapRec[1:], separators=(',', ':'))
-        if self.args.debug: print('validateWrap: digestBase=' + digestBase)
+        logging.debug('digestBase=' + digestBase)
         digest_bytes = base64.b64encode(hashlib.sha256(digestBase.encode('ascii')).digest())
         return (digest_bytes.decode('ascii') == self.hash)
 
@@ -65,14 +68,14 @@ class WrapperRecord:
         :return: wrapped structure to be appended to aods including hash
         '''
         assert isinstance(lastHash, str)
-        if self.args.verbose: print("WrapperRecord.getRec %d lastHash: " % newSeq + lastHash)
+        logging.debug("%d lastHash: " % newSeq + lastHash)
         wrapList = ["placeholder_for_digest", newSeq, self.deleteflag, self.rec.raw,
                     self.datetimestamp, self.registrant, self.submitter]
         wrapStructJson = json.dumps(wrapList[1:], separators=(',', ':'))
         digestBase = lastHash + wrapStructJson
         digestBase_bytes = digestBase.encode('utf-8')
         digest_str = base64.b64encode(hashlib.sha256(digestBase_bytes).digest()).decode('ascii')
-        if self.args.debug: print('getRec: digestBase=' + digestBase + '\n        digest_str=' + digest_str)
+        logging.debug('digestBase=' + digestBase + '\n        digest_str=' + digest_str)
         return [digest_str] + wrapList[1:]
 
     def __str__(self):

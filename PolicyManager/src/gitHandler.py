@@ -1,4 +1,4 @@
-import os, shutil
+import logging, os, shutil
 import git
 from constants import *
 __author__ = 'r2h2'
@@ -17,17 +17,17 @@ class GitHandler:
         return self.gitcmd.ls_files(GIT_REQUESTQUEUE).split('\n')
 
     def remove_from_accepted(self, file):
-        if self.verbose: print('removing file from request_queue and accept directory ')
+        logging.debug('removing file from request_queue and accept directory ')
         self.repo.index.move([file, self.acceptpath]) # TODO implement
         self.repo.index.commit('accepted')
 
     def move_to_accepted(self, file):
-        if self.verbose: print('moving to accept directory ')
+        logging.debug('moving to accept directory ')
         self.repo.index.move([file, self.acceptpath])
         self.repo.index.commit('accepted')
 
     def move_to_rejected(self, file):
-        if self.verbose: print('moving to reject directory ')
+        logging.debug('moving to reject directory ')
         self.repo.index.move([file, self.rejectpath])
 
     def add_reject_message(self, filename_base, errortext):

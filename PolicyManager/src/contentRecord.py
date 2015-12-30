@@ -43,7 +43,7 @@ class ContentRecord:
             if not isinstance(self.attr[1], str):
                 raise InputFormatError('cert (2nd attribute of user privilege record) must be of type string')
             if self.attr[0] not in dir['organization']:
-                raise InputValueError('adding user privilege record referencing non-existing organization, pk=%s, orgid=%s' % (self.primarykey, self.attr[0]))
+                raise InputValueError('adding user privilege record referencing non-existing organization, pk=%s, orgid=%s' % (self.primarykey[:20], self.attr[0]))
         elif self.rectype == "revocation":
             if len(self.attr) != 1:
                 raise InputFormatError('revocation record must have exactly 1 attribute (the certificate)')

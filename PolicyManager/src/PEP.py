@@ -1,4 +1,5 @@
 import git
+import logging
 from os import path
 from urllib.parse import urlparse
 from lxml import etree as ET
@@ -97,7 +98,7 @@ class PEP:
         content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
         if len(content) == 0:
             raise ValidationFailure('EntityDescriptor contained in XML signature value is empty')
-        if self.verbose: print('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
+        logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
         content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
         return bz2.decompress(base64.b64decode(content_body))
 
@@ -111,12 +112,12 @@ class PEP:
         entityID_hostname = urlparse(entityID_url).hostname
         if entityID_hostname not in allowedDomains:
             raise InvalidFQDN('%s not in allowed domains: %s' % (entityID_hostname, allowedDomains))
-        if self.verbose: print('signer is allowed to use %s as entityID' % entityID_hostname)
+        logging.debug('signer is allowed to use %s as entityID' % entityID_hostname)
         for element in ed_root.xpath('//[@location]'):
             location_hostname = urlparse(element.attrib['Location']).hostname
             if location_hostname not in allowedDomains:
                 raise InvalidFQDN('%s in %s not in allowed domains: %s' % (location_hostname, element.tag, allowedDomains))
-            if self.verbose: print('signer is allowed to use %s in %' % (location_hostname, element.tag.split('}')))
+            logging.debug('signer is allowed to use %s in %' % (location_hostname, element.tag.split('}')))
         return True
 
     def getCerts(self, ed_str, role) -> list:
@@ -153,45 +154,46 @@ def run_me(testrunnerInvocation=None):
     projdir_abs = os.path.abspath(projdir_rel)
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
-    if invocation.args.verbose: print('   using repo ' + invocation.args.pubrequ)
+    logging.debug('   using repo ' + invocation.args.pubrequ)
     gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
         if not filename.endswith('.xml'):
-            if invocation.args.verbose: print('   ignoring ' + filename)
+            logging.debug('   ignoring ' + filename)
             continue
         filename_abs = invocation.args.pubrequ + '/' + filename
         filename_base = os.path.basename(filename)
         pep.file_counter += 1
         try:
-            if invocation.args.verbose: print('\n== processing ' + filename_base)
+            logging.debug('\n== processing ' + filename_base)
             if pep.isDeletionRequest(filename_abs):
                 gitHandler.remove_from_accepted(filename)
             else:
-                if invocation.args.verbose: print('validating XML schema')
+                logging.debug('validating XML schema')
                 ed = SAMLEntityDescriptor(filename_abs, projdir_abs)
                 ed.validateXSD()
                 pep.validateSchematron(filename_abs)
-                if invocation.args.verbose: print('validating signature')
+                logging.debug('validating signature')
                 signerCert = pep.validateSignature(filename_abs)
-                if invocation.args.verbose: print('validating signer cert, loading allowed domains')
+                logging.debug('validating signer cert, loading allowed domains')
                 pep.getAllowedDomains(signerCert, policyDict)
                 ed_str = pep.getEntityDescriptor(filename_abs)
-                if invocation.args.verbose: print('validating signer\'s privileges to use domain names in URLs')
+                logging.debug('validating signer\'s privileges to use domain names in URLs')
                 pep.validateDomainNames(ed_str, policyDict)
-                if invocation.args.verbose: print('validating certificate(s): not expired & not blacklisted & issuer is valid ')
+                logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed_str, 'IDP')
                 pep.checkCerts(ed_str, 'SP')
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
         except ValidationFailure as e:
-            if invocation.args.verbose: print(str(e))
+            logging.debug(str(e))
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
     if invocation.args.verbose:
-        print('files processed: ' + str(pep.file_counter) + '\n' + \
-              'files accepted: ' + str(pep.file_counter_accepted) + '\n' + \
-              'files rejected: ' + str(pep.file_counter_rejected) + '\n')
+        logging.debug('files processed: ' + str(pep.file_counter) + '\n' + \
+                      'files accepted: ' + str(pep.file_counter_accepted) + '\n' + \
+                      'files rejected: ' + str(pep.file_counter_rejected) + '\n')
+
 
 if __name__ == '__main__':
     run_me()

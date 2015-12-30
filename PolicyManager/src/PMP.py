@@ -1,3 +1,4 @@
+import logging
 from invocation import *
 from aodsListHandler import *
 from aodsFileHandler import *
@@ -19,7 +20,7 @@ def run_me(testrunnerInvocation=None):
         try:
             aodsListHandler.aods_create()
         except InvalidArgumentValue as e:
-            print(e)
+            logging.error(e)
     elif (invocation.args.subcommand == 'read'):
         aodsListHandler.aods_read()
     elif (invocation.args.subcommand == 'scratch'):

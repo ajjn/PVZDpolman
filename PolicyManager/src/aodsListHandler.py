@@ -1,5 +1,6 @@
-import simplejson as json
 import base64, hashlib, sys
+import logging
+import simplejson as json
 from inputRecord import InputRecord
 from contentRecord import ContentRecord
 from wrapperRecord import WrapperRecord
@@ -25,12 +26,12 @@ class AodsListHandler:
         try:
             inputdataJSON = self.args.input.read()
         except (OSError, IOError) as e:
-            print('could not read inputfile, because: %s' %(repr(e)))
+            logging.error('could not read inputfile, because: %s' %(repr(e)))
             sys.exit(1)
         try:
             appendList = json.loads(inputdataJSON)
         except Exception:
-            print("reading from " + self.args.input.name)
+            logging.error("reading from " + self.args.input.name)
             raise JSONdecodeError
         self.aods = self.aodsFileHandler.readFile() # does validation as well
         inputRecSeq = 0
@@ -39,10 +40,10 @@ class AodsListHandler:
             wrapperRec = WrapperRecord('elements', inputRec, self.args)
             inputRecSeq += 1
             policyDict = self.aods_read()  # get latest version
-            if self.args.verbose: print("aods_append: %d rectype=%s pk=%s" % (inputRecSeq, inputRec.rec.rectype, inputRec.rec.primarykey))
+            logging.debug("%d rectype=%s pk=%s" % (inputRecSeq, inputRec.rec.rectype, inputRec.rec.primarykey))
             inputRec.validate(policyDict)
             lastHash = self.aods['AODS'][self.lastSeq][0]
-            if self.args.verbose: print("aods_append %d lastHash: " % inputRecSeq + lastHash)
+            logging.debug("%d lastHash: " % inputRecSeq + lastHash)
             wrapperRec_final = wrapperRec.getRec(self.lastSeq + 1, lastHash)
             self.aods['AODS'].append(wrapperRec_final)
         self.aodsFileHandler.save(self.aods, self.args.xmlsign)
@@ -54,7 +55,7 @@ class AodsListHandler:
         seedVal_str = str(datetime.now())
         seedVal_bytes = base64.b64encode(hashlib.sha256(seedVal_str.encode('ascii')).digest())
         if self.args.debug: seedVal_bytes = 'fixedValueForDebugOnly'.encode('ascii')
-        if self.args.verbose: print("aods_create: 0 seedVal: " + seedVal_bytes.decode('ascii'))
+        logging.debug("0 seedVal: " + seedVal_bytes.decode('ascii'))
         self.aodsFileHandler.create({"AODS": [wrapperRec.getRec(0, seedVal_bytes.decode('ascii'))]}, self.args.xmlsign)
 
     def aods_read(self) -> dict:
@@ -78,13 +79,13 @@ class AodsListHandler:
                 try:
                     del policyDict[rec.rectype][rec.primarykey]
                 except KeyError:
-                    print("Broken (AODS) data structure: deleting record without previous entry", file=sys.stderr)
+                    logging.error("Broken (AODS) data structure: deleting record without previous entry", file=sys.stderr)
                     sys.exit(1)
             else:
                 try:
                     policyDict[rec.rectype].update({rec.primarykey: rec.attr})
                 except KeyError as e:
-                    print(str(wrap) + ' ' + str(rec), file=sys.stderr)
+                    logging.error(str(wrap) + ' ' + str(rec), file=sys.stderr)
                     raise e
         if getattr(self.args, 'jsondump', False):
             output = sys.stdout if self.args.output is None else self.args.output

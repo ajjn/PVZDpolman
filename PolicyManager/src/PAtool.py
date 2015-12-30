@@ -1,3 +1,4 @@
+import logging
 from invocation import *
 from aodsFileHandler import *
 from SAMLEntityDescriptor import *
@@ -31,7 +32,7 @@ class PAtool:
 
 
     def createED(self):
-        if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
+        logging.debug('reading certificate from  ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
         entityId = self.getEntityId(x509cert)
         if self.args.samlrole == 'IDP':
@@ -69,7 +70,7 @@ class PAtool:
         else:
             raise EntityRoleNotSupported("Only IDP and SP entity roles implemented, but %s given" % self.args.samlrole)
 
-        if self.args.verbose: print('writing ED to ' + self.args.output.name)
+        logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
 
     def signED(self, projdir_abs):
@@ -83,10 +84,10 @@ class PAtool:
         signed_contents = creSignedXML(unsigned_contents, verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
             output_filename = self.args.signed_output
-            if self.args.verbose: print('writing signed document ' + output_filename)
+            logging.debug('writing signed document ' + output_filename)
         else:
             output_filename = self.args.input.name[:-4] + '_req.xml'
-            if self.args.verbose: print('writing signed document with default name ' + output_filename)
+            logging.debug('writing signed document with default name ' + output_filename)
         with open(output_filename, 'w') as f:
             f.write(signed_contents)
 
@@ -94,7 +95,7 @@ class PAtool:
         pass  # TODO implement
 
     def deleteED(self):
-        if self.args.verbose: print('reading certificate from  ' + self.args.cert.name)
+        logging.debug('reading certificate from  ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
         entityId = self.getEntityId(x509cert)
         entityDescriptor = '''\
@@ -116,14 +117,14 @@ class PAtool:
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
   </md:IDPSSODescriptor>
 </md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
-        if self.args.verbose: print('writing ED to ' + self.args.output.name)
+        logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
 
     def revokeCert(self):
-        if self.args.verbose: print('reading certificate from ' + self.args.cert.name)
+        logging.debug('reading certificate from ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
         pmp_input = '[{"record": ["revocation", "{cert}%s"], "delete": false}]' % x509cert.getPEM_str()
-        if self.args.verbose: print('writing PMP input file to ' + self.args.output.name)
+        logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
 
 
