@@ -2,7 +2,6 @@
 # run tests without test runner (no signature creation)
 
 source ./setTestEnv.sh
-echo $CLASSPATH
 
 MOD_HOME=$PROJ_HOME/PolicyManager
 MOASPSS_LIB=$PROJ_HOME/lib/moa-spss-lib
