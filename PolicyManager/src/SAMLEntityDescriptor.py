@@ -11,7 +11,7 @@ class SAMLEntityDescriptor:
 
     def validateXSD(self):
         xsdValidator = autoclass('at.wien.ma14.pvzd.validatexsd.XSDValidator')
-        validator = xsdValidator(os.path.join(self.projdir_abs, 'ValidateXSD/SAML_MD_Schema'), False)
+        validator = xsdValidator(os.path.join(self.projdir_abs, 'lib/SAML_MD_Schema'), False)
         return validator.validateSchema(self.filename_abs)
 
 
