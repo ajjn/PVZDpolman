@@ -78,7 +78,7 @@ class Test03_broken_input_for_append(unittest.TestCase):
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(JSONdecodeError) as context:
             PMP.run_me(cliClient)
-        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + ''.join(context.exception.args))
 
 
 class Test04_broken_input_for_validation(unittest.TestCase):

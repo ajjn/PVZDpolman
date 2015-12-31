@@ -1,6 +1,5 @@
 cffi>=1.2.1
 future>=0.15.2
-gitdb>=0.6.4
 GitPython>=1.0.1
 lxml>=3.5.0
 Cython>=0.23.4
