@@ -35,7 +35,9 @@ class CliPmpInvocation(AbstractInvocation):
 
         # create the parser for the "read" command
         self._parser_append = _subparsers.add_parser('read', help='read, verify and transform the journal')
-        self._parser_append.add_argument('-j', '--jsondump', action="store_true", help='dump policy dict as JSON)')
+        self._parser_append.add_argument('-P', '--poldirhtml', action="store_true", help='output policy dir as HTML)')
+        self._parser_append.add_argument('-p', '--poldirjson', action="store_true", help='dump policy dir as JSON)')
+        self._parser_append.add_argument('-j', '--journal', action="store_true", help='output Journal as JSON)')
         self._parser_append.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None,
                                          help='dump policy dictionary file)')
         # TODO: implement range and diff listings
@@ -53,6 +55,11 @@ class CliPmpInvocation(AbstractInvocation):
             self.args = self._parser.parse_args(testargs)
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
+        if self.args.subcommand == 'read':
+            if getattr(self.args, 'poldirhtml', False) and \
+               getattr(self.args, 'poldirjson', False) and \
+               getattr(self.args, 'journal', False):
+                raise ValidationFailure("-j/--journal, -P/--poldirhtml and -p/--poldirjson are mutually exclusive")
 
         if not self.args.verbose:
             sys.tracebacklimit = 2
@@ -84,17 +91,18 @@ class CliPAtoolInvocation(AbstractInvocation):
     ''' define CLI invocation for PAtool. Test runner can use this by passing testargs  '''
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
+        self._parser.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r'))
         self._parser.add_argument('-e', '--entityid', dest='entityid', help="overwrite default entityId generated from "
                                                                             "the certificate's subject-CN and role type")
         self._parser.add_argument('-m', '--metadatacerts', dest='metadatacerts', default='metadatacerts.json',
                                   help='file containing json-array of PEM-formatted certificates trusted to sign the'
                                        ' metadata aggregate')
         self._parser.add_argument('-r', '--samlrole', dest='samlrole', default="")
-        self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         self._parser.add_argument('-s', '--signed_output', dest='signed_output',
                                   help='signED output file (default: s/(inputfile).xml/\1_signed.xml/)')
         self._parser.add_argument('-S', '--entityidSuffix', dest='entityid_suffix', default="",
                                   help="used to distinguish multiple entities with a single FQDN")
+        self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
 
         # create the parser for the "createED" command
@@ -114,6 +122,11 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_delete = _subparsers.add_parser('deleteED', help='create a request to delete an entityDescriptor')
         self._parser_delete.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
 
+        # create the parser for the "revokeCert" command
+        self._parser_revoke = _subparsers.add_parser('revokeCert', help='create a PMP input file to revoke a certificate')
+        self._parser_revoke.add_argument('-R', '--reason', dest='reason', help='test explaining the reason for the revocation')
+        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
+
 
         if testargs:
             self.args = self._parser.parse_args(testargs)
@@ -126,6 +139,9 @@ class CliPAtoolInvocation(AbstractInvocation):
             if self.args.entityid is not None:
                 if self.args.entityid[0:8] != 'https://':
                     raise ValidationFailure('entityId must start with https://')
+        if self.args.subcommand == 'revokeCert' and not getattr(self.args, 'reason', False):
+            raise ValidationFailure('must specify --reason for command revokeCert')
+
 
         if not self.args.verbose:
             sys.tracebacklimit = 2

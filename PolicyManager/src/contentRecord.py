@@ -6,7 +6,7 @@ __author__ = 'r2h2'
 
 class ContentRecord:
     ''' Handle a single content record, agnostic of the record type: create an object and access the attributes '''
-    recordTypes = ["domain", "organization", "userprivilege", "header"]
+    recordTypes = ["domain", "header", "organization", "revocation", "userprivilege", ]
 
     def __init__(self, rawRec):
         self.raw = rawRec
@@ -46,7 +46,7 @@ class ContentRecord:
                 raise InputValueError('adding user privilege record referencing non-existing organization, pk=%s, orgid=%s' % (self.primarykey[:20], self.attr[0]))
         elif self.rectype == "revocation":
             if len(self.attr) != 1:
-                raise InputFormatError('revocation record must have exactly 1 attribute (the certificate)')
+                raise InputFormatError('revocation record must have exactly 1 attribute (the "reason text")')
             if not isinstance(self.attr[0], str):
                 raise InputFormatError('certificate (first attribute of revocation record) must be of type string')
 

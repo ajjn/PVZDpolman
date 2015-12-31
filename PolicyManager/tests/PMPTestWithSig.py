@@ -21,39 +21,41 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 
 class TestS01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
-        logging.info('Test S01: happy cycle: create, append, read, verify (includung xml sig)')
+        logging.info('  -- Test S01: happy cycle: create, append, read, verify (includung xml sig)')
         aodsfile_new = 'work/aods_02.xml'
         policydir_new = 'work/dir_02.json'
         logging.debug('removing existing aods file %s .. ' % aodsfile_new)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile_new, '-x', 'scratch'])
         PMP.run_me(cliClient)
-        logging.debug('OK.')
 
-        logging.debug('creating aods file .. ')
+        logging.debug('  creating aods file .. ')
         cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'create']);
         PMP.run_me(cliClient)
-        logging.debug('OK.')
 
         inputfile = os.path.abspath('testdata/a1.json')
-        logging.debug('appending input file %s .. ' % inputfile)
+        logging.debug('  appending input file %s .. ' % inputfile)
         cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'append',
                                       inputfile])
         PMP.run_me(cliClient)
-        logging.debug('OK.')
 
-        logging.debug('reading aods file, writing directory .. ')
+        inputfile = os.path.abspath('testdata/gondorMagwienGvAt_2011-cer_revoke.json')
+        logging.debug('  appending input file %s .. ' % inputfile)
+        cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'append',
+                                      inputfile])
+        PMP.run_me(cliClient)
+
+        logging.debug('  reading aods file, writing directory .. ')
         cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'read', \
                                    '--jsondump', policydir_new])
         PMP.run_me(cliClient)
 
-        logging.debug('comparing directory with reference data .. ')
+        logging.debug('  comparing directory with reference data .. ')
         aodsfile_refdata = 'testdata/dir_01.json'
         diff = difflib.unified_diff(open(os.path.abspath(policydir_new)).readlines(),
                                     open(os.path.abspath(aodsfile_refdata)).readlines())
         delta = '\n'.join(diff)
         logging.debug(delta)
         assert delta == '', 'resulting policy directory (%s) is not equal to reference data (%s)' % (policydir_new, aodsfile_refdata)
-        logging.debug('OK.')
 
 
 if __name__ == '__main__':

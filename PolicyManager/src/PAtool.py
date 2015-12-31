@@ -95,35 +95,26 @@ class PAtool:
         pass  # TODO implement
 
     def deleteED(self):
-        logging.debug('reading certificate from  ' + self.args.cert.name)
-        x509cert = X509cert(self.args.cert.read())
-        entityId = self.getEntityId(x509cert)
+        logging.debug('creating delete request for entitID ' + self.args.entityid)
         entityDescriptor = '''\
+<!-- DELETE entity descriptor from metadata -->
 <md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
     xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
-    pvzd:disposition="delete">  <!-- delete entity descriptor from metadata -->
+    pvzd:disposition="delete">
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:KeyDescriptor use="signing">
-      <ds:KeyInfo>
-        <ds:X509Data>
-           <ds:X509Certificate>
-{pem}
-           </ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
-    </md:KeyDescriptor>
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
   </md:IDPSSODescriptor>
-</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+</md:EntityDescriptor>'''.format(eid=self.args.entityid)
         logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
 
     def revokeCert(self):
-        logging.debug('reading certificate from ' + self.args.cert.name)
-        x509cert = X509cert(self.args.cert.read())
-        pmp_input = '[{"record": ["revocation", "{cert}%s"], "delete": false}]' % x509cert.getPEM_str()
+        logging.debug('reading certificate from ' + self.args.certfile.name)
+        x509cert = X509cert(self.args.certfile.read())
+        x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
+        pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % (x509cert_pem, self.args.reason)
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
 

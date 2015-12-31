@@ -47,8 +47,16 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
-        logging.debug('=== reading aods file, dumping policy directory .. ')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--jsondump', os.path.abspath('work/dir_01.json')])
+        logging.debug('=== reading aods file, dumping policy directory as json .. ')
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirjson', os.path.abspath('work/dir_01.json')])
+        PMP.run_me(cliClient)
+
+        logging.debug('=== reading aods file, dumping policy directory as html .. ')
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirhtml', os.path.abspath('work/dir_01.html')])
+        PMP.run_me(cliClient)
+
+        logging.debug('=== reading aods file, dumping journal as json .. ')
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--journal', os.path.abspath('work/aods_01_journal.json')])
         PMP.run_me(cliClient)
 
         logging.debug('comparing directory with reference data .. ')

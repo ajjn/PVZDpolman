@@ -9,12 +9,12 @@ __author__ = 'r2h2'
 
 class Test04_deleteED(unittest.TestCase):
     def runTest(self):
-        print('== Test 04: create request to delete EntityDescriptor from metadata')
-        entitydescriptor_file = os.path.abspath('testdata/gondorMagwienGvAt_ed_delete.xml')
+        print('  -- Test 04: create request to delete EntityDescriptor from metadata')
+        entitydescriptor_file = os.path.abspath('work/gondorMagwienGvAt_ed_delete.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
-                                         'deleteED',
                                          '--entityid', 'https://redmine.identinetics.com',
+                                         'deleteED',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
 

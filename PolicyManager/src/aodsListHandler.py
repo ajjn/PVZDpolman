@@ -1,6 +1,7 @@
 import base64, hashlib, sys
 import logging
 import simplejson as json
+from json2html import *
 from inputRecord import InputRecord
 from contentRecord import ContentRecord
 from wrapperRecord import WrapperRecord
@@ -69,8 +70,13 @@ class AodsListHandler:
             self.aods = self.aodsFileHandler.readFile()
         if self.aods['AODS'][0][3][0] != 'header':
             raise ValidationFailure('Cannot locate aods header record')
-        policyDict = {"domain": {}, "organization": {}, "userprivilege": {}}
+        policyDict = {"domain": {}, "organization": {}, "revocation": {}, "userprivilege": {}}
+        if getattr(self.args, 'journal', False):
+            output = sys.stdout if self.args.output is None else self.args.output
+            output.write('[\n')
         for w in self.aods['AODS']:
+            if getattr(self.args, 'journal', False):
+                output.write(json.dumps(w) + '\n')
             wrap = WrapperRecord('rawStruct', w, self.args)
             rec = ContentRecord(wrap.record)
             self.prevHash = self.lastHash
@@ -91,7 +97,16 @@ class AodsListHandler:
                 except KeyError as e:
                     logging.error(str(wrap) + ' ' + str(rec), file=sys.stderr)
                     raise e
-        if getattr(self.args, 'jsondump', False):
+        if getattr(self.args, 'journal', False):
+            output.write(']')
+            output.close()
+        if getattr(self.args, 'poldirhtml', False):
+            output = sys.stdout if self.args.output is None else self.args.output
+            html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" href="./tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
+            tabhtml = json2html.convert(json=policyDict, table_attributes='class="pure-table"')
+            output.write(html % tabhtml)
+            output.close()
+        if getattr(self.args, 'poldirjson', False):
             output = sys.stdout if self.args.output is None else self.args.output
             output.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
             output.close()
