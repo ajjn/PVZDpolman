@@ -65,7 +65,9 @@ class AodsListHandler:
         self.aodsFileHandler.create({"AODS": [wrapperRec.getRec(0, seedVal_bytes.decode('ascii'))]}, self.args.xmlsign)
 
     def aods_read(self) -> dict:
-        '''   read aods from input file and transform into policyDict structure  '''
+        '''   read aods from input file and transform into policyDict structure
+              option: output policiy directory or journal in various formats
+        '''
         if not hasattr(self, 'aods'):
             self.aods = self.aodsFileHandler.readFile()
         if self.aods['AODS'][0][3][0] != 'header':
