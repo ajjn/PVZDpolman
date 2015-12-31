@@ -81,6 +81,6 @@ class SignatureVerificationFailed(ValidationFailure):
 
 
 class PMPInputRecNoDict(ValidationFailure):
-    """ Signature verification failed """
+    """ PMP input record is not a non-empty list of dict """
     pass
 

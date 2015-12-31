@@ -21,6 +21,5 @@ class InputRecord:
         try:
             self.rec.validateRec(dir, self.deleteflag)
         except (InputValueError, InputFormatError) as e:
-            logging.error('Validation of input record failed. ' + str(e))
             raise e
 

@@ -19,7 +19,7 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):
-        logging.info('== Test 00: testing CLI interface for create subcommand')
+        logging.info('  -- Test 00: testing CLI interface for create subcommand')
         try:
             cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ])
             self.assertEqual(cliClient.args.subcommand, 'create')
@@ -66,7 +66,7 @@ class Test02_broken_hash_chain(unittest.TestCase):
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read'])
         with self.assertRaises(HashChainError) as context:
             PMP.run_me(cliClient)
-        logging.debug('OK.')
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
 
 class Test03_broken_input_for_append(unittest.TestCase):
@@ -75,11 +75,10 @@ class Test03_broken_input_for_append(unittest.TestCase):
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test03_a1_broken.json')
         logging.debug('appending broken input file %s .. ' % inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(JSONdecodeError) as context:
             PMP.run_me(cliClient)
-        logging.debug('OK.')
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
 
 class Test04_broken_input_for_validation(unittest.TestCase):
@@ -88,50 +87,50 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a01.json')
         logging.debug('appending invalid input file ' + inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(PMPInputRecNoDict) as context:
             PMP.run_me(cliClient)
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
         logging.info('  -- Test 04/2: handle broken input for append/validation: missing PK in domain record')
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a02.json')
         logging.debug('appending invalid input file ' + inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
         logging.info('  -- Test 04/3: handle broken input for append/validation: wrong type of PK (bool not String)')
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a03.json')
         logging.debug('appending invalid input file ' + inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
         logging.info('  -- Test 04/4: handle broken input for append/validation: wrong type of PK (int not String)')
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a04.json')
         logging.debug('appending invalid input file ' + inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
         logging.info('  -- Test 04/5: handle broken input for append/validation: FK in user privilege references non-existing organization')
         aodsfile = os.path.abspath('work/aods_01.json')
         inputfile = os.path.abspath('testdata/test04_a05.json')
         logging.debug('appending invalid input file ' + inputfile)
-        logging.info('    expect ERROR message:')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
+        logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
 class Test05_sigver(unittest.TestCase):
     def runTest(self):
-        logging.info('== Test 05: test calling signature verification (java class)')
+        logging.info('  -- Test 05: test calling signature verification (java class)')
         # OSX: pyjnius requires dyldlib setting:
         # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(/usr/libexec/java_home)/jre/lib/server
         #logging.debug('CLASSPATH=' + os.environ['CLASSPATH'])

@@ -30,9 +30,14 @@ class AodsListHandler:
             sys.exit(1)
         try:
             appendList = json.loads(inputdataJSON)
-        except Exception:
-            logging.error("reading from " + self.args.input.name)
+        except Exception as e:
             raise JSONdecodeError
+        if not isinstance(appendList, list):
+            raise PMPInputRecNoDict('JSON input file must contain a list of dict')
+        if len(appendList) == 0:
+            raise PMPInputRecNoDict('JSON input file must contain a non-empty list of dict')
+        if not isinstance(appendList[0], dict):
+            raise PMPInputRecNoDict('JSON input file: first object in list is not a dict')
         self.aods = self.aodsFileHandler.readFile() # does validation as well
         inputRecSeq = 0
         for inputDataRaw in appendList:
@@ -79,8 +84,7 @@ class AodsListHandler:
                 try:
                     del policyDict[rec.rectype][rec.primarykey]
                 except KeyError:
-                    logging.error("Broken (AODS) data structure: deleting record without previous entry", file=sys.stderr)
-                    sys.exit(1)
+                    raise HashChainError('Inconsistent (AODS) data structure: deleting record without previous entry: ' + rec.rectype + ', ' + rec.primarykey)
             else:
                 try:
                     policyDict[rec.rectype].update({rec.primarykey: rec.attr})

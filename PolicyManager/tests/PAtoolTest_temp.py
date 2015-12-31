@@ -14,7 +14,7 @@ class Test04_deleteED(unittest.TestCase):
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
                                          'deleteED',
-                                         '--entityID', 'https://redmine.identinetics.com',
+                                         '--entityid', 'https://redmine.identinetics.com',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
 
