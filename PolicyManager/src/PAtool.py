@@ -138,6 +138,7 @@ def run_me(testrunnerInvocation=None):
         invocation = CliPAtoolInvocation()
     projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
     projdir_abs = os.path.abspath(projdir_rel)
+    print('projdir_abs=' + projdir_abs)
 
 
     patool = PAtool(invocation.args)

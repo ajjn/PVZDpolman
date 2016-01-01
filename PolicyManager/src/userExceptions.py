@@ -30,6 +30,11 @@ class InvalidArgumentValue(Exception):
     pass
 
 
+class EmptySamlED(Exception):
+    """ SAML metadata file is empty or does not exist """
+    pass
+
+
 class InvalidSamlXmlSchema(Exception):
     """ Invalid XML schmea for SAML metadata """
     pass
