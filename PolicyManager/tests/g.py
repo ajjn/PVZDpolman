@@ -20,7 +20,7 @@ acceptpath = os.path.join(repo_dir_abs, GIT_ACCEPTED)
 rejectpath_abs = os.path.join(repo_dir_abs, GIT_REJECTED)
 rejectpath_rel = os.path.join(repo_dir, GIT_REJECTED)
 
-file = os.path.join(repo_dir_abs, GIT_REQUESTQUEUE, '02_idp5_valid_sig_untrusted_signer.xml')
+file = os.path.join(repo_dir_abs, GIT_REQUESTQUEUE, 'PEP04b_idp5_valid_sig_untrusted_signer.xml')
 print('file=%s, rejectpath=%s' %(file, rejectpath_abs))
 repo = git.Repo(repo_dir)
 repo.index.move([file, rejectpath_abs])
