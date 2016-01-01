@@ -25,6 +25,8 @@ class PAtool:
 
 
     def getEntityId(self,x509cert) -> str:
+        if not (getattr(self.args, 'entityid', False) and getattr(self.args, 'samlrole', False)):
+            raise MissingArgument('createED requires both entityid and samlrole arguments')
         entityId = self.args.entityid + '/' + self.args.samlrole.lower()
         #entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
         if hasattr(self.args, 'entityid_suffix') and len(self.args.entityid_suffix) > 0:

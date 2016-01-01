@@ -11,8 +11,9 @@ entitydescriptor_file="$MOD_HOME/tests/work/gondorMagwienGvAt_ed.xml"
 md_signingcerts_file="$MOD_HOME/tests/testdata/metadatasigningcerts.json"
 
 $py3 $MOD_HOME/src/PAtool.py -v \
-    -m $md_signingcerts_file \
-    -r IDP \
+    --metadatacerts $md_signingcerts_file \
+    --entityid https://gondor.magwien.gv.at/idp \
+    --samlrole IDP \
     createED \
     $certificate_file \
     $entitydescriptor_file

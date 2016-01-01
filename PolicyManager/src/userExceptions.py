@@ -89,3 +89,7 @@ class PMPInputRecNoDict(ValidationFailure):
     """ PMP input record is not a non-empty list of dict """
     pass
 
+class MissingArgument(ValidationFailure):
+    """ required argument missing """
+    pass
+
