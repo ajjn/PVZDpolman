@@ -66,9 +66,12 @@ def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
 
 def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=False):
     ''' Create XAdES signature using AT Bürgerkarte/Security Layer
-        two signature types:
-            envelopingB64BZIP: compress, b64-encode and sign the data (enveloping)
-            enveloped at specified position
+        There are two signature types:
+            1. envelopingB64BZIP: compress, b64-encode and sign the data (enveloping)
+            2. enveloped: sign whole element specified py the XPath location
+        Caveat: the XPAth for the position of the enveloping signature must use the
+            QName prefix, not the namespace URI
+            (e.g. md: instead of urn:oasis:names:tc:SAML:2.0:metadata:)
     '''
 
     if sigType not in ('envelopingB64BZIP', 'enveloped'):
@@ -100,13 +103,13 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
 
 
 if __name__ == '__main__':
-    ''' main for simlified command-line tests'''
-    logging.info("# args=" + str(len(sys.argv)) + "\n")
-    if len(sys.argv) == 1:
-        logging.info("Enveloping signature\n")
-        logging.info(creSignedXML('Teststring', verbose=True))
-    if len(sys.argv) == 2:
-        logging.info("Enveloped signature\n")
+    ''' main for simplified command-line tests of XML documents with a dummy md:EntityDescriptor as root element'''
+    print("args=" + sys.argv[1] + "\n")
+    if sys.argv[1] == 'Enveloping':
+        print("Enveloping signature\n")
+        print(creSignedXML('Test string', verbose=True))
+    elif sys.argv[1] == 'Enveloped':
+        print("Enveloped signature\n")
         ed = '''\
         <md:EntityDescriptor entityID="https://gondor.magwien.gv.at/idp"
             xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
@@ -123,4 +126,5 @@ if __name__ == '__main__':
             <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://gondor.magwien.gv.at/R-Profil-dummy"/>
           </md:IDPSSODescriptor>
         </md:EntityDescriptor>'''
-        logging.info(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))
+        print(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))
+    else: print('invalid argument')

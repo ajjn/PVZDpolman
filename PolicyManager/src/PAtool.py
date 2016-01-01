@@ -12,14 +12,17 @@ class PAtool:
         1) create an EntityDescriptor from a certificate
         2) sign an EntityDescriptor
         3) extract certificate data from metadata
-        4) create an EntityDescriptor to revoke a certificate
+        4) create an EntityDescriptor as a deletion request
+        5) create a PMP-input file to revoke a certificate
     '''
 
     def __init__(self, args):
         self.args = args
 
+
     #def extractX509SubjectCN(self) -> str:
     #    pass # TODO implement
+
 
     def getEntityId(self,x509cert) -> str:
         entityId = self.args.entityid + '/' + self.args.samlrole.lower()
@@ -72,8 +75,11 @@ class PAtool:
 
         logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
+        self.args.output.close()
+
 
     def signED(self, projdir_abs):
+        ''' Validate XML-Schema and sign with enveloped signature.  '''
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
         ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name), projdir_abs)
         retmsg = ed.validateXSD()
@@ -81,7 +87,11 @@ class PAtool:
             sys.tracebacklimit = 1
             raise InvalidSamlXmlSchema('File ' +  self.args.input.name + ' is not schema valid:\n' + retmsg)
         unsigned_contents = self.args.input.read()
-        signed_contents = creSignedXML(unsigned_contents, verbose=self.args.verbose)
+        md_namespace_prefix = ed.getNamespacePrefix()
+        signed_contents = creSignedXML(unsigned_contents,
+                                       sigType='enveloped',
+                                       sigPosition='/' + md_namespace_prefix + ':EntityDescriptor',
+                                       verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
             output_filename = self.args.signed_output
             logging.debug('writing signed document ' + output_filename)
@@ -90,9 +100,8 @@ class PAtool:
             logging.debug('writing signed document with default name ' + output_filename)
         with open(output_filename, 'w') as f:
             f.write(signed_contents)
+            f.close()
 
-    def extractED(self):
-        pass  # TODO implement
 
     def deleteED(self):
         logging.debug('creating delete request for entitID ' + self.args.entityid)
@@ -109,6 +118,8 @@ class PAtool:
 </md:EntityDescriptor>'''.format(eid=self.args.entityid)
         logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
+        self.args.output.close()
+
 
     def revokeCert(self):
         logging.debug('reading certificate from ' + self.args.certfile.name)
@@ -117,6 +128,7 @@ class PAtool:
         pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % (x509cert_pem, self.args.reason)
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
+        self.args.output.close()
 
 
 def run_me(testrunnerInvocation=None):

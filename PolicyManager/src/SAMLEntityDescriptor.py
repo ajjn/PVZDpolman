@@ -1,4 +1,4 @@
-import os
+import os, re
 from jnius import autoclass
 
 __author__ = 'r2h2'
@@ -14,4 +14,16 @@ class SAMLEntityDescriptor:
         validator = xsdValidator(os.path.join(self.projdir_abs, 'lib/SAML_MD_Schema'), False)
         return validator.validateSchema(self.filename_abs)
 
+    def getNamespacePrefix(self):
+        '''
+        Due to a limitation in the XML signer used here (SecurityLayer 1.2)
+        the XPath expression for the enveloped signature is specified as
+        namespace prefix. getNamespacePrefix extracts the prefix to be used
+        in the XPath when calling the signature.
+        This functions is using a regular expression, YMMV in corner cases.
+        '''
+        xml_str = open(self.filename_abs).read()
+        p = re.compile('\sxmlns:(\w+)\s*=\s*"urn:oasis:names:tc:SAML:2.0:metadata"')
+        m = p.search(xml_str)
+        return m.group(1)
 
