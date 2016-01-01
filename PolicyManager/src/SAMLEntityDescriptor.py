@@ -1,11 +1,14 @@
 import os, re
 from jnius import autoclass
+from userExceptions import EmptySamlED
 
 __author__ = 'r2h2'
 
 
 class SAMLEntityDescriptor:
     def __init__(self, filename_abs, projdir_abs):
+        if not os.path.isfile(filename_abs) or os.path.getsize(filename_abs) == 0:
+            raise EmptySamlED(filename_abs + ' empty or missing')
         self.filename_abs = filename_abs
         self.projdir_abs = projdir_abs
 
