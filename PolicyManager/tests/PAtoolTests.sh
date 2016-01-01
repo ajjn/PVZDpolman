@@ -29,5 +29,5 @@ echo '== Test 03: sign EntityDescriptor with invalid SAML schema'
 $py3 $MOD_HOME/src/PAtool.py -v \
     -m $md_signingcerts_file \
     signED \
-    "$MOD_HOME/tests/testdata/gondorMagwienGvAt_ed_invalid_xsd.xml"
+    "$MOD_HOME/tests/testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml"
 

@@ -1,4 +1,5 @@
-== Packages not available from package index
+Packages not available from package index
+=========================================
 
 pyjnius: Need to install from git:
 * kivy (upstream master): python3 "import jnius" OK for OSX, but not OK for CentOS7

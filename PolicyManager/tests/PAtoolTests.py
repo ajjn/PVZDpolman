@@ -19,9 +19,9 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 
 class Test01_createED(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 01: create EntitDescriptor from certificate')
+        logging.info('  -- Test PAT01: create EntitDescriptor from certificate (pvzd:pvptype="R-Profile")')
         certificate_file = os.path.abspath('testdata/redmineIdentineticsCom-cer.pem')
-        entitydescriptor_file = os.path.abspath('work/redmineIdentineticsOrg_ed.xml')
+        entitydescriptor_file = os.path.abspath('work/PAT02_redmineIdentineticsOrg_ed.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
                                          '-r', 'IDP',
@@ -34,10 +34,18 @@ class Test01_createED(unittest.TestCase):
 
 class Test02_signED(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 02: sign EntityDescriptor')
-        entitydescriptor_file = os.path.abspath('work/redmineIdentineticsOrg_ed.xml')
+        logging.info('  -- Test PAT02a: sign EntityDescriptor w/o xml header to default output')
+        entitydescriptor_file = os.path.abspath('work/PAT02_redmineIdentineticsOrg_ed.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
+                                         'signED',
+                                         entitydescriptor_file])
+        PAtool.run_me(cliClient)
+        logging.info('  -- Test PAT02b: sign EntityDescriptor with xml header to specified output')
+        entitydescriptor_file = os.path.abspath('testdata/PAT02_idpExampleCom.xml')
+        md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
+        cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
+                                         '-s', 'work/PAT02_idpExampleCom_sig.xml',
                                          'signED',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
@@ -45,8 +53,8 @@ class Test02_signED(unittest.TestCase):
 
 class Test03_signED_invalidXSD(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 03: sign EntityDescriptor with invalid SAML schema (OK with xmllint, failing with xerces)')
-        entitydescriptor_file = os.path.abspath('testdata/gondorMagwienGvAt_ed_invalid_xsd.xml')
+        logging.info('  -- Test PAT03: sign EntityDescriptor with invalid SAML schema (OK with xmllint, failing with xerces)')
+        entitydescriptor_file = os.path.abspath('testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
                                          'signED',
@@ -57,8 +65,8 @@ class Test03_signED_invalidXSD(unittest.TestCase):
 
 class Test04_deleteED(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 04: create request to delete EntityDescriptor from metadata')
-        entitydescriptor_file = os.path.abspath('work/gondorMagwienGvAt_ed_delete.xml')
+        logging.info('  -- Test PAT04: create request to delete EntityDescriptor from metadata')
+        entitydescriptor_file = os.path.abspath('work/PAT04_redmineIdentineticsOrg_ed_delete.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
                                          '--entityid', 'https://redmine.identinetics.com',
@@ -69,15 +77,20 @@ class Test04_deleteED(unittest.TestCase):
 
 class Test05_revokeCert(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 05: create revocation request for policy directory (PMP)')
-        certificate_file = os.path.abspath('testdata/gondorMagwienGvAt_2011-cer.pem')
-        pmpinput_file = os.path.abspath('work/gondorMagwienGvAt_2011-cer_revoke.json')
+        logging.info('  -- Test PAT05: create revocation request for policy directory (PMP)')
+        certificate_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer.pem')
+        pmpinput_file = os.path.abspath('work/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')  # output
+        pmpref_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')
         cliClient = CliPAtoolInvocation(['-v',
                                          '--certfile', certificate_file,
                                          'revokeCert',
                                          '--reason', 'testing revocation',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
+        logging.debug('comparing output file with reference data .. ')
+        diff = difflib.unified_diff(open(pmpinput_file).readlines(),
+                                    open(pmpref_file).readlines())
+        assert ''.join(diff) == '', ' result is not equal to reference data'
 
 
 if __name__ == '__main__':

@@ -35,12 +35,12 @@ class PAtool:
 
 
     def createED(self):
-        logging.debug('reading certificate from  ' + self.args.cert.name)
+        logging.debug('reading certificate from ' + self.args.cert.name)
         x509cert = X509cert(self.args.cert.read())
         entityId = self.getEntityId(x509cert)
         if self.args.samlrole == 'IDP':
             entityDescriptor = '''\
-<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo>
@@ -56,7 +56,7 @@ class PAtool:
 </md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
         elif self.args.samlrole == 'SP':
             entityDescriptor = '''\
-<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
   <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo>

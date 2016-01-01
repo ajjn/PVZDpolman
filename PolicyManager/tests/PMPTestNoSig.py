@@ -19,7 +19,7 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 00: testing CLI interface for create subcommand')
+        logging.info('  -- Test PMPns00: testing CLI interface for create subcommand')
         try:
             cliClient = CliPmpInvocation(['-v', '-x', '-a', 'aods.json', 'create', ])
             self.assertEqual(cliClient.args.subcommand, 'create')
@@ -30,8 +30,8 @@ class Test00_cli(unittest.TestCase):
 
 class Test01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 01: happy cycle: create, append, read, verify')
-        aodsfile = os.path.abspath('work/aods_01.json')
+        logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
         logging.debug('=== removing existing aods file .. ')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'scratch'])
         PMP.run_me(cliClient)
@@ -41,35 +41,35 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
         logging.debug('=== create done.')
 
-        inputfile = os.path.abspath('testdata/a1.json')
+        inputfile = os.path.abspath('testdata/PMPns01_pmp_input1.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         logging.debug('=== reading aods file, dumping policy directory as json .. ')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirjson', os.path.abspath('work/dir_01.json')])
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirjson', os.path.abspath('work/PMPns01_poldir.json')])
         PMP.run_me(cliClient)
 
         logging.debug('=== reading aods file, dumping policy directory as html .. ')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirhtml', os.path.abspath('work/dir_01.html')])
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--poldirhtml', os.path.abspath('work/PMPns01_poldir.html')])
         PMP.run_me(cliClient)
 
         logging.debug('=== reading aods file, dumping journal as json .. ')
-        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--journal', os.path.abspath('work/aods_01_journal.json')])
+        cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--journal', os.path.abspath('work/PMPns01_aods_01_journal.json')])
         PMP.run_me(cliClient)
 
         logging.debug('comparing directory with reference data .. ')
-        diff = difflib.unified_diff(open(os.path.abspath('work/dir_01.json')).readlines(),
-                             open(os.path.abspath('testdata/dir_01.json')).readlines())
+        diff = difflib.unified_diff(open(os.path.abspath('work/PMPns01_poldir.json')).readlines(),
+                             open(os.path.abspath('testdata/PMPns01_poldir.json')).readlines())
         assert ''.join(diff) == '', ' result is not equal to reference data'
         logging.debug('=== read/compare done.')
 
 
 class Test02_broken_hash_chain(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 02: detect broken hash chain')
-        aodsfile = os.path.abspath('testdata/aods_02_broken_hashchain.json')
+        logging.info('  -- Test PMPns02: detect broken hash chain')
+        aodsfile = os.path.abspath('testdata/PMPns02_aods_broken_hashchain.json')
         logging.debug('reading aods file with broken hash chain .. ')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read'])
         with self.assertRaises(HashChainError) as context:
@@ -79,9 +79,9 @@ class Test02_broken_hash_chain(unittest.TestCase):
 
 class Test03_broken_input_for_append(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 03: handle broken json input for append')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test03_a1_broken.json')
+        logging.info('  -- Test PMPns03: handle broken json input for append')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns03_pmpinput_brokenjson.json')
         logging.debug('appending broken input file %s .. ' % inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(JSONdecodeError) as context:
@@ -91,45 +91,45 @@ class Test03_broken_input_for_append(unittest.TestCase):
 
 class Test04_broken_input_for_validation(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 04/1: handle broken input for append/validation: JSON not an array')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test04_a01.json')
+        logging.info('  -- Test PMPns04/1: handle broken input for append/validation: JSON not an array')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns04_1_pmpinput_noarray.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(PMPInputRecNoDict) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
-        logging.info('  -- Test 04/2: handle broken input for append/validation: missing PK in domain record')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test04_a02.json')
+        logging.info('  -- Test PMPns04/2: handle broken input for append/validation: FK references non-existing domain')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns04_2_pmpinput_fk_invalid_domain.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
-        logging.info('  -- Test 04/3: handle broken input for append/validation: wrong type of PK (bool not String)')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test04_a03.json')
+        logging.info('  -- Test PMPns04/3: handle broken input for append/validation: wrong type of PK (bool not String)')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns04_3_pmpinput_pk_no_str.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
-        logging.info('  -- Test 04/4: handle broken input for append/validation: wrong type of PK (int not String)')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test04_a04.json')
+        logging.info('  -- Test PMPns04/4: handle broken input for append/validation: wrong type of PK (int not String)')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns04_4_pmpinput_pk_no_str.json.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 
-        logging.info('  -- Test 04/5: handle broken input for append/validation: FK in user privilege references non-existing organization')
-        aodsfile = os.path.abspath('work/aods_01.json')
-        inputfile = os.path.abspath('testdata/test04_a05.json')
+        logging.info('  -- Test PMPns04/5: handle broken input for append/validation: FK in user privilege references non-existing organization')
+        aodsfile = os.path.abspath('work/PMPns_aods_01.json')
+        inputfile = os.path.abspath('testdata/PMPns04_5_pmpinput_fk_invalid_org.json.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
@@ -138,7 +138,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
 
 class Test05_sigver(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test 05: test calling signature verification (java class)')
+        logging.info('  -- Test PMPns05: test calling signature verification (java class)')
         # OSX: pyjnius requires dyldlib setting:
         # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(/usr/libexec/java_home)/jre/lib/server
         #logging.debug('CLASSPATH=' + os.environ['CLASSPATH'])
@@ -153,7 +153,7 @@ class Test05_sigver(unittest.TestCase):
         verifier = PvzdVerfiySig(
             os.path.join(projdir_abs, "conf/moa-spss/MOASPSSConfiguration.xml"),
             os.path.join(projdir_abs, "conf/log4j.properties"),
-            os.path.abspath("testdata/idp5_signed_untrusted_signer.xml"))
+            os.path.abspath("testdata/PMPns05_idp5_signed_untrusted_signer.xml"))
 
         response  = verifier.verify()
         if response.pvzdCode != 'OK': print ('pvzdMessage: ' + response.pvzdMessage)
