@@ -1,5 +1,5 @@
 #!/bin/bash
-# run tests without test runner (no signature creation)
+# run some tests without test runner (no signature creation)
 
 source ./setTestEnv.sh
 
