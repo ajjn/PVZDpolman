@@ -72,7 +72,7 @@ class AodsListHandler:
             self.aods = self.aodsFileHandler.readFile()
         if self.aods['AODS'][0][3][0] != 'header':
             raise ValidationFailure('Cannot locate aods header record')
-        policyDict = {"domain": {}, "organization": {}, "revocation": {}, "userprivilege": {}}
+        policyDict = {"domain": {}, "issuer": {}, "organization": {}, "revocation": {}, "userprivilege": {}}
         if getattr(self.args, 'journal', False):
             output = sys.stdout if self.args.output is None else self.args.output
             output.write('[\n')

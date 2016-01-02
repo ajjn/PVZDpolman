@@ -1,6 +1,7 @@
 import logging
-from invocation import *
 from aodsFileHandler import *
+from constants import PROJDIR_ABS
+from invocation import *
 from SAMLEntityDescriptor import *
 from userExceptions import *
 from x509cert import X509cert
@@ -128,7 +129,8 @@ class PAtool:
         logging.debug('reading certificate from ' + self.args.certfile.name)
         x509cert = X509cert(self.args.certfile.read())
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
-        pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % (x509cert_pem, self.args.reason)
+        pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % \
+                    (x509cert_pem, self.args.reason)
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
         self.args.output.close()
@@ -138,7 +140,8 @@ class PAtool:
         logging.debug('reading ca certificate from ' + self.args.certfile.name)
         x509cert = X509cert(self.args.certfile.read())
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
-        pmp_input = '[\n{"record": ["issuer", "%s", "%s"], "delete": false}\n]' % (x509cert_pem, self.args.pvprole)
+        pmp_input = '[\n{"record": ["issuer", "%s", "%s", "%s"], "delete": false}\n]' % \
+                    (x509cert_pem, self.args.pvprole, x509cert.getSubjectCN())
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
         self.args.output.close()
@@ -149,16 +152,13 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
     else:
         invocation = CliPAtoolInvocation()
-    projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-    projdir_abs = os.path.abspath(projdir_rel)
-    print('projdir_abs=' + projdir_abs)
 
 
     patool = PAtool(invocation.args)
     if (invocation.args.subcommand == 'createED'):
         patool.createED()
     elif (invocation.args.subcommand == 'signED'):
-        patool.signED(projdir_abs)
+        patool.signED(PROJDIR_ABS)
     elif (invocation.args.subcommand == 'extractED'):
         patool.extractED()
     elif (invocation.args.subcommand == 'deleteED'):

@@ -36,8 +36,7 @@ class PEP:
     '''
 
     def __init__(self, cliClient):
-        projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-        self.projdir_abs = os.path.abspath(projdir_rel)
+        self.projdir_abs = PROJDIR_ABS
         self.verbose = cliClient.args.verbose
         self.file_counter = 0
         self.file_counter_accepted = 0
@@ -150,8 +149,6 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
     else:
         invocation = CliPepInvocation()
-    projdir_rel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-    projdir_abs = os.path.abspath(projdir_rel)
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
     logging.debug('   using repo ' + invocation.args.pubrequ)
@@ -169,7 +166,7 @@ def run_me(testrunnerInvocation=None):
                 gitHandler.remove_from_accepted(filename)
             else:
                 logging.debug('validating XML schema')
-                ed = SAMLEntityDescriptor(filename_abs, projdir_abs)
+                ed = SAMLEntityDescriptor(filename_abs, PROJDIR_ABS)
                 ed.validateXSD()
                 pep.validateSchematron(filename_abs)
                 logging.debug('validating signature')

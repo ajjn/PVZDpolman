@@ -102,7 +102,7 @@ class Test06_caCert(unittest.TestCase):
         cliClient = CliPAtoolInvocation(['-v',
                                          '--certfile', certificate_file,
                                          'caCert',
-                                         '--pvptype', 'STP',
+                                         '--pvprole', 'STP',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
         logging.debug('comparing output file with reference data .. ')

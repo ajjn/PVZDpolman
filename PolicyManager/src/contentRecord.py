@@ -6,7 +6,7 @@ __author__ = 'r2h2'
 
 class ContentRecord:
     ''' Handle a single content record, agnostic of the record type: create an object and access the attributes '''
-    recordTypes = ["domain", "header", "organization", "revocation", "userprivilege", ]
+    recordTypes = ["domain", "header", "issuer", "organization", "revocation", "userprivilege", ]
 
     def __init__(self, rawRec):
         self.raw = rawRec
@@ -48,7 +48,16 @@ class ContentRecord:
             if len(self.attr) != 1:
                 raise InputFormatError('revocation record must have exactly 1 attribute (the "reason text")')
             if not isinstance(self.attr[0], str):
-                raise InputFormatError('certificate (first attribute of revocation record) must be of type string')
+                raise InputFormatError('reason (1st attribute of revocation record) must be of type string')
+        elif self.rectype == "issuer":
+            if len(self.attr) != 2:
+                raise InputFormatError('issuer record must have exactly 2 attributes ("pvprole" and "Subject CN string")')
+            if not isinstance(self.attr[0], str):
+                raise InputFormatError('pvprole must be of type string')
+            if not (self.attr[0] in ('STP', 'AWP')):
+                raise InputFormatError("pvprole must be 'STP' or 'AWP")
+            if not isinstance(self.attr[1], str):
+                raise InputFormatError('Subject CN (2nd attribute of issuer record) must be of type string')
 
     def __str__(self):
         return self.rectype + ' ' + self.primarykey
