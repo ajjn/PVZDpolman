@@ -104,7 +104,7 @@ class AodsListHandler:
             output.close()
         if getattr(self.args, 'poldirhtml', False):
             output = sys.stdout if self.args.output is None else self.args.output
-            html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" href="./tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
+            html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" href="../tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
             tabhtml = json2html.convert(json=policyDict, table_attributes='class="pure-table"')
             output.write(html % tabhtml)
             output.close()
