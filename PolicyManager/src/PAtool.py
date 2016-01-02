@@ -14,6 +14,7 @@ class PAtool:
         3) extract certificate data from metadata
         4) create an EntityDescriptor as a deletion request
         5) create a PMP-input file to revoke a certificate
+        6) create a PMP-input file to import a CA certificate
     '''
 
     def __init__(self, args):
@@ -133,6 +134,16 @@ class PAtool:
         self.args.output.close()
 
 
+    def caCert(self):
+        logging.debug('reading ca certificate from ' + self.args.certfile.name)
+        x509cert = X509cert(self.args.certfile.read())
+        x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
+        pmp_input = '[\n{"record": ["issuer", "%s", "%s"], "delete": false}\n]' % (x509cert_pem, self.args.pvprole)
+        logging.debug('writing PMP input file to ' + self.args.output.name)
+        self.args.output.write(pmp_input)
+        self.args.output.close()
+
+
 def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
         invocation = testrunnerInvocation
@@ -154,6 +165,8 @@ def run_me(testrunnerInvocation=None):
         patool.deleteED()
     elif (invocation.args.subcommand == 'revokeCert'):
         patool.revokeCert()
+    elif (invocation.args.subcommand == 'caCert'):
+        patool.caCert()
 
 
 if __name__ == '__main__':

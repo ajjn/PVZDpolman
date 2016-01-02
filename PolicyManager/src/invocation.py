@@ -127,6 +127,11 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_revoke.add_argument('-R', '--reason', dest='reason', help='test explaining the reason for the revocation')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
+        # create the parser for the "caCert" command
+        self._parser_revoke = _subparsers.add_parser('caCert', help='create a PMP input file to import a ca certificate')
+        self._parser_revoke.add_argument('-p', '--pvprole', dest='pvprole', help='STP, AWP')
+        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
+
 
         if testargs:
             self.args = self._parser.parse_args(testargs)
@@ -141,6 +146,12 @@ class CliPAtoolInvocation(AbstractInvocation):
                     raise ValidationFailure('entityId must start with https://')
         if self.args.subcommand == 'revokeCert' and not getattr(self.args, 'reason', False):
             raise ValidationFailure('must specify --reason for command revokeCert')
+        if self.args.subcommand == 'caCert':
+            if not getattr(self.args, 'pvprole', False):
+                raise ValidationFailure('must specify --pvprole for command caCert')
+            if self.args.pvprole not in ('STP', 'AWP'):
+                raise ValidationFailure("pvprole must be one of ('STP', 'AWP')")
+
 
 
         if not self.args.verbose:

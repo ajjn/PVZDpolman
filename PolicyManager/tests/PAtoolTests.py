@@ -77,7 +77,7 @@ class Test04_deleteED(unittest.TestCase):
 
 class Test05_revokeCert(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test PAT05: create revocation request for policy directory (PMP)')
+        logging.info('  -- Test PAT05: create PMP import file to revoke a certificate')
         certificate_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer.pem')
         pmpinput_file = os.path.abspath('work/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')  # output
         pmpref_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')
@@ -85,6 +85,24 @@ class Test05_revokeCert(unittest.TestCase):
                                          '--certfile', certificate_file,
                                          'revokeCert',
                                          '--reason', 'testing revocation',
+                                         pmpinput_file])
+        PAtool.run_me(cliClient)
+        logging.debug('comparing output file with reference data .. ')
+        diff = difflib.unified_diff(open(pmpinput_file).readlines(),
+                                    open(pmpref_file).readlines())
+        assert ''.join(diff) == '', ' result is not equal to reference data'
+
+
+class Test06_caCert(unittest.TestCase):
+    def runTest(self):
+        logging.info('  -- Test PAT06: create PMP import file for CA certificate')
+        certificate_file = os.path.abspath('testdata/PAT06_StartComCa.pem')
+        pmpinput_file = os.path.abspath('work/PAT06_StartComCa.json')  # output
+        pmpref_file = os.path.abspath('testdata/PAT06_StartComCa.json')
+        cliClient = CliPAtoolInvocation(['-v',
+                                         '--certfile', certificate_file,
+                                         'caCert',
+                                         '--pvptype', 'STP',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
         logging.debug('comparing output file with reference data .. ')
