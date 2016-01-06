@@ -56,7 +56,7 @@ class WrapperRecord:
         wrapRec = [self.hash, self.seq, self.deleteflag, self.record,
                    self.datetimestamp, self.registrant, self.submitter]
         digestBase = prevHash + json.dumps(wrapRec[1:], separators=(',', ':'))
-        logging.debug('digestBase=' + digestBase)
+        # logging.debug('digestBase=' + digestBase)
         digest_bytes = base64.b64encode(hashlib.sha256(digestBase.encode('ascii')).digest())
         return (digest_bytes.decode('ascii') == self.hash)
 

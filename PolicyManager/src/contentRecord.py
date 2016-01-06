@@ -51,13 +51,13 @@ class ContentRecord:
                 raise InputFormatError('reason (1st attribute of revocation record) must be of type string')
         elif self.rectype == "issuer":
             if len(self.attr) != 2:
-                raise InputFormatError('issuer record must have exactly 2 attributes ("pvprole" and "Subject CN string")')
+                raise InputFormatError('issuer record must have exactly 2 attributes ("pvprole" and "certificate (PEM)")')
             if not isinstance(self.attr[0], str):
                 raise InputFormatError('pvprole must be of type string')
-            if not (self.attr[0] in ('STP', 'AWP')):
-                raise InputFormatError("pvprole must be 'STP' or 'AWP")
+            if not (self.attr[0] in ('IDP', 'SP')):
+                raise InputFormatError("pvprole must be 'IDP' or 'SP")
             if not isinstance(self.attr[1], str):
-                raise InputFormatError('Subject CN (2nd attribute of issuer record) must be of type string')
+                raise InputFormatError('Certificate (2nd attribute of issuer record) must be of type string')
 
     def __str__(self):
         return self.rectype + ' ' + self.primarykey

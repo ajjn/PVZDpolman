@@ -50,17 +50,12 @@ class EntityRoleNotSupported(ValidationFailure):
     pass
 
 
-class EntityRoleMissingCert(ValidationFailure):
-    """ RoleDescriptor does not contain a certificate """
-    pass
-
-
 class CertExpired(ValidationFailure):
     """ certificate has a notValidAfter date in the pas """
     pass
 
 
-class CertInvalidIssuer(ValidationFailure):
+class CertInvalid(ValidationFailure):
     """ certificate was not issued by a accredited CA """
     pass
 

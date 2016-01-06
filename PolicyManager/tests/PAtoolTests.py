@@ -1,7 +1,8 @@
 import difflib, os, sys
-import PAtool
 import unittest
+from assertNoDiff import assertNoDiff
 from invocation import CliPAtoolInvocation
+import PAtool
 from userExceptions import *
 
 __author__ = 'r2h2'
@@ -30,6 +31,7 @@ class Test01_createED(unittest.TestCase):
                                          certificate_file,
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
+        assertNoDiff(os.path.basename(entitydescriptor_file))
 
 
 class Test02_signED(unittest.TestCase):
@@ -41,15 +43,17 @@ class Test02_signED(unittest.TestCase):
                                          'signED',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
+
         logging.info('  -- Test PAT02b: sign EntityDescriptor with xml header to specified output')
         entitydescriptor_file = os.path.abspath('testdata/PAT02_idpExampleCom.xml')
+        entitydescriptor_sig_file = os.path.abspath('work/PAT02_idpExampleCom_sig.xml')
         md_signingcerts_file = os.path.abspath('testdata/metadatasigningcerts.json')
         cliClient = CliPAtoolInvocation(['-v', '-m', md_signingcerts_file,
-                                         '-s', 'work/PAT02_idpExampleCom_sig.xml',
+                                         '-s', entitydescriptor_sig_file,
                                          'signED',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
-
+        # skipping comparison with ref data: signatures are time-stamped, would need xpath filter ..
 
 class Test03_signED_invalidXSD(unittest.TestCase):
     def runTest(self):
@@ -73,6 +77,7 @@ class Test04_deleteED(unittest.TestCase):
                                          'deleteED',
                                          entitydescriptor_file])
         PAtool.run_me(cliClient)
+        assertNoDiff(os.path.basename(entitydescriptor_file))
 
 
 class Test05_revokeCert(unittest.TestCase):
@@ -87,28 +92,22 @@ class Test05_revokeCert(unittest.TestCase):
                                          '--reason', 'testing revocation',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
-        logging.debug('comparing output file with reference data .. ')
-        diff = difflib.unified_diff(open(pmpinput_file).readlines(),
-                                    open(pmpref_file).readlines())
-        assert ''.join(diff) == '', ' result is not equal to reference data'
+        assertNoDiff(os.path.basename(pmpinput_file))
 
 
 class Test06_caCert(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PAT06: create PMP import file for CA certificate')
-        certificate_file = os.path.abspath('testdata/PAT06_StartComCa.pem')
-        pmpinput_file = os.path.abspath('work/PAT06_StartComCa.json')  # output
-        pmpref_file = os.path.abspath('testdata/PAT06_StartComCa.json')
+        certificate_file = os.path.abspath('testdata/PAT06_StartComCa_root.pem')
+        pmpinput_file = os.path.abspath('work/PAT06_StartComCa_root.json')  # output
+        pmpref_file = os.path.abspath('testdata/PAT06_StartComCa_root.json')
         cliClient = CliPAtoolInvocation(['-v',
                                          '--certfile', certificate_file,
                                          'caCert',
-                                         '--pvprole', 'STP',
+                                         '--pvprole', 'IDP',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
-        logging.debug('comparing output file with reference data .. ')
-        diff = difflib.unified_diff(open(pmpinput_file).readlines(),
-                                    open(pmpref_file).readlines())
-        assert ''.join(diff) == '', ' result is not equal to reference data'
+        assertNoDiff(os.path.basename(pmpinput_file))
 
 
 if __name__ == '__main__':

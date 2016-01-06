@@ -1,14 +1,25 @@
 import re
 from datetime import datetime
-from OpenSSL import crypto as c
+from OpenSSL import crypto
 __author__ = 'r2h2'
 
-class X509cert:
+
+class XY509cert:
     def __init__(self, cert_str, inform='PEM'):
         if inform == 'PEM':
-            self.cert = c.load_certificate(c.FILETYPE_PEM, cert_str)
+            hasStartLine = False
+            for l in cert_str.splitlines(True):
+                if l == '-----BEGIN CERTIFICATE-----\n':
+                    hasStartLine = True
+                    break
+            if not hasStartLine:
+                c =  '-----BEGIN CERTIFICATE-----\n' + cert_str + '\n-----END CERTIFICATE-----\n'
+                c = re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
+            else:
+                c = cert_str
+            self.cert = crypto.load_certificate(crypto.FILETYPE_PEM, c)
         elif inform == 'DER':
-            self.cert = c.load_certificate(c.FILETYPE_ASN1, cert_str)
+            self.cert = crypto.load_certificate(crypto.FILETYPE_ASN1, cert_str)
         self.cert_str = cert_str
 
     def getPEM_str(self):
@@ -37,12 +48,17 @@ class X509cert:
             if k.decode('utf-8') == 'CN':
                 return v.decode('utf-8')
 
+    def getSubject_str(self):
+        subject_dn = self.cert.get_subject()
+        subject_str = str(subject_dn).replace("<X509Name object '", '')[:-2]
+        return subject_str
+
     def getIssuer_str(self):
         issuer_dn = self.cert.get_issuer()
         issuer_str = str(issuer_dn).replace("<X509Name object '", '')[:-2]
         return issuer_str
 
     def isNotExpired(self):
-        notValidAfter_str = self.cert.get_notAfter()
+        notValidAfter_str = self.cert.get_notAfter().decode('ascii')
         notValidAfter_date = datetime.strptime(notValidAfter_str, '%Y%m%d%H%M%SZ')
         return notValidAfter_date > datetime.now()

@@ -129,7 +129,7 @@ class CliPAtoolInvocation(AbstractInvocation):
 
         # create the parser for the "caCert" command
         self._parser_revoke = _subparsers.add_parser('caCert', help='create a PMP input file to import a ca certificate')
-        self._parser_revoke.add_argument('-p', '--pvprole', dest='pvprole', help='STP, AWP')
+        self._parser_revoke.add_argument('-p', '--pvprole', dest='pvprole', help='IDP, SP')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
 
@@ -149,8 +149,8 @@ class CliPAtoolInvocation(AbstractInvocation):
         if self.args.subcommand == 'caCert':
             if not getattr(self.args, 'pvprole', False):
                 raise ValidationFailure('must specify --pvprole for command caCert')
-            if self.args.pvprole not in ('STP', 'AWP'):
-                raise ValidationFailure("pvprole must be one of ('STP', 'AWP')")
+            if self.args.pvprole not in ('IDP', 'SP'):
+                raise ValidationFailure("pvprole must be one of ('IDP', 'SP')")
 
 
 

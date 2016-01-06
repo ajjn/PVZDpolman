@@ -1,5 +1,5 @@
-Packages not available from package index
-=========================================
+Packages not to be installed from package index
+===============================================
 
 pyjnius: Need to install from git:
 * kivy (upstream master): python3 "import jnius" OK for OSX, but not OK for CentOS7
@@ -12,3 +12,7 @@ json2html
     https://github.com/YAmikep/json2html.git
 * ordereddict:
     load tarball from https://pypi.python.org/pypi/ordereddict
+
+pyOpenSSL
+    fixed AttributeError: 'X509certStore' object has no attribute '_store'
+    install git@github.com:rhoerbe/pyopenssl.git (15.0.2_dev0+rh0)

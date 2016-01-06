@@ -4,7 +4,7 @@ from constants import PROJDIR_ABS
 from invocation import *
 from SAMLEntityDescriptor import *
 from userExceptions import *
-from x509cert import X509cert
+from xy509cert import XY509cert
 
 __author__ = 'r2h2'
 
@@ -40,7 +40,7 @@ class PAtool:
 
     def createED(self):
         logging.debug('reading certificate from ' + self.args.cert.name)
-        x509cert = X509cert(self.args.cert.read())
+        x509cert = XY509cert(self.args.cert.read())
         entityId = self.getEntityId(x509cert)
         if self.args.samlrole == 'IDP':
             entityDescriptor = '''\
@@ -85,7 +85,7 @@ class PAtool:
     def signED(self, projdir_abs):
         ''' Validate XML-Schema and sign with enveloped signature.  '''
         assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
-        ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name), projdir_abs)
+        ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name))
         retmsg = ed.validateXSD()
         if retmsg is not None:
             sys.tracebacklimit = 1
@@ -127,7 +127,7 @@ class PAtool:
 
     def revokeCert(self):
         logging.debug('reading certificate from ' + self.args.certfile.name)
-        x509cert = X509cert(self.args.certfile.read())
+        x509cert = XY509cert(self.args.certfile.read())
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % \
                     (x509cert_pem, self.args.reason)
@@ -138,10 +138,10 @@ class PAtool:
 
     def caCert(self):
         logging.debug('reading ca certificate from ' + self.args.certfile.name)
-        x509cert = X509cert(self.args.certfile.read())
+        x509cert = XY509cert(self.args.certfile.read())
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["issuer", "%s", "%s", "%s"], "delete": false}\n]' % \
-                    (x509cert_pem, self.args.pvprole, x509cert.getSubjectCN())
+                    (x509cert.getSubjectCN(), self.args.pvprole, x509cert_pem)
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
         self.args.output.close()

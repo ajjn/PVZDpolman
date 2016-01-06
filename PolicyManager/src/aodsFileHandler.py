@@ -55,7 +55,7 @@ class AODSFileHandler():
             content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
             if len(content) < 0:
                 raise ValidationFailure('AODS contained in XML signature value is empty')
-            logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
+            # logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
             content_body_str = content.replace(DATA_HEADER_B64BZIP, '', 1)
             j_bzip2 = base64.b64decode(content_body_str)
             j = bz2.decompress(j_bzip2)

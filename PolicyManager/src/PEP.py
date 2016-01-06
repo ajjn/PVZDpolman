@@ -4,13 +4,16 @@ from os import path
 from urllib.parse import urlparse
 from lxml import etree as ET
 from jnius import autoclass
+from OpenSSL import crypto
 from aodsFileHandler import *
 from aodsListHandler import *
 from constants import *
 from gitHandler import GitHandler
 from invocation import *
 from SAMLEntityDescriptor import *
-from x509cert import X509cert
+from x509certStore import X509certStore
+from xy509cert import XY509cert
+
 __author__ = 'r2h2'
 
 class PEP:
@@ -50,9 +53,6 @@ class PEP:
         aodsListHandler = AodsListHandler(aodsFileHandler, invocation.args)
         return aodsListHandler.aods_read()
 
-    def validateSchematron(self, filename_abs):
-        pass  # TODO: implement
-
     def validateSignature(self, filename_abs) -> str:
         PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
         verifier = PvzdVerfiySig(
@@ -64,84 +64,100 @@ class PEP:
             raise SignatureVerificationFailed("Signature verification failed, code=" + \
                                               response.pvzdCode + "; " + response.pvzdMessage)
         #if self.verbose:
-        #    cert = X509cert(response.signerCertificateEncoded, inform='DER') # TODO: check encoding
+        #    cert = XY509cert(response.signerCertificateEncoded, inform='DER') # TODO: check encoding
         #    print('Subject CN: ' + cert.getIssuer_str)
         return response.signerCertificateEncoded
 
-    def getAllowedDomains(self, signerCert, policyDict) -> list:
+    def getOrgID(self, signerCert, policyDict) -> str:
+        ''' return associated organizazions for signer. There are two possible paths:
+                signer-cert -> portaladmin -> org
+                signer-cert -> identity-link/ssid -> portaladmin -> org (not implemented)
+        '''
+        try:
+            org_id = policyDict["userprivilege"]['{cert}'+signerCert][0]
+        except KeyError:
+            raise UnauthorizedSigner( 'Signer certificate not found in policy directory')
+        return org_id
+
+    def getAllowedDomainsForOrg(self, org_id, policyDict) -> list:
         ''' return allowed domains for signer. There are two possible paths:
                 signer-cert -> portaladmin -> org -> domain
                 signer-cert -> identity-link/ssid -> portaladmin -> org -> domain (not implemented)
         '''
-        if policyDict["userprivilege"].get(signerCert, None) is None:
-            raise UnauthorizedSigner( 'Signer certificate not found in policy directory')
-        org_id = policyDict["userprivilege"][signerCert][0]
         allowedDomains = []
         for dn in policyDict["domain"].keys():
             if policyDict["domain"][dn][0] == org_id:
                 allowedDomains.append(dn)
         return allowedDomains
 
-    def assertNameInAllowedDomains(self, dn, allowedDomains) -> bool:
-        '''  check if dn is identical to or a sub-domain of an allowed domain '''
-        isInAllowed = False
-        for adn in allowedDomains:
-            if dn == adn:
-                isInAllowed = True
-                break
-        return isInAllowed
+    def isInAllowedDomains(self, dn, allowedDomains) -> bool:
+        '''  check if dn is identical to or an immediate sub-domain of an allowed domain '''
+        parent_dn = re.sub('^[^\.]+\.', '', dn)
+        if dn in allowedDomains or parent_dn in allowedDomains:
+            return True
+        return False
 
-    def getEntityDescriptor(self, filename_abs):
-        ''' extract the contents of the enveloping signature in filename_abs and uncompress and decode it '''
-        tree = ET.parse(filename_abs)
-        content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
-        if len(content) == 0:
-            raise ValidationFailure('EntityDescriptor contained in XML signature value is empty')
-        logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
-        content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
-        return bz2.decompress(base64.b64decode(content_body))
+    # removed, only accepting enveloping signatures
+    # def getEntityDescriptor(self, filename_abs):
+        #     ''' extract the contents of the enveloping signature in filename_abs and uncompress and decode it '''
+    #     tree = ET.parse(filename_abs)
+    #     content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
+    #     if len(content) == 0:
+    #         raise ValidationFailure('EntityDescriptor contained in XML signature value is empty')
+    #     logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
+    #     content_body = re.sub(DATA_HEADER_B64BZIP, '', content)
+    #     return bz2.decompress(base64.b64decode(content_body))
 
-
-    def validateDomainNames(self, ed_str, allowedDomains) -> bool:
+    def validateDomainNames(self, ed, allowedDomains) -> bool:
         ''' check that entityId and endpoints contain only hostnames from allowed domains'''
-        ed_root = ET.fromstring(ed_str)
-        if ed_root.tag != XMLNS_MD + 'EntityDescriptor':
+        if ed.dom.tag != XMLNS_MD + 'EntityDescriptor':
             raise MissingRootElem('Request object must contain EntityDescriptor as root element')
-        entityID_url = ed_root.attrib['entityID']
+        entityID_url = ed.dom.attrib['entityID']
         entityID_hostname = urlparse(entityID_url).hostname
-        if entityID_hostname not in allowedDomains:
-            raise InvalidFQDN('%s not in allowed domains: %s' % (entityID_hostname, allowedDomains))
+        if not self.isInAllowedDomains(entityID_hostname, allowedDomains):
+            raise InvalidFQDN('FQDN of entityID %s not in allowed domains: %s' % (entityID_hostname, allowedDomains))
         logging.debug('signer is allowed to use %s as entityID' % entityID_hostname)
-        for element in ed_root.xpath('//[@location]'):
+        for element in ed.dom.xpath('//@location'):
             location_hostname = urlparse(element.attrib['Location']).hostname
-            if location_hostname not in allowedDomains:
+            if self.isInAllowedDomains(location_hostname, allowedDomains):
                 raise InvalidFQDN('%s in %s not in allowed domains: %s' % (location_hostname, element.tag, allowedDomains))
             logging.debug('signer is allowed to use %s in %' % (location_hostname, element.tag.split('}')))
         return True
 
-    def getCerts(self, ed_str, role) -> list:
-        ed_root = ET.fromstring(ed_str)
+    def getCerts(self, ed, role) -> list:
         certs = []
         if role == 'IDP': xp = 'md:IDPSSODescriptor//ds:X509Certificate'
         if role == 'SP': xp = 'md:SPSSODescriptor//ds:X509Certificate'
         i = 0
-        for elem in ed_root.xpath(xp, namespaces={'ds': 'http://www.w3.org/2000/09/xmldsig#',
+        for elem in ed.dom.xpath(xp, namespaces={'ds': 'http://www.w3.org/2000/09/xmldsig#',
                                                   'md': 'urn:oasis:names:tc:SAML:2.0:metadata'}):
-            certs.append(self, elem.text)
+            certs.append(elem.text)
             i += 1
-        if i == 0:
-            raise EntityRoleMissingCert
         return certs
 
-    def checkCerts(self, ed_str, role):
-        ''' do certificate validation for singing and encryption certificates '''
-        # TODO: prüfung auf count(certs) > 0
-        for cert_pem in self.getCerts(ed_str, role):
-            cert = X509cert(cert_pem)
+    def checkCerts(self, ed, IDP_trustStore, SP_trustStore):
+        ''' validate that included signing and encryption certificates meet
+            all of the following conditions:
+            * not expired
+            * issued by a CA listed as issuer in the related trust store
+        '''
+        for cert_pem in self.getCerts(ed, 'IDP'):
+            cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
                 raise CertExpired('certificate has a notValidAfter date in the past')
-            if cert.getIssuer_str not in VALIDCERTISSUERS[role]:
-                raise CertInvalidIssuer('certificate was not issued by a accredited CA')
+            x509storeContext = crypto.X509StoreContext(IDP_trustStore, cert.cert)
+            try:
+                x509storeContext.verify_certificate()
+            except crypto.X509StoreContextError as e:
+                raise CertInvalid(('Invalid certificate. Issuer not in policy directory: ' + cert.getIssuer_str()))
+
+        for cert_pem in self.getCerts(ed, 'SP'):
+            cert = XY509cert(cert_pem)
+            if not cert.isNotExpired():
+                raise CertExpired('certificate has a notValidAfter date in the past')
+            x509storeContext = crypto.X509StoreContext(SP_trustStore, cert)
+            x509storeContext.verify_certificate()
+
 
 
 def run_me(testrunnerInvocation=None):
@@ -151,34 +167,35 @@ def run_me(testrunnerInvocation=None):
         invocation = CliPepInvocation()
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
+    IDP_trustStore = X509certStore(policyDict, 'IDP')
+    SP_trustStore = X509certStore(policyDict, 'SP')
     logging.debug('   using repo ' + invocation.args.pubrequ)
     gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
         if not filename.endswith('.xml'):
-            logging.debug('   ignoring ' + filename)
+            logging.debug('   not .xml: ignoring ' + filename)
             continue
         filename_abs = invocation.args.pubrequ + '/' + filename
         filename_base = os.path.basename(filename)
         pep.file_counter += 1
         try:
-            logging.debug('\n== processing ' + filename_base)
+            logging.debug('== processing ' + filename_base)
             if pep.isDeletionRequest(filename_abs):
                 gitHandler.remove_from_accepted(filename)
             else:
                 logging.debug('validating XML schema')
-                ed = SAMLEntityDescriptor(filename_abs, PROJDIR_ABS)
+                ed = SAMLEntityDescriptor(filename_abs)
                 ed.validateXSD()
-                pep.validateSchematron(filename_abs)
+                ed.validateSchematron()
                 logging.debug('validating signature')
                 signerCert = pep.validateSignature(filename_abs)
                 logging.debug('validating signer cert, loading allowed domains')
-                pep.getAllowedDomains(signerCert, policyDict)
-                ed_str = pep.getEntityDescriptor(filename_abs)
+                org_id = pep.getOrgID(signerCert, policyDict)
                 logging.debug('validating signer\'s privileges to use domain names in URLs')
-                pep.validateDomainNames(ed_str, policyDict)
+                allowedDomains = pep.getAllowedDomainsForOrg(org_id, policyDict)
+                pep.validateDomainNames(ed, allowedDomains)
                 logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
-                pep.checkCerts(ed_str, 'IDP')
-                pep.checkCerts(ed_str, 'SP')
+                pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
         except ValidationFailure as e:

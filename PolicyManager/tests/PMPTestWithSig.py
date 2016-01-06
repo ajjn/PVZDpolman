@@ -1,8 +1,8 @@
-''' all tests that require citizen card signature '''
+''' all PMP tests with citizen card signature '''
 
-from __future__ import print_function
 import difflib, os, sys
 import unittest
+from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
 from userExceptions import *
 import PMP
@@ -38,24 +38,11 @@ class Test01_basic_happy_cycle(unittest.TestCase):
                                       inputfile])
         PMP.run_me(cliClient)
 
-        inputfile = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')
-        logging.debug('  appending input file %s .. ' % inputfile)
-        cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'append',
-                                      inputfile])
-        PMP.run_me(cliClient)
-
         logging.debug('  reading aods file, writing directory .. ')
         cliClient = CliPmpInvocation(['-v', '-t', 'testdata/trustedcerts.json', '-a', aodsfile_new, '-x', 'read', \
                                    '--poldirjson', policydir_new])
         PMP.run_me(cliClient)
-
-        logging.debug('  comparing directory with reference data .. ')
-        aodsfile_refdata = 'testdata/PMPns01_poldir.json'
-        diff = difflib.unified_diff(open(os.path.abspath(policydir_new)).readlines(),
-                                    open(os.path.abspath(aodsfile_refdata)).readlines())
-        delta = '\n'.join(diff)
-        logging.debug(delta)
-        assert delta == '', 'resulting policy directory (%s) is not equal to reference data (%s)' % (policydir_new, aodsfile_refdata)
+        assertNoDiff('PMPws01_poldir.json')
 
 
 if __name__ == '__main__':

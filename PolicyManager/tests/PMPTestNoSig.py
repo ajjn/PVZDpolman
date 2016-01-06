@@ -2,6 +2,7 @@
 
 import difflib, os, sys
 import unittest
+from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
 from userExceptions import *
 import PMP
@@ -58,12 +59,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         logging.debug('=== reading aods file, dumping journal as json .. ')
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'read', '--journal', os.path.abspath('work/PMPns01_aods_01_journal.json')])
         PMP.run_me(cliClient)
-
-        logging.debug('comparing directory with reference data .. ')
-        diff = difflib.unified_diff(open(os.path.abspath('work/PMPns01_poldir.json')).readlines(),
-                             open(os.path.abspath('testdata/PMPns01_poldir.json')).readlines())
-        assert ''.join(diff) == '', ' result is not equal to reference data'
-        logging.debug('=== read/compare done.')
+        assertNoDiff('PMPns01_poldir.json')
 
 
 class Test02_broken_hash_chain(unittest.TestCase):
