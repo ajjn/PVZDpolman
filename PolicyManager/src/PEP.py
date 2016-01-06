@@ -203,10 +203,9 @@ def run_me(testrunnerInvocation=None):
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
-    if invocation.args.verbose:
-        logging.debug('files processed: ' + str(pep.file_counter) + '\n' + \
-                      'files accepted: ' + str(pep.file_counter_accepted) + '\n' + \
-                      'files rejected: ' + str(pep.file_counter_rejected) + '\n')
+    logging.debug('files processed: ' + str(pep.file_counter) + '\n' + \
+                  'files accepted: ' + str(pep.file_counter_accepted) + '\n' + \
+                  'files rejected: ' + str(pep.file_counter_rejected) + '\n')
 
 
 if __name__ == '__main__':

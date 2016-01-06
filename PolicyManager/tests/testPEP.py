@@ -54,25 +54,25 @@ class Test03_basic_happy_cycle(unittest.TestCase):
         assert os.path.isfile(os.path.abspath(requ1_result)), 'expected %s in accept directory' % requ1_result
 
 
-# class Test04_unauthorized_requests(unittest.TestCase):
-#     def runTest(self):
-#         logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
-#         repo_dir = 'work/policyDirectory'
-#         cliClient = CliPepInvocation(['--verbose',
-#                                       '--aods', os.path.abspath('testdata/PMPws01_aods_journal.xml'), '-x',
-#                                       '--pubreq', os.path.abspath(repo_dir),
-#                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
-#         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-#         gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-#         gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz', repo_dir)
-#         logging.debug('    - processing request queue')
-#         PEP.run_me(cliClient)
-#         requ1_result = os.path.abspath('work/policyDirectory/rejected/PEP04a_gondorMagwienGvAt_ed_delete.xml')
-#         os.path.isfile(requ1_result)
-#         requ2_result = os.path.abspath('work/policyDirectory/rejected/PEP04b_idp5_valid_sig_untrusted_signer.xml')
-#         assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
-#         requ2_errmsg = 'Signer certificate not found in policy directory'
-#         assert open(requ2_result + '.err').read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
+class Test04_unauthorized_requests(unittest.TestCase):
+    def runTest(self):
+        logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
+        repo_dir = 'work/policyDirectory'
+        cliClient = CliPepInvocation(['--verbose',
+                                      '--aods', os.path.abspath('testdata/PMPws01_aods_journal.xml'), '-x',
+                                      '--pubreq', os.path.abspath(repo_dir),
+                                      '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
+        logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
+        gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
+        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz', repo_dir)
+        logging.debug('    - processing request queue')
+        PEP.run_me(cliClient)
+        requ1_result = os.path.abspath('work/policyDirectory/rejected/PEP04a_gondorMagwienGvAt_ed_delete.xml')
+        os.path.isfile(requ1_result)
+        requ2_result = os.path.abspath('work/policyDirectory/rejected/PEP04b_idpExampleCom_req_sig_an.xml')
+        assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
+        requ2_errmsg = 'Signer certificate not found in policy directory'
+        assert open(requ2_result + '.err').read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
 
 
 if __name__ == '__main__':
