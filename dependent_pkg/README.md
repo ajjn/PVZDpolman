@@ -12,7 +12,3 @@ json2html
     https://github.com/YAmikep/json2html.git
 * ordereddict:
     load tarball from https://pypi.python.org/pypi/ordereddict
-
-pyOpenSSL
-    fixed AttributeError: 'X509certStore' object has no attribute '_store'
-    install git@github.com:rhoerbe/pyopenssl.git (15.0.2_dev0+rh0)

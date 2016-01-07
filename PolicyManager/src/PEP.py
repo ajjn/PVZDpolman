@@ -11,7 +11,7 @@ from constants import *
 from gitHandler import GitHandler
 from invocation import *
 from SAMLEntityDescriptor import *
-from x509certStore import X509certStore
+from xy509certStore import Xy509certStore
 from xy509cert import XY509cert
 
 __author__ = 'r2h2'
@@ -145,7 +145,7 @@ class PEP:
             cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
                 raise CertExpired('certificate has a notValidAfter date in the past')
-            x509storeContext = crypto.X509StoreContext(IDP_trustStore, cert.cert)
+            x509storeContext = crypto.X509StoreContext(IDP_trustStore.x509store, cert.cert)
             try:
                 x509storeContext.verify_certificate()
             except crypto.X509StoreContextError as e:
@@ -155,7 +155,7 @@ class PEP:
             cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
                 raise CertExpired('certificate has a notValidAfter date in the past')
-            x509storeContext = crypto.X509StoreContext(SP_trustStore, cert)
+            x509storeContext = crypto.X509StoreContext(SP_trustStore.x509store, cert.cert)
             x509storeContext.verify_certificate()
 
 
@@ -167,8 +167,8 @@ def run_me(testrunnerInvocation=None):
         invocation = CliPepInvocation()
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
-    IDP_trustStore = X509certStore(policyDict, 'IDP')
-    SP_trustStore = X509certStore(policyDict, 'SP')
+    IDP_trustStore = Xy509certStore(policyDict, 'IDP')
+    SP_trustStore = Xy509certStore(policyDict, 'SP')
     logging.debug('   using repo ' + invocation.args.pubrequ)
     gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
