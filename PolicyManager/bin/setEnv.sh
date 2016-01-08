@@ -7,6 +7,11 @@ if [[ "$ostype" == "linux-gnu" ]]; then
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZD
     export py3=/usr/bin/python3.4
+elif [[ "$ostype" == "linux" ]]; then
+    #  deployment env
+    export JAVA_HOME=/var/lib/jvm/java-1.8.0-openjdk.x86_64
+    export PROJ_HOME=/home/gal/pvpmeta/PVZD
+    export py3=/usr/bin/python3.4
 elif [[ "$ostype" == "darwin" ]]; then
     if [[ `/bin/hostname` == "devl8.local" ]]; then  # r2h2 development env
         export devlhome=~/devl
@@ -26,26 +31,26 @@ else
     exit 1
 fi
 
-export CLASSPATH="/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/lib/jconsole.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/lib/sa-jdi.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/lib/tools.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/charsets.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/deploy.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/javaws.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/jce.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/jfr.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/jsse.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/management-agent.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/plugin.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/resources.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/rt.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/dnsns.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/localedata.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/sunec.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:\
-/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/ext/zipfs.jar:\
+export CLASSPATH="$JAVA_HOME/lib/jconsole.jar:\
+$JAVA_HOME/lib/sa-jdi.jar:\
+$JAVA_HOME/lib/tools.jar:\
+$JAVA_HOME/jre/lib/charsets.jar:\
+$JAVA_HOME/jre/lib/deploy.jar:\
+$JAVA_HOME/jre/lib/javaws.jar:\
+$JAVA_HOME/jre/lib/jce.jar:\
+$JAVA_HOME/jre/lib/jfr.jar:\
+$JAVA_HOME/jre/lib/jsse.jar:\
+$JAVA_HOME/jre/lib/management-agent.jar:\
+$JAVA_HOME/jre/lib/plugin.jar:\
+$JAVA_HOME/jre/lib/resources.jar:\
+$JAVA_HOME/jre/lib/rt.jar:\
+$JAVA_HOME/jre/lib/ext/cldrdata.jar:\
+$JAVA_HOME/jre/lib/ext/dnsns.jar:\
+$JAVA_HOME/jre/lib/ext/localedata.jar:\
+$JAVA_HOME/jre/lib/ext/sunec.jar:\
+$JAVA_HOME/jre/lib/ext/sunjce_provider.jar:\
+$JAVA_HOME/jre/lib/ext/sunpkcs11.jar:\
+$JAVA_HOME/jre/lib/ext/zipfs.jar:\
 $PROJ_HOME/lib/moa-spss-lib/moa-spss.jar:\
 $PROJ_HOME/lib/moa-spss-lib/moa-common.jar:\
 $PROJ_HOME/lib/moa-spss-lib/lib/mail-1.4.7.jar:\
