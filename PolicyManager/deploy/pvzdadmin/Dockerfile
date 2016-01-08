@@ -1,7 +1,7 @@
 FROM centos:centos7
 MAINTAINER r2h2 <rainer@hoerbe.at>
 
-# PVZD Admin System (PMP, PAtools)
+# PVZD Administration System (PMP, PAtools)
 
 RUN yum -y install epel-release
 RUN yum -y groupinstall "Development Tools" "GNOME Desktop" net-tools
