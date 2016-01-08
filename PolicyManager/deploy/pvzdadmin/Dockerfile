@@ -19,6 +19,7 @@ RUN yum -y install java-1.8.0-openjdk-devel.x86_64
 # Install MOA-ID
 
 # Install Python for PolicyManager
+# RHEL6: rh-python34 rh-python34-virtualenv etc.
 RUN yum -y install python34-devel libffi-devel openssl-devel
 RUN curl -O https://bootstrap.pypa.io/get-pip.py
 RUN python3.4 get-pip.py
