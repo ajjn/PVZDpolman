@@ -11,7 +11,7 @@ elif [[ "$ostype" == "linux" ]]; then
     #  deployment env
     export JAVA_HOME=/var/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZD
-    export py3=scl enable rh-python34 /home/gal/.virtualenv/bin/python3.4
+    export py3='scl enable rh-python34 bash -c /home/gal/.virtualenvs/pvzd34/bin/python3.4'
 elif [[ "$ostype" == "darwin" ]]; then
     if [[ `/bin/hostname` == "devl8.local" ]]; then  # r2h2 development env
         export devlhome=~/devl
