@@ -1,8 +1,8 @@
 # Installation
 
 ## Path setup
-To run shell scripts in ./bin and ./test you need to configure the env variables 
-JAVA_HOME, PROJ_HOME and py3. 
+To run shell scripts in PolicyManager/bin and PolicyManager/tests you need to 
+configure the environment variables JAVA_HOME, PROJ_HOME and py3. 
 
 
 ## Packages not to be installed from package index
@@ -18,3 +18,9 @@ JAVA_HOME, PROJ_HOME and py3.
     https://github.com/YAmikep/json2html.git
 * ordereddict:
     load tarball from https://pypi.python.org/pypi/ordereddict
+
+## Run unittests (keep sequence because of test data dependencies)
+cd PolicyManager/tests
+./testPAtool.sh
+./testPMP.sh
+./testPEP.sh

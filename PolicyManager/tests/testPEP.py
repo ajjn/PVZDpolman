@@ -72,7 +72,8 @@ class Test04_unauthorized_requests(unittest.TestCase):
         requ2_result = os.path.abspath('work/policyDirectory/rejected/PEP04b_idpExampleCom_req_sig_an.xml')
         assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
         requ2_errmsg = 'Signer certificate not found in policy directory'
-        assert open(requ2_result + '.err').read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
+        with open(requ2_result + '.err') as f:
+            assert f.read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
 
 
 if __name__ == '__main__':
