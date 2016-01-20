@@ -2,7 +2,7 @@
 
 ## Path setup
 To run shell scripts in PolicyManager/bin and PolicyManager/tests you need to 
-configure the environment variables JAVA_HOME, PROJ_HOME and py3. 
+set the environment variables JAVA_HOME, PROJ_HOME and py3. 
 
 
 ## Packages not to be installed from package index
@@ -24,3 +24,9 @@ cd PolicyManager/tests
 ./testPAtool.sh
 ./testPMP.sh
 ./testPEP.sh
+
+# Configuration
+The key file and directory locations for the PolicyManager are
+* POLICY_JOURNAL  (the policy journal ("aods") file passed to PMP and PEP with the -a option)
+* REPO_DIR        (Repository root)
+* TRUSTEDCERTS    (List of signing certificates for the policy journal)
