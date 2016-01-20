@@ -14,6 +14,7 @@ def failIfSecurityLayerUnavailable():
     if sock.connect_ex(addr) != 0:
         sys.tracebacklimit = 0
         raise SecurityLayerUnavailable(SecurityLayerUnavailable.__doc__)
+    sock.close()
 
 def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
     ''' return an XML template to be merged with the data to be signed

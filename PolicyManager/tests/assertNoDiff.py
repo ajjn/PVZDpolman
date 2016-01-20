@@ -6,8 +6,11 @@ def assertNoDiff(testresult_filename):
     :param testresult_filename: namepart onyl, no path
     :return: assert message
     '''
-    diff = difflib.unified_diff(open(os.path.abspath(os.path.join('work', testresult_filename))).readlines(),
-                                open(os.path.abspath(os.path.join('testdata', testresult_filename))).readlines())
+    f_work = open(os.path.abspath(os.path.join('work', testresult_filename)))
+    f_testdata = open(os.path.abspath(os.path.join('testdata', testresult_filename)))
+    diff = difflib.unified_diff(f_work.readlines(), f_testdata.readlines())
+    f_work.close()
+    f_testdata.close()
     try:
         assert ''.join(diff) == '', 'result (' + testresult_filename + ') is not equal to reference data'
     except AssertionError as e:

@@ -29,6 +29,7 @@ class AodsListHandler:
         except (OSError, IOError) as e:
             logging.error('could not read inputfile, because: %s' %(repr(e)))
             sys.exit(1)
+        self.args.input.close()
         try:
             appendList = json.loads(inputdataJSON)
         except Exception as e:

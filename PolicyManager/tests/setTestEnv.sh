@@ -9,4 +9,3 @@ $PROJ_HOME/lib/unittests/hamcrest-library-1.3.jar"
 
 export PYTHONPATH=$PYTHONPATH:$PROJ_HOME/PolicyManager/tests
 export UTRUNNER=$PROJ_HOME/pycharm-helper/utrunner.py
-export TESTRUNNER=/opt/local/Library/Frameworks/Python.framework/Versions/3.4/bin/nose2

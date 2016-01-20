@@ -32,6 +32,7 @@ class AODSFileHandler():
             f.write(x)
         else:
             f.write(json.dumps(s))
+        f.close()
 
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
@@ -47,7 +48,8 @@ class AODSFileHandler():
                                         response.pvzdCode + "; " + response.pvzdMessage)
             if not os.path.isfile(self.trustCertsFile):
                 raise ValidationFailure('Trust certs file not found: %s' % self.trustCertsFile)
-            trustCerts = json.loads(open(self.trustCertsFile).read())
+            with open(self.trustCertsFile) as f:
+                trustCerts = json.loads(f.read())
             if response.signerCertificateEncoded not in trustCerts:
                 raise ValidationFailure("Signature certificate not in trusted list. Signature cert is\n" +
                                         response.signerCertificateEncoded)
@@ -61,8 +63,9 @@ class AODSFileHandler():
             j = bz2.decompress(j_bzip2)
             return json.loads(j.decode('UTF-8'))
         else:  # must be json
-            f = open(self._aodsFile, 'r')
-            return json.loads(f.read())
+            with open(self._aodsFile, 'r') as f:
+                j = json.loads(f.read())
+            return j
 
     def removeFile(self):
         ''' remove file but ignore if it does not exist '''
@@ -73,9 +76,9 @@ class AODSFileHandler():
                 raise e
 
     def save(self, s, xmlsign):
-        f = open(self._aodsFile, 'w')
-        f.truncate()
-        if xmlsign:
-            f.write(creSignedXML(json.dumps(s)))
-        else:
-            f.write(json.dumps(s))
+        with open(self._aodsFile, 'w') as f:
+            f.truncate()
+            if xmlsign:
+                f.write(creSignedXML(json.dumps(s)))
+            else:
+                f.write(json.dumps(s))
