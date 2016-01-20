@@ -3,34 +3,34 @@
 
 ostype=${OSTYPE//[0-9.]/}
 if [[ "$ostype" == "linux-gnu" ]]; then
-    #  deployment env
+    #  tested with CentOS7
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZD
     export py3=/usr/bin/python3.4
 elif [[ "$ostype" == "linux" ]]; then
-    #  deployment env
-    export JAVA_HOME=/var/lib/jvm/java-1.8.0-openjdk.x86_64
-    export PROJ_HOME=/home/gal/pvpmeta/PVZD
-    export py3='scl enable rh-python34 bash -c /home/gal/.virtualenvs/pvzd34/bin/python3.4'
+    #  tested with RHEL6
+    export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
+    export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
+    export py3='scl enable rh-python34 -- python'
 elif [[ "$ostype" == "darwin" ]]; then
+    #  used for OSX development env
     if [[ `/bin/hostname` == "devl8.local" ]]; then  # r2h2 development env
         export devlhome=~/devl
-        echo "I am devl8: ${devlhome}"
     elif [[ `/bin/hostname` == "ClapTsuNami.local" ]]; then
         export devlhome=/Volumes/devl
-        echo "I am ClapTsuNami"
     else
         echo "no environment defined for  host `/bin/hostname`"
         exit 1
     fi
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home
-    export PROJ_HOME=$devlhome/pycharm/rhoerbe/PVZD
+    export PROJ_HOME=$devlhome/pycharm/rhoerbe/PVZDpolman
     export py3=~/virtualenvs/pvzd34/bin/python
 else
     echo "no environment defined for $ostype"
     exit 1
 fi
 
+# --- do not change below this line for target system configuration
 export CLASSPATH="$JAVA_HOME/lib/jconsole.jar:\
 $JAVA_HOME/lib/sa-jdi.jar:\
 $JAVA_HOME/lib/tools.jar:\
