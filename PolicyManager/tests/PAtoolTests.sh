@@ -1,8 +1,7 @@
 #!/bin/bash
 
 source ./setTestEnv.sh
-echo "CLASSPATH=$CLASSPATH"
-echo
+
 MOD_HOME=$PROJ_HOME/PolicyManager
 
 echo '== Test 01: create EntitDescriptor from certificate'
