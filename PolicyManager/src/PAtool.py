@@ -41,6 +41,7 @@ class PAtool:
     def createED(self):
         logging.debug('reading certificate from ' + self.args.cert.name)
         x509cert = XY509cert(self.args.cert.read())
+        self.args.cert.close()
         entityId = self.getEntityId(x509cert)
         if self.args.samlrole == 'IDP':
             entityDescriptor = '''\
@@ -88,9 +89,11 @@ class PAtool:
         ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name))
         retmsg = ed.validateXSD()
         if retmsg is not None:
+            self.args.input.close()
             sys.tracebacklimit = 1
             raise InvalidSamlXmlSchema('File ' +  self.args.input.name + ' is not schema valid:\n' + retmsg)
         unsigned_contents = self.args.input.read()
+        self.args.input.close()
         md_namespace_prefix = ed.getNamespacePrefix()
         signed_contents = creSignedXML(unsigned_contents,
                                        sigType='enveloped',
@@ -104,7 +107,6 @@ class PAtool:
             logging.debug('writing signed document with default name ' + output_filename)
         with open(output_filename, 'w') as f:
             f.write(signed_contents)
-            f.close()
 
 
     def deleteED(self):
@@ -128,6 +130,7 @@ class PAtool:
     def revokeCert(self):
         logging.debug('reading certificate from ' + self.args.certfile.name)
         x509cert = XY509cert(self.args.certfile.read())
+        self.args.certfile.close()
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["revocation", "%s", "%s"], "delete": false}\n]' % \
                     (x509cert_pem, self.args.reason)
@@ -139,6 +142,7 @@ class PAtool:
     def caCert(self):
         logging.debug('reading ca certificate from ' + self.args.certfile.name)
         x509cert = XY509cert(self.args.certfile.read())
+        self.args.certfile.close()
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["issuer", "%s", "%s", "%s"], "delete": false}\n]' % \
                     (x509cert.getSubjectCN(), self.args.pvprole, x509cert_pem)

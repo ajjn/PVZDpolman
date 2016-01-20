@@ -25,14 +25,13 @@ class AODSFileHandler():
     def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
             raise InvalidArgumentValue('Must remove existing %s before creating a new AODS' % self._aodsFile)
-        f = open(self._aodsFile, 'w')
-        if xmlsign:
-            j = json.dumps(s)
-            x = creSignedXML(j, verbose=self.verbose)
-            f.write(x)
-        else:
-            f.write(json.dumps(s))
-        f.close()
+        with open(self._aodsFile, 'w') as f:
+            if xmlsign:
+                j = json.dumps(s)
+                x = creSignedXML(j, verbose=self.verbose)
+                f.write(x)
+            else:
+                f.write(json.dumps(s))
 
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
