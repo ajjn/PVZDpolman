@@ -78,7 +78,7 @@ class AODSFileHandler():
     def save(self, s, xmlsign):
         if xmlsign:
             xml = creSignedXML(json.dumps(s))
-            if len(xml) == 0:  # just for defense, should never happen
+            if len(xml) == 0:  # just for defense, should not happen
                 raise EmptyAODS('Journal empty, not saved - signature failed?')
             with open(self._aodsFile, 'w') as f:
                 f.truncate()
