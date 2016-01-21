@@ -94,6 +94,7 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
         raise ValidationFailure("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
     if r.text.find('sl:ErrorResponse') >= 0:
         raise ValidationFailure("Security Layer responed with error message.\n" + r.text)
+        # sl:ErrorCode=6001, Abbruch durch den Bürger über die Benutzerschnittstelle.
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:
     # (keeping namespace prefixes - otherwise the signature would break. Therefore not using etree.)

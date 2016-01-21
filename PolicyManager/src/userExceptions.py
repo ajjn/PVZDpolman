@@ -35,6 +35,11 @@ class EmptySamlED(Exception):
     pass
 
 
+class EmptyAODS(Exception):
+    """ Policy Journal file is empty and will not be saved"""
+    pass
+
+
 class InvalidSamlXmlSchema(Exception):
     """ Invalid XML schmea for SAML metadata """
     pass

@@ -25,6 +25,8 @@ cd PolicyManager/tests
 ./testPMP.sh
 ./testPEP.sh
 
+---
+
 # Configuration
 The key file and directory locations for the PolicyManager are
 * POLICY_JOURNAL  (the policy journal ("aods") file passed to PMP and PEP with the -a option)

@@ -25,12 +25,13 @@ class AODSFileHandler():
     def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
             raise InvalidArgumentValue('Must remove existing %s before creating a new AODS' % self._aodsFile)
-        with open(self._aodsFile, 'w') as f:
-            if xmlsign:
-                j = json.dumps(s)
-                x = creSignedXML(j, verbose=self.verbose)
+        if xmlsign:
+            j = json.dumps(s)
+            x = creSignedXML(j, verbose=self.verbose)
+            with open(self._aodsFile, 'w') as f:
                 f.write(x)
-            else:
+        else:
+            with open(self._aodsFile, 'w') as f:
                 f.write(json.dumps(s))
 
     def readFile(self):
@@ -75,9 +76,14 @@ class AODSFileHandler():
                 raise e
 
     def save(self, s, xmlsign):
-        with open(self._aodsFile, 'w') as f:
-            f.truncate()
-            if xmlsign:
-                f.write(creSignedXML(json.dumps(s)))
-            else:
+        if xmlsign:
+            xml = creSignedXML(json.dumps(s))
+            if len(xml) == 0:  # just for defense, should never happen
+                raise EmptyAODS('Journal empty, not saved - signature failed?')
+            with open(self._aodsFile, 'w') as f:
+                f.truncate()
+                f.write(xml)
+        else:
+            with open(self._aodsFile, 'w') as f:
+                f.truncate()
                 f.write(json.dumps(s))

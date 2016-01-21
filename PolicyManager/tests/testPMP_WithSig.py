@@ -1,6 +1,7 @@
 ''' all PMP tests with citizen card signature '''
 
 import difflib, os, sys
+#print(os.environ['CLASSPATH'])
 import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
@@ -24,7 +25,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         logging.info('  -- Test PMPws01: happy cycle: create, append, read, verify (includung xml sig)')
         aodsfile_new = 'work/PMPws01_aods_journal.xml'
         policydir_new = 'work/PMPws01_poldir.json'
-        logging.debug('removing existing aods file %s .. ' % aodsfile_new)
+        logging.debug('  removing existing aods file %s .. ' % aodsfile_new)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile_new, '-x', 'scratch'])
         PMP.run_me(cliClient)
 
