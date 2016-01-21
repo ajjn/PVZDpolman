@@ -1,8 +1,9 @@
 #!/bin/bash
 
 source ./setEnv.sh
+source ./setConfig.sh
 
-$py3    $PROJ_HOME/PolicyManager/src/PEP.py --verbose \
-    --aods $aodsfile -x \
-    --pubreq $repo_dir \
-    --trustedcerts $trustedcerts
+$py3 $PROJ_HOME/PolicyManager/src/PEP.py \
+    --aods $POLICY_JOURNAL -x \
+    --pubreq $REPO_DIR \
+    --trustedcerts $TRUSTEDCERTS

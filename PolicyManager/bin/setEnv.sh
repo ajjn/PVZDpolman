@@ -101,8 +101,3 @@ $PROJ_HOME/lib/PVZDjava/bin/production/ValidateXSD"
 
 export DYLD_LIBRARY_PATH=$JAVA_HOME/jre/lib/server
 export PYTHONPATH=$PYTHONPATH:$PROJ_HOME/PolicyManager/src
-
-export aodsfile=$PROJ_HOME/PolicyManager/tests/work/aods_01_pretty.json
-export repo_dir=$PROJ_HOME/PolicyManager/tests/work/policyDirectory
-export trustedcerts=$PROJ_HOME/PolicyManager/tests/testdata/trustedcerts.json
-
