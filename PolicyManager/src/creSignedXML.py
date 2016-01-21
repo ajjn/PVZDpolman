@@ -93,7 +93,11 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
     if r.status_code != 200:
         raise ValidationFailure("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
     if r.text.find('sl:ErrorResponse') >= 0:
-        raise ValidationFailure("Security Layer responed with error message.\n" + r.text)
+        if r.text.find('<sl:ErrorCode>6001</sl:ErrorCode>'):
+            sys.tracebacklimit = 0  # bug in py3 - not honored
+            raise SecurityLayerCancelled('Signature cancelled by user')
+        else:
+            raise ValidationFailure("Security Layer responed with error message.\n" + r.text)
         # sl:ErrorCode=6001, Abbruch durch den Bürger über die Benutzerschnittstelle.
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:

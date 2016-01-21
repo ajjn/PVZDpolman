@@ -26,6 +26,11 @@ class SecurityLayerUnavailable(Exception):
     pass
 
 
+class SecurityLayerCancelled(Exception):
+    """ Security Layer (MOCCA etc.) interaction was cancelled by user """
+    pass
+
+
 class InvalidArgumentValue(Exception):
     pass
 
