@@ -6,13 +6,18 @@ set the environment variables JAVA_HOME, PROJ_HOME and py3.
 
 ## Java Dependencies
 Following Java libraries need to be downloaded.
-cd $PROJ_HOME/lib
-moa-spss-lib-x.x.x
-curl -O https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
-unzip moa-spss-lib-2.0.3.zip
-ln -s moa-spss-lib-2.0.3 moa-spss-lib
-curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdValidateXsd/pvzdValidateXsd.jar
-curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdVerifySig/pvzdVerifySig.jar
+### MOA-SPSS
+
+    cd $PROJ_HOME/lib
+    moa-spss-lib-x.x.x
+    curl -O https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
+    unzip moa-spss-lib-2.0.3.zip
+    ln -s moa-spss-lib-2.0.3 moa-spss-lib
+
+### PVZDjava
+
+    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdValidateXsd/pvzdValidateXsd.jar
+    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdVerifySig/pvzdVerifySig.jar
 
 ## Python Packages not to be installed from package index
 Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
@@ -30,10 +35,11 @@ Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
     load tarball from https://pypi.python.org/pypi/ordereddict
 
 ## Run unittests (keep sequence because of test data dependencies)
-cd PolicyManager/tests
-./testPAtool.sh
-./testPMP.sh
-./testPEP.sh
+
+    cd PolicyManager/tests
+    ./testPAtool.sh
+    ./testPMP.sh
+    ./testPEP.sh
 
 ---
 
