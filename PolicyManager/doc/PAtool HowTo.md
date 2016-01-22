@@ -42,7 +42,7 @@ This creates an EntiyDescriptor with the attribute pvzd:disposition="delete".
     ./PAtool.sh  \
         --certfile ../tests/testdata/gondorMagwienGvAt_2017-cer.pem \
         revokeCert \
-        --reason 'testing revocation' \
+        --reason testing_revocation \
         ../tests/work/gondorMagwienGvAt_2017-cer_revoke.json
         
 ### Create a PMP Request to add an Issuer Certificate 
