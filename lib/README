@@ -1,9 +1,1 @@
-You need to install MOA-SPSS libraries for validating XADES signatures
-
-Download MOA-SPSS from this address
-https://joinup.ec.europa.eu/catalogue/distribution/moa-spss-lib-203-0
-
-(Test was performed with version 2.0.3)
-
-Finally, the symlink moa-spss-lib must point to the downlaoded library:
-ln -s moa-spss-lib-2.0.3 moa-spss-lib
+see doc/Instzall-Config.md for the required artifacts

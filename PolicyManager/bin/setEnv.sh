@@ -96,8 +96,12 @@ $PROJ_HOME/lib/moa-spss-lib/ext/iaik_jce_full.jar:\
 $PROJ_HOME/lib/moa-spss-lib/ext/iaik_Pkcs11Wrapper.jar:\
 $PROJ_HOME/lib/moa-spss-lib/ext/iaik_Pkcs11Provider.jar:\
 $PROJ_HOME/lib/unittests/junit-4.11.jar:\
-$PROJ_HOME/lib/PVZDjava/bin/production/VerifySigAPI:\
-$PROJ_HOME/lib/PVZDjava/bin/production/ValidateXSD"
+$PROJ_HOME/lib/pvzdValidateXsd.jar:\
+$PROJ_HOME/lib/pvzdVerifySig.jar"
+
+
+#$PROJ_HOME/lib/PVZDjava/bin/production/VerifySigAPI
+#$PROJ_HOME/lib/PVZDjava/bin/production/ValidateXSD
 
 export DYLD_LIBRARY_PATH=$JAVA_HOME/jre/lib/server
 export PYTHONPATH=$PYTHONPATH:$PROJ_HOME/PolicyManager/src
