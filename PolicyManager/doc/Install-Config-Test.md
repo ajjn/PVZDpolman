@@ -4,8 +4,18 @@
 To run shell scripts in PolicyManager/bin and PolicyManager/tests you need to 
 set the environment variables JAVA_HOME, PROJ_HOME and py3. 
 
+## Java Dependencies
+Following Java libraries need to be downloaded.
+cd $PROJ_HOME/lib
+moa-spss-lib-x.x.x
+curl -O https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
+unzip moa-spss-lib-2.0.3.zip
+ln -s moa-spss-lib-2.0.3 moa-spss-lib
+curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdValidateXsd/pvzdValidateXsd.jar
+curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdVerifySig/pvzdVerifySig.jar
 
-## Packages not to be installed from package index
+## Python Packages not to be installed from package index
+Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
 
 ### pyjnius
 * kivy (upstream master): python3 "import jnius" OK for OSX + RHEL6, but not OK for CentOS7
