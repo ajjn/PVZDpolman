@@ -9,5 +9,5 @@ fi
 export POLICY_JOURNAL=/var/lib/git/pvmd/policydir/aods.xml
 export REPO_DIR=/var/lib/git/pvmd
 # need to _manually configure_ the trust store for policydir signing certs:
-export TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
+export TRUSTEDCERTS=/etc/pki/sign/trustedcerts.json
 
