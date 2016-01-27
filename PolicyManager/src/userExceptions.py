@@ -21,80 +21,80 @@ class InputFormatError(InputFormatOrValueError):
     pass
 
 
-class SecurityLayerUnavailable(Exception):
+class SecurityLayerUnavailableError(Exception):
     """ Security Layer (MOCCA etc.) is inactive (local port 3495 not open) """
     pass
 
 
-class SecurityLayerCancelled(Exception):
+class SecurityLayerCancelledError(Exception):
     """ Security Layer (MOCCA etc.) interaction was cancelled by user """
     pass
 
 
-class InvalidArgumentValue(Exception):
+class InvalidArgumentValueError(Exception):
     pass
 
 
-class EmptySamlED(Exception):
+class EmptySamlEDError(Exception):
     """ SAML metadata file is empty or does not exist """
     pass
 
 
-class EmptyAODS(Exception):
+class EmptyAODSError(Exception):
     """ Policy Journal file is empty and will not be saved"""
     pass
 
 
-class InvalidSamlXmlSchema(Exception):
+class InvalidSamlXmlSchemaError(Exception):
     """ Invalid XML schmea for SAML metadata """
     pass
 
 
-class ValidationFailure(Exception):
+class ValidationError(Exception):
     """ application-level validation failure """
     pass
 
 
-class EntityRoleNotSupported(ValidationFailure):
+class EntityRoleNotSupportedError(ValidationError):
     """ Only IDP and SP roles are implemented """
     pass
 
 
-class CertExpired(ValidationFailure):
+class CertExpiredError(ValidationError):
     """ certificate has a notValidAfter date in the pas """
     pass
 
 
-class CertInvalid(ValidationFailure):
+class CertInvalidError(ValidationError):
     """ certificate was not issued by a accredited CA """
     pass
 
 
-class InvalidFQDN(ValidationFailure):
+class InvalidFQDNError(ValidationError):
     """ The FQDN is not in the allowed domains """
     pass
 
 
-class MissingRootElem(ValidationFailure):
+class MissingRootElemError(ValidationError):
     """ Expected XML root element not found """
     pass
 
 
-class UnauthorizedSigner(ValidationFailure):
+class UnauthorizedSignerError(ValidationError):
     """ Signer certificate not found not found in policy directory """
     pass
 
 
-class SignatureVerificationFailed(ValidationFailure):
+class SignatureVerificationError(ValidationError):
     """ Signature verification failed """
     pass
 
 
-class PMPInputRecNoDict(ValidationFailure):
+class PMPInputRecNoDictError(ValidationError):
     """ PMP input record is not a non-empty list of dict """
     pass
 
-class MissingArgument(ValidationFailure):
+class MissingArgumentError(ValidationError):
     """ required argument missing """
     pass
 
