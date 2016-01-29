@@ -4,7 +4,7 @@ import difflib, os, sys
 import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
-from userExceptions import *
+from userexceptions import *
 import PMP
 __author__ = 'r2h2'
 
@@ -92,7 +92,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         inputfile = os.path.abspath('testdata/PMPns04_1_pmpinput_noarray.json')
         logging.debug('appending invalid input file ' + inputfile)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile, 'append', inputfile])
-        with self.assertRaises(PMPInputRecNoDict) as context:
+        with self.assertRaises(PMPInputRecNoDictError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
 

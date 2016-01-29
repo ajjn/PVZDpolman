@@ -1,5 +1,5 @@
 from __future__ import print_function
-from userExceptions import *
+from userexceptions import *
 __author__ = 'r2h2'
 
 ''' Classes in this source file encapsulate the structure of record types '''

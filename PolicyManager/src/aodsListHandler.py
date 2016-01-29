@@ -2,10 +2,10 @@ import base64, hashlib, sys
 import logging
 import simplejson as json
 from json2html import *
-from inputRecord import InputRecord
-from contentRecord import ContentRecord
-from wrapperRecord import WrapperRecord
-from userExceptions import *
+from inputrecord import InputRecord
+from contentrecord import ContentRecord
+from wrapperrecord import WrapperRecord
+from userexceptions import *
 from datetime import datetime
 __author__ = 'r2h2'
 assert sys.version_info >= (3,4), 'modules used here support unicode and require python 3. Tested version is 3.4.3'
@@ -35,11 +35,11 @@ class AodsListHandler:
         except Exception as e:
             raise JSONdecodeError
         if not isinstance(appendList, list):
-            raise PMPInputRecNoDict('JSON input file must contain a list of dict')
+            raise PMPInputRecNoDictError('JSON input file must contain a list of dict')
         if len(appendList) == 0:
-            raise PMPInputRecNoDict('JSON input file must contain a non-empty list of dict')
+            raise PMPInputRecNoDictError('JSON input file must contain a non-empty list of dict')
         if not isinstance(appendList[0], dict):
-            raise PMPInputRecNoDict('JSON input file: first object in list is not a dict')
+            raise PMPInputRecNoDictError('JSON input file: first object in list is not a dict')
         self.aods = self.aodsFileHandler.readFile() # does validation as well
         inputRecSeq = 0
         for inputDataRaw in appendList:
@@ -72,7 +72,7 @@ class AodsListHandler:
         if not hasattr(self, 'aods'):
             self.aods = self.aodsFileHandler.readFile()
         if self.aods['AODS'][0][3][0] != 'header':
-            raise ValidationFailure('Cannot locate aods header record')
+            raise ValidationError('Cannot locate aods header record')
         policyDict = {"domain": {}, "issuer": {}, "organization": {}, "revocation": {}, "userprivilege": {}}
         if getattr(self.args, 'journal', False):
             output = sys.stdout if self.args.output is None else self.args.output

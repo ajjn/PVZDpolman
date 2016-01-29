@@ -7,17 +7,17 @@ __author__ = 'r2h2'
 
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-''' Classes in this source file encapsulate the structure of record types '''
+""" Classes in this source file encapsulate the structure of record types """
 
 class WrapperRecord:
-    ''' Create an object from either input record or an aods record.
+    """ Create an object from either input record or an aods record.
         A wrapper record is the list header that provides administrative such as the hash,
         sequence number and delete flag around content records, followed by the datetimestamp,
         registrant and submitter.
-    '''
+    """
     def __init__(self, argtype, *args):
         if argtype == 'elements':
-            ''' create record from input data '''
+            """ create record from input data """
             try:
                 self.hash = None
                 self.seq = None
@@ -33,7 +33,7 @@ class WrapperRecord:
         elif argtype == 'rawStruct':
             rawStruct = args[0]
             self.args = args[1]
-            ''' rawStruct: wrapper record read from aods file '''
+            """ rawStruct: wrapper record read from aods file """
             try:
                 self.hash = rawStruct[0]
                 self.seq = rawStruct[1]
@@ -48,10 +48,10 @@ class WrapperRecord:
         else: raise Exception
 
     def validateWrap(self, prevHash):
-        ''' validate hash chain
+        """ validate hash chain
         :param prevHash: hash value of previous record in aods
         :return: True if valid
-        '''
+        """
         assert isinstance(prevHash, str)
         wrapRec = [self.hash, self.seq, self.deleteflag, self.record,
                    self.datetimestamp, self.registrant, self.submitter]
@@ -61,12 +61,12 @@ class WrapperRecord:
         return (digest_bytes.decode('ascii') == self.hash)
 
     def getRec(self, newSeq, lastHash) -> list:
-        ''' compute hash: take last hash and append the representation of the wrapped structure
+        """ compute hash: take last hash and append the representation of the wrapped structure
         of json.dumps in compact representaion
         :param newSeq: Sequence number to be assigned to the new record
         :param lastHash: hash value of last record in aods
         :return: wrapped structure to be appended to aods including hash
-        '''
+        """
         assert isinstance(lastHash, str)
         logging.debug("%d lastHash: " % newSeq + lastHash)
         wrapList = ["placeholder_for_digest", newSeq, self.deleteflag, self.rec.raw,

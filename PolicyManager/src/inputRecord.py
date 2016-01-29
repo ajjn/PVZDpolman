@@ -1,6 +1,6 @@
 import logging
-from contentRecord import ContentRecord
-from userExceptions import *
+from contentrecord import ContentRecord
+from userexceptions import *
 __author__ = 'r2h2'
 
 
@@ -9,13 +9,13 @@ class InputRecord:
 
     def __init__(self, appendData):
         if not isinstance(appendData, dict):
-            raise PMPInputRecNoDict('input record to be appended must be of type dict')
+            raise PMPInputRecNoDictError('input record to be appended must be of type dict')
         if 'record' not in appendData:
-            raise ValidationFailure('input record dict must have the key "record"')
+            raise ValidationError('input record dict must have the key "record"')
         self.rec = ContentRecord(appendData['record'])
         self.deleteflag = appendData['delete']
         if not isinstance(self.deleteflag, bool):
-            raise ValidationFailure('deleteflag must be of type boolean')
+            raise ValidationError('deleteflag must be of type boolean')
 
     def validate(self, dir):
         try:

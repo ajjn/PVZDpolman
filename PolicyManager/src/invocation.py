@@ -1,16 +1,16 @@
 import argparse, getpass, sys
-from userExceptions import *
+from userexceptions import *
 
 __author__ = 'r2h2'
 
 
 class AbstractInvocation():
-    ''' Allow invocations from CLI/test runner, GUI '''
+    """ Allow invocations from CLI/test runner, GUI """
     pass
 
 
 class CliPmpInvocation(AbstractInvocation):
-    ''' define CLI invocation for PMP. Test runner can use this by passing testargs '''
+    """ define CLI invocation for PMP. Test runner can use this by passing testargs """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Policy Management Point')
         self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='Policy journal (append only data strcuture)')
@@ -59,13 +59,13 @@ class CliPmpInvocation(AbstractInvocation):
             if sum(bool(x) for x in (getattr(self.args, 'poldirhtml', False),
                                      getattr(self.args, 'poldirjson', False),
                                      getattr(self.args, 'journal', False))) > 1:
-                raise ValidationFailure("-j/--journal, -P/--poldirhtml and -p/--poldirjson are mutually exclusive")
+                raise ValidationError("-j/--journal, -P/--poldirhtml and -p/--poldirjson are mutually exclusive")
         if not self.args.verbose:
             sys.tracebacklimit = 2
 
 
 class CliPepInvocation(AbstractInvocation):
-    ''' define CLI invocation for PEP.  Test runner can use this by passing testargs '''
+    """ define CLI invocation for PEP.  Test runner can use this by passing testargs """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Policy Enforcement Point')
         self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='Policy journal (append only data strcuture)')
@@ -87,7 +87,7 @@ class CliPepInvocation(AbstractInvocation):
 
 
 class CliPAtoolInvocation(AbstractInvocation):
-    ''' define CLI invocation for PAtool. Test runner can use this by passing testargs  '''
+    """ define CLI invocation for PAtool. Test runner can use this by passing testargs  """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
         self._parser.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r'))
@@ -131,6 +131,10 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_revoke.add_argument('-p', '--pvprole', dest='pvprole', help='IDP, SP')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
+        # create the parser for the "paCert" command
+        self._parser_revoke = _subparsers.add_parser('paCert', help='create a PMP input file to import an admin certificate')
+        self._parser_revoke.add_argument('-o', '--orgid', dest='orgid', help='Organization ID')
+        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
         if testargs:
             self.args = self._parser.parse_args(testargs)
@@ -139,19 +143,17 @@ class CliPAtoolInvocation(AbstractInvocation):
 
         if self.args.subcommand == 'createED':
             if self.args.samlrole not in ('IDP', 'SP'):
-                raise ValidationFailure("samlrole must be one of ('IDP', 'SP')")
+                raise ValidationError("samlrole must be one of ('IDP', 'SP')")
             if self.args.entityid is not None:
                 if self.args.entityid[0:8] != 'https://':
-                    raise ValidationFailure('entityId must start with https://')
+                    raise ValidationError('entityId must start with https://')
         if self.args.subcommand == 'revokeCert' and not getattr(self.args, 'reason', False):
-            raise ValidationFailure('must specify --reason for command revokeCert')
+            raise ValidationError('must specify --reason for command revokeCert')
         if self.args.subcommand == 'caCert':
             if not getattr(self.args, 'pvprole', False):
-                raise ValidationFailure('must specify --pvprole for command caCert')
+                raise ValidationError('must specify --pvprole for command caCert')
             if self.args.pvprole not in ('IDP', 'SP'):
-                raise ValidationFailure("pvprole must be one of ('IDP', 'SP')")
-
-
+                raise ValidationError("pvprole must be one of ('IDP', 'SP')")
 
         if not self.args.verbose:
             sys.tracebacklimit = 2

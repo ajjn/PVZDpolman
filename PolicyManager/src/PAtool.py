@@ -1,22 +1,22 @@
 import logging
-from aodsFileHandler import *
+from aodsfilehandler import *
 from constants import PROJDIR_ABS
 from invocation import *
-from SAMLEntityDescriptor import *
-from userExceptions import *
+from samlentitydescriptor import *
+from userexceptions import *
 from xy509cert import XY509cert
 
 __author__ = 'r2h2'
 
 class PAtool:
-    ''' The PAtool (Portaladministrator Tool) performs following functions:
+    """ The PAtool (Portaladministrator Tool) performs following functions:
         1) create an EntityDescriptor from a certificate
         2) sign an EntityDescriptor
         3) extract certificate data from metadata
         4) create an EntityDescriptor as a deletion request
         5) create a PMP-input file to revoke a certificate
         6) create a PMP-input file to import a CA certificate
-    '''
+    """
 
     def __init__(self, args):
         self.args = args
@@ -26,9 +26,9 @@ class PAtool:
     #    pass # TODO implement
 
 
-    def getEntityId(self,x509cert) -> str:
+    def get_entityid(self, x509cert) -> str:
         if not (getattr(self.args, 'entityid', False) and getattr(self.args, 'samlrole', False)):
-            raise MissingArgument('createED requires both entityid and samlrole arguments')
+            raise MissingArgumentError('createED requires both entityid and samlrole arguments')
         entityId = self.args.entityid + '/' + self.args.samlrole.lower()
         #entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
         if hasattr(self.args, 'entityid_suffix') and len(self.args.entityid_suffix) > 0:
@@ -42,9 +42,9 @@ class PAtool:
         logging.debug('reading certificate from ' + self.args.cert.name)
         x509cert = XY509cert(self.args.cert.read())
         self.args.cert.close()
-        entityId = self.getEntityId(x509cert)
+        entityId = self.get_entityid(x509cert)
         if self.args.samlrole == 'IDP':
-            entityDescriptor = '''\
+            entityDescriptor = """\
 <md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
@@ -58,9 +58,9 @@ class PAtool:
     </md:KeyDescriptor>
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
   </md:IDPSSODescriptor>
-</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+</md:EntityDescriptor>""".format(eid=entityId, pem=x509cert.getPEM_str())
         elif self.args.samlrole == 'SP':
-            entityDescriptor = '''\
+            entityDescriptor = """\
 <md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
   <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
@@ -74,9 +74,9 @@ class PAtool:
       <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/acs/unused" index="0" isDefault="true"/>
     </md:KeyDescriptor>
   </md:SPSSODescriptor>
-</md:EntityDescriptor>'''.format(eid=entityId, pem=x509cert.getPEM_str())
+</md:EntityDescriptor>""".format(eid=entityId, pem=x509cert.getPEM_str())
         else:
-            raise EntityRoleNotSupported("Only IDP and SP entity roles implemented, but %s given" % self.args.samlrole)
+            raise EntityRoleNotSupportedError("Only IDP and SP entity roles implemented, but %s given" % self.args.samlrole)
 
         logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
@@ -84,17 +84,12 @@ class PAtool:
 
 
     def signED(self, projdir_abs):
-        ''' Validate XML-Schema and sign with enveloped signature.  '''
-        assert self.args.input.name[-4:] == '.xml', 'input file must have the extension .xml'
-        ed = SAMLEntityDescriptor(os.path.abspath(self.args.input.name))
-        retmsg = ed.validateXSD()
-        if retmsg is not None:
-            self.args.input.close()
-            sys.tracebacklimit = 1
-            raise InvalidSamlXmlSchema('File ' +  self.args.input.name + ' is not schema valid:\n' + retmsg)
+        """ Validate XML-Schema and sign with enveloped signature.  """
+        ed = SAMLEntityDescriptor(self.args.input)
+        ed.validate_xsd()
         unsigned_contents = self.args.input.read()
         self.args.input.close()
-        md_namespace_prefix = ed.getNamespacePrefix()
+        md_namespace_prefix = ed.get_namespace_prefix()
         signed_contents = creSignedXML(unsigned_contents,
                                        sigType='enveloped',
                                        sigPosition='/' + md_namespace_prefix + ':EntityDescriptor',
@@ -111,7 +106,7 @@ class PAtool:
 
     def deleteED(self):
         logging.debug('creating delete request for entitID ' + self.args.entityid)
-        entityDescriptor = '''\
+        entityDescriptor = """\
 <!-- DELETE entity descriptor from metadata -->
 <md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
@@ -121,7 +116,7 @@ class PAtool:
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
   </md:IDPSSODescriptor>
-</md:EntityDescriptor>'''.format(eid=self.args.entityid)
+</md:EntityDescriptor>""".format(eid=self.args.entityid)
         logging.debug('writing ED to ' + self.args.output.name)
         self.args.output.write(entityDescriptor)
         self.args.output.close()
@@ -151,7 +146,21 @@ class PAtool:
         self.args.output.close()
 
 
+    def paCert(self):
+        logging.debug('reading admin certificate from ' + self.args.certfile.name)
+        x509cert = XY509cert(self.args.certfile.read())
+        self.args.certfile.close()
+        x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
+        pmp_input = '[\n{"record": ["userprivilege", "{cert}%s", "%s", "%s"], "delete": false}\n]' % \
+                    (x509cert_pem, self.args.orgid, x509cert.getSubjectCN())
+        logging.debug('writing PMP input file to ' + self.args.output.name)
+        self.args.output.write(pmp_input)
+        self.args.output.close()
+
+
 def run_me(testrunnerInvocation=None):
+    if sys.version_info < (3, 4):
+        raise "must use python 3.4 or greater"
     if testrunnerInvocation:
         invocation = testrunnerInvocation
     else:
@@ -171,6 +180,8 @@ def run_me(testrunnerInvocation=None):
         patool.revokeCert()
     elif (invocation.args.subcommand == 'caCert'):
         patool.caCert()
+    elif (invocation.args.subcommand == 'paCert'):
+        patool.paCert()
 
 
 if __name__ == '__main__':

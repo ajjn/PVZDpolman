@@ -1,9 +1,10 @@
 import os
 import unittest
+from githandler import GitHandler
 from invocation import CliPepInvocation
-from SAMLEntityDescriptor import SAMLEntityDescriptor
 import PEP
-from gitHandler import GitHandler
+from samlentitydescriptor import SAMLEntityDescriptor
+from userexceptions import InvalidSamlXmlSchemaError
 
 __author__ = 'r2h2'
 
@@ -21,19 +22,21 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 class Test01_xsdval_valid(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP01: testing schema validation/expecting OK')
-        filename_abs = os.path.abspath('testdata/PAT04_redmineIdentineticsOrg_ed_delete.xml')
-        ed = SAMLEntityDescriptor(filename_abs)
-        retmsg = ed.validateXSD()
+        file_handle = open(os.path.abspath('testdata/PAT04_redmineIdentineticsOrg_ed_delete.xml'))
+        ed = SAMLEntityDescriptor(file_handle)
+        retmsg = ed.validate_xsd()
+        file_handle.close()
         self.assertIsNone(retmsg, msg=retmsg)
 
 
 class Test02_xsdval_invalid(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP02: test calling schema validation/expecting invalid schema(using java SAX parser)')
-        filename_abs = os.path.abspath('testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml')
-        ed = SAMLEntityDescriptor(filename_abs)
-        retmsg = ed.validateXSD()
-        self.assertIsNotNone(retmsg, msg=retmsg)
+        with self.assertRaises(InvalidSamlXmlSchemaError) as context:
+            with open(os.path.abspath('testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml')) as f:
+                ed = SAMLEntityDescriptor(f)
+                retmsg = ed.validate_xsd()
+                #self.assertIsNotNone(retmsg, msg=retmsg)
 
 
 class Test03_basic_happy_cycle(unittest.TestCase):

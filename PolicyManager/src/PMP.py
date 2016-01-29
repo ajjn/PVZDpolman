@@ -1,11 +1,13 @@
 import logging
 from invocation import *
-from aodsListHandler import *
-from aodsFileHandler import *
+from aodslisthandler import *
+from aodsfilehandler import *
 __author__ = 'r2h2'
 
 
 def run_me(testrunnerInvocation=None):
+    if sys.version_info < (3, 4):
+        raise "must use python 3.4 or greater"
     if (testrunnerInvocation):
         invocation = testrunnerInvocation
     else:
@@ -19,7 +21,7 @@ def run_me(testrunnerInvocation=None):
     elif (invocation.args.subcommand == 'create'):
         try:
             aodsListHandler.aods_create()
-        except InvalidArgumentValue as e:
+        except InvalidArgumentValueError as e:
             logging.error(e)
     elif (invocation.args.subcommand == 'read'):
         aodsListHandler.aods_read()

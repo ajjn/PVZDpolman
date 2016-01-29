@@ -3,7 +3,7 @@ import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPAtoolInvocation
 import PAtool
-from userExceptions import *
+from userexceptions import *
 
 __author__ = 'r2h2'
 
@@ -55,7 +55,7 @@ class Test03_signED_invalidXSD(unittest.TestCase):
         entitydescriptor_file = os.path.abspath('testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml')
         cliClient = CliPAtoolInvocation(['-v', 'signED',
                                          entitydescriptor_file])
-        with self.assertRaises(InvalidSamlXmlSchema) as context:
+        with self.assertRaises(InvalidSamlXmlSchemaError) as context:
             PAtool.run_me(cliClient)
 
 

@@ -1,13 +1,12 @@
-from __future__ import print_function
 import base64, bz2, datetime, os, re, sys
 import logging
 import simplejson as json
-from jnius import autoclass
 import xml.etree.ElementTree as ET
-from constants import DATA_HEADER_B64BZIP, PROJDIR_ABS
-from creSignedXML import creSignedXML
-from wrapperRecord import *
-from userExceptions import *
+from constants import DATA_HEADER_B64BZIP
+from cresignedxml import creSignedXML
+from wrapperrecord import *
+from userexceptions import EmptyAODSError, InvalidArgumentValueError, ValidationError
+from xmlsigverifyer import XmlSigVerifyer
 __author__ = 'r2h2'
 
 
@@ -24,7 +23,7 @@ class AODSFileHandler():
 
     def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
-            raise InvalidArgumentValue('Must remove existing %s before creating a new AODS' % self._aodsFile)
+            raise InvalidArgumentValueError('Must remove existing %s before creating a new AODS' % self._aodsFile)
         if xmlsign:
             j = json.dumps(s)
             x = creSignedXML(j, verbose=self.verbose)
@@ -36,27 +35,22 @@ class AODSFileHandler():
 
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
-            # verify xmldsig and extract content
-            PvzdVerfiySig = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
-            verifier = PvzdVerfiySig(
-                os.path.join(PROJDIR_ABS, 'conf/moa-spss/MOASPSSConfiguration.xml'),
-                os.path.join(PROJDIR_ABS, 'conf/log4j.properties'),
-                self._aodsFile)
-            response  = verifier.verify()
-            if response.pvzdCode != 'OK':
-                raise ValidationFailure("Signature verification failed, code=" +
-                                        response.pvzdCode + "; " + response.pvzdMessage)
+            # verify whether the signature is valid
+            xml_sig_verifyer = XmlSigVerifyer();
+            signerCertificateEncoded = xml_sig_verifyer.verify(self._aodsFile)
+            # verify whether the signer is authorized
             if not os.path.isfile(self.trustCertsFile):
-                raise ValidationFailure('Trust certs file not found: %s' % self.trustCertsFile)
+                raise ValidationError('Trust certs file not found: %s' % self.trustCertsFile)
             with open(self.trustCertsFile) as f:
                 trustCerts = json.loads(f.read())
-            if response.signerCertificateEncoded not in trustCerts:
-                raise ValidationFailure("Signature certificate not in trusted list. Signature cert is\n" +
-                                        response.signerCertificateEncoded)
+            if signerCertificateEncoded not in trustCerts:
+                raise ValidationError("Signature certificate not in trusted list. Signature cert is\n" +
+                                      signerCertificateEncoded)
+            # get contents
             tree = ET.parse(self._aodsFile)
             content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')
             if len(content) < 0:
-                raise ValidationFailure('AODS contained in XML signature value is empty')
+                raise ValidationError('AODS contained in XML signature value is empty')
             # logging.debug('Found dsig:SignatureValue/text() in aods:\n%s\n' % content)
             content_body_str = content.replace(DATA_HEADER_B64BZIP, '', 1)
             j_bzip2 = base64.b64decode(content_body_str)
@@ -79,7 +73,7 @@ class AODSFileHandler():
         if xmlsign:
             xml = creSignedXML(json.dumps(s))
             if len(xml) == 0:  # just for defense, should not happen
-                raise EmptyAODS('Journal empty, not saved - signature failed?')
+                raise EmptyAODSError('Journal empty, not saved - signature failed?')
             with open(self._aodsFile, 'w') as f:
                 f.truncate()
                 f.write(xml)

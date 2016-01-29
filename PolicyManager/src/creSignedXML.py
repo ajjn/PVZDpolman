@@ -4,7 +4,7 @@ import requests
 import re
 import socket
 from constants import DATA_HEADER_B64BZIP
-from userExceptions import *
+from userexceptions import *
 
 __author__ = 'r2h2'
 
@@ -13,7 +13,7 @@ def failIfSecurityLayerUnavailable():
     addr = ('127.0.0.1', 3495)
     if sock.connect_ex(addr) != 0:
         sys.tracebacklimit = 0
-        raise SecurityLayerUnavailable(SecurityLayerUnavailable.__doc__)
+        raise SecurityLayerUnavailableError(SecurityLayerUnavailableError.__doc__)
     sock.close()
 
 def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
@@ -76,7 +76,7 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
     '''
 
     if sigType not in ('envelopingB64BZIP', 'enveloped'):
-        raise ValidationFailure("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sigType)
+        raise ValidationError("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sigType)
     failIfSecurityLayerUnavailable()
     if sigType == 'envelopingB64BZIP':
         dataObject = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data.encode('utf-8'))).decode('ascii')
@@ -89,15 +89,15 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
         r = requests.post('http://localhost:3495/http-security-layer-request',
                           data={'XMLRequest': sigRequ})
     except requests.exceptions.ConnectionError as e:
-        raise ValidationFailure("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
+        raise ValidationError("Cannot connect to security layer (MOCCA) to create a signature " + e.strerror)
     if r.status_code != 200:
-        raise ValidationFailure("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
+        raise ValidationError("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
     if r.text.find('sl:ErrorResponse') >= 0:
         if r.text.find('<sl:ErrorCode>6001</sl:ErrorCode>'):
             sys.tracebacklimit = 0  # bug in py3 - not honored
-            raise SecurityLayerCancelled('Signature cancelled by user')
+            raise SecurityLayerCancelledError('Signature cancelled by user')
         else:
-            raise ValidationFailure("Security Layer responed with error message.\n" + r.text)
+            raise ValidationError("Security Layer responed with error message.\n" + r.text)
         # sl:ErrorCode=6001, Abbruch durch den Bürger über die Benutzerschnittstelle.
 
     # Strip xml root element (CreateXMLSignatureResponse), making disg:Signature the new root:

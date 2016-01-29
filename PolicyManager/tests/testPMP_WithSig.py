@@ -5,7 +5,7 @@ import difflib, os, sys
 import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
-from userExceptions import *
+from userexceptions import *
 import PMP
 __author__ = 'r2h2'
 

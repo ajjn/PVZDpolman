@@ -9,7 +9,7 @@ Following Java libraries need to be downloaded.
 ### MOA-SPSS
 
     cd $PROJ_HOME/lib
-    moa-spss-lib-x.x.x
+    # moa-spss-lib-x.x.x
     curl -O https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
     unzip moa-spss-lib-2.0.3.zip
     ln -s moa-spss-lib-2.0.3 moa-spss-lib
