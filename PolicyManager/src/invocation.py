@@ -55,6 +55,7 @@ class CliPmpInvocation(AbstractInvocation):
             self.args = self._parser.parse_args(testargs)
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
+        self.args.list_trustedcerts = False  # only used in PEP
         if self.args.subcommand == 'read':
             if sum(bool(x) for x in (getattr(self.args, 'poldirhtml', False),
                                      getattr(self.args, 'poldirjson', False),
@@ -74,6 +75,8 @@ class CliPepInvocation(AbstractInvocation):
                                   help='root path of git repo containing the publication request')
         self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json',
                                   help='file containing json-array of PEM-formatted certificates trusted to sign the policy journal')
+        self._parser.add_argument('-l', '--list_trustedcerts', action="store_true",
+                                  help='list trusted vertificates on startup')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         self._parser.add_argument('-x', '--xmlsign', action="store_true", help='use signed aods policy directory)')
 

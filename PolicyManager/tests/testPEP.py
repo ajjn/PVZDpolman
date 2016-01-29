@@ -12,7 +12,8 @@ __author__ = 'r2h2'
 import logging
 from logging.config import dictConfig
 from settings import *
-UT_LOGFILENAME = os.path.abspath(os.path.join('log', __name__ + '.debug'))
+logdir = os.environ.get('LOGDIR', os.path.abspath(os.path.join('log'))
+UT_LOGFILENAME = os.path.abspath(os.path.join(logdir, __name__ + '.debug'))
 UT_LOGGING = LOGGING
 UT_LOGGING['handlers']['file']['filename'] = UT_LOGFILENAME
 dictConfig(UT_LOGGING)
@@ -36,7 +37,6 @@ class Test02_xsdval_invalid(unittest.TestCase):
             with open(os.path.abspath('testdata/PEP02_gondorMagwienGvAt_ed_invalid_xsd.xml')) as f:
                 ed = SAMLEntityDescriptor(f)
                 retmsg = ed.validate_xsd()
-                #self.assertIsNotNone(retmsg, msg=retmsg)
 
 
 class Test03_basic_happy_cycle(unittest.TestCase):

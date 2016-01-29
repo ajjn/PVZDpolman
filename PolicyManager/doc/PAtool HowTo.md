@@ -53,5 +53,9 @@ This creates an EntiyDescriptor with the attribute pvzd:disposition="delete".
         --pvprole IDP \
         ../tests/work/BMI_portalverbundCA_crt_add.json
         
+### Create a PMP Request to add an Admin Certificate 
+
+    ./PAtool.sh adminCert --orgid L9 ../tests/work/add_L9_admin_cert.json
+        
 
         

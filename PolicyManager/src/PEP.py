@@ -1,6 +1,7 @@
 import git
 import logging
 import re
+import sys
 from os import path
 from urllib.parse import urlparse
 from lxml import etree as ET

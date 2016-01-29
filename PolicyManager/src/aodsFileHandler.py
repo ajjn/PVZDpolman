@@ -7,6 +7,7 @@ from cresignedxml import creSignedXML
 from wrapperrecord import *
 from userexceptions import EmptyAODSError, InvalidArgumentValueError, ValidationError
 from xmlsigverifyer import XmlSigVerifyer
+from xy509cert import XY509cert
 __author__ = 'r2h2'
 
 
@@ -14,12 +15,23 @@ class AODSFileHandler():
     def __init__(self, cliClient):
         self._aodsFile = cliClient.args.aods
         self.verbose = cliClient.args.verbose
+        self.list_trustedcerts = cliClient.args.list_trustedcerts
 
         if cliClient.args.xmlsign and self._aodsFile[-4:] != '.xml':
             self._aodsFile += '.xml'
         if not cliClient.args.xmlsign and self._aodsFile[-5:] != '.json':
             self._aodsFile += '.json'
         self.trustCertsFile = os.path.abspath(cliClient.args.trustedcerts)
+
+    def do_list_trustedcerts(self, trustCerts, signerCertificateEncoded):
+        for cert in trustCerts:
+            logging.info('Certificates trusted to sign the policy journal. Certificate used fir current file is marked with ">>".')
+            if cert == signerCertificateEncoded:
+                logging.info('>>', end='')
+            xy509cert = XY509cert(cert, 'PEM')
+            logging.info('s: ' + xy509cert.getSubject_str() + ', i:' + xy509cert.getIssuer_str() +
+                  'not after: ' + xy509cert.notValidAfter())
+            logging.info('--- end of list of trusted certificates ---')
 
     def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
@@ -46,6 +58,8 @@ class AODSFileHandler():
             if signerCertificateEncoded not in trustCerts:
                 raise ValidationError("Signature certificate not in trusted list. Signature cert is\n" +
                                       signerCertificateEncoded)
+            if self.list_trustedcerts:
+                self.do_list_trustedcerts(trustCerts, signerCertificateEncoded)
             # get contents
             tree = ET.parse(self._aodsFile)
             content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')

@@ -62,6 +62,9 @@ class XY509cert:
         issuer_str = str(issuer_dn).replace("<X509Name object '", '')[:-2]
         return issuer_str
 
+    def notValidAfter(self) -> str:
+        return self.cert.get_notAfter().decode('ascii')
+
     def isNotExpired(self) -> bool:
         notValidAfter_str = self.cert.get_notAfter().decode('ascii')
         notValidAfter_date = datetime.strptime(notValidAfter_str, '%Y%m%d%H%M%SZ')

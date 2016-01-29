@@ -18,32 +18,17 @@ Add some policies
 
     ./PMP.sh append ../tests/testdata/PMPns01_pmp_input1.json
 
-Add an organization with domain & authorized signing certificate. The signing certificate
-is a PEM-file without BEGIN/END lines. (See in the next example how to obtain it.)
+Add an organization with domain & authorized signing certificate. 
 
     echo '[{"record":["organization", "L9", "Stadt Wien"], "delete": false}]' | ./PMP.sh append -
     echo '[{"record": ["domain", "portal.wien.gv.at", "L9"], "delete": false}]' | ./PMP.sh append -
-    echo -n '[{"record": ["userprivilege", "{cert}' > /tmp/$0.$$.tmp && \
-    perl -pe 's/\s*//g' ../tests/testdata/r2h2_ecard_qcert.b64   >> /tmp/$0.$$.tmp && \
-    echo '", "L9", "Testeroni Testimatics"], "delete": false}]' >> /tmp/$0.$$.tmp && \
-    ./PMP.sh append /tmp/$0.$$.tmp && rm /tmp/$0.$$.tmp
+    ./PAtool.sh adminCert --orgid L9 ../tests/work/add_L9_admin_cert.json
+    ./PMP.sh append ../tests/work/add_L9_admin_cert.json
 
-Store the signing certificate from the citizen card.
+Add issuer certificate (for TLS):  
 
-    # start the MOCCA citizen card client. Select "Karte | Zertifikat speichern" in the menu.
-    # store the certificate in the filesystem, e.g. in /tmp/qualified.cer. The convert it to PEM: 
-    openssl x509 -inform der -in /tmp/name_ecard_qcert.cer -text > /tmp/name_ecard_qcert_crt.pem
- 
-    # open the -pem file and double check that you are taking the correct certificate.
-    # Extract the lines between -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- 
-    # and store the result in /tmp/name_ecard_qcert_crt.b64. 
-
-Add issuer certificate (for TLS): use the PAtool. Or alternatively:
-
-    echo -n '[{"record": ["issuer", "BMI Portalverbund-CA", "IDP", "' > /tmp/$0.$$.tmp && \
-    perl -pe 's/\s*//g' ../tests/testdata/BMI_portalverbundCA_crt.b64   >> /tmp/$0.$$.tmp && \
-    echo '"], "delete": false}]' >> /tmp/$0.$$.tmp && \
-    ./PMP.sh append /tmp/$0.$$.tmp && rm /tmp/$0.$$.tmp
+    # use PAtool to pack the certificate into a JSOM-formatted PMP-input
+    ./PMP.sh append <add_issuer_cert.json>
     
 Remove issuer certificate from the policy directory:
 Take the example above and change "delete": false to "delete": true

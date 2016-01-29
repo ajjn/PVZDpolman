@@ -6,4 +6,5 @@ source ./setConfig.sh
 $py3 $PROJ_HOME/PolicyManager/src/PEP.py \
     --aods $POLICY_JOURNAL -x \
     --pubreq $REPO_DIR \
-    --trustedcerts $TRUSTEDCERTS
+    --trustedcerts $TRUSTEDCERTS \
+    --list_trustedcerts

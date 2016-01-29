@@ -22,8 +22,8 @@ logging.info('DEBUG log: ' + UT_LOGFILENAME)
 
 class Test01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test PMPws01: happy cycle: create, append, read, verify (includung xml sig)')
-        aodsfile_new = 'work/PMPws01_aods_journal.xml'
+        logging.info('  -- Test PMPws01: happy cycle: create, append, read, verify (including xml sig)')
+        aodsfile_new = 'work/policyDirectory/policydir/aods.xml'
         policydir_new = 'work/PMPws01_poldir.json'
         logging.debug('  removing existing aods file %s .. ' % aodsfile_new)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile_new, '-x', 'scratch'])
