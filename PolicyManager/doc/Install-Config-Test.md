@@ -44,7 +44,13 @@ Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
 ---
 
 # Configuration
-The key file and directory locations for the PolicyManager are
+Access to LDAP and HTTP-resources for hosts without direct Internet connection:
+* edit jre/lib/net.properties
+* set http.proxyHost, http.proxyPort, http.nonProxyHosts
+* Caveat: This file is read by java.net; properties _cannot_ be seen with System.getProperty(..)
+
+
+The key file and directory locations for the PolicyManager are:
 * POLICY_JOURNAL  (the policy journal ("aods") file passed to PMP and PEP with the -a option)
 * REPO_DIR        (Repository root)
 * TRUSTEDCERTS    (List of signing certificates for the policy journal)
