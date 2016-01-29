@@ -131,8 +131,8 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_revoke.add_argument('-p', '--pvprole', dest='pvprole', help='IDP, SP')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
-        # create the parser for the "paCert" command
-        self._parser_revoke = _subparsers.add_parser('paCert', help='create a PMP input file to import an admin certificate')
+        # create the parser for the "adminCert" command
+        self._parser_revoke = _subparsers.add_parser('adminCert', help='create a PMP input file to import an admin certificate')
         self._parser_revoke.add_argument('-o', '--orgid', dest='orgid', help='Organization ID')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='PMP input file)')
 
@@ -154,6 +154,11 @@ class CliPAtoolInvocation(AbstractInvocation):
                 raise ValidationError('must specify --pvprole for command caCert')
             if self.args.pvprole not in ('IDP', 'SP'):
                 raise ValidationError("pvprole must be one of ('IDP', 'SP')")
+        if self.args.subcommand == 'adminCert':
+            if not getattr(self.args, 'orgid', False):
+                raise ValidationError('must specify --orgid for command adminCert')
+            if not getattr(self.args, 'output', False):
+                raise ValidationError('must specify output for command adminCert')
 
         if not self.args.verbose:
             sys.tracebacklimit = 2

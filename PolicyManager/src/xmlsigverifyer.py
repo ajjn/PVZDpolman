@@ -2,7 +2,6 @@ import base64, bz2, datetime, os, re, sys
 from jnius import autoclass
 from constants import PROJDIR_ABS
 from userexceptions import InvalidArgumentValueError, ValidationError
-from xmlsigverifyer import XmlSigVerifyer
 __author__ = 'r2h2'
 
 

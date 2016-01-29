@@ -1,9 +1,10 @@
-import logging
+import logging, tempfile
 from aodsfilehandler import *
 from constants import PROJDIR_ABS
 from invocation import *
 from samlentitydescriptor import *
 from userexceptions import *
+from xmlsigverifyer import XmlSigVerifyer
 from xy509cert import XY509cert
 
 __author__ = 'r2h2'
@@ -146,10 +147,24 @@ class PAtool:
         self.args.output.close()
 
 
-    def paCert(self):
-        logging.debug('reading admin certificate from ' + self.args.certfile.name)
-        x509cert = XY509cert(self.args.certfile.read())
-        self.args.certfile.close()
+    def mk_temp_filename(self) -> str:
+        """ temp file name method that should work on both POSIX & Win"""
+        (fd, filename) = tempfile.mkstemp()
+        os.close(fd)
+        os.remove(filename)
+        return filename
+
+    def adminCert(self):
+        logging.debug('challenging admin to create a signature to extract signing cert')
+        x = creSignedXML('sign this dummy text - result is used to extract signature certificate.')
+        fn = self.mk_temp_filename()
+        with open(fn, 'w') as f:
+            f.write(x)
+        xml_sig_verifyer = XmlSigVerifyer();
+        signerCertificateEncoded = xml_sig_verifyer.verify(fn, verify_file_extension=False)
+        x509cert = XY509cert('-----BEGIN CERTIFICATE-----\n' + \
+             signerCertificateEncoded + \
+             '\n-----END CERTIFICATE-----\n')
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["userprivilege", "{cert}%s", "%s", "%s"], "delete": false}\n]' % \
                     (x509cert_pem, self.args.orgid, x509cert.getSubjectCN())
@@ -180,8 +195,8 @@ def run_me(testrunnerInvocation=None):
         patool.revokeCert()
     elif (invocation.args.subcommand == 'caCert'):
         patool.caCert()
-    elif (invocation.args.subcommand == 'paCert'):
-        patool.paCert()
+    elif (invocation.args.subcommand == 'adminCert'):
+        patool.adminCert()
 
 
 if __name__ == '__main__':

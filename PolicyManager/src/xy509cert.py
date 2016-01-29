@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from OpenSSL import crypto
+from userexceptions import ValidationError
 __author__ = 'r2h2'
 
 
@@ -40,9 +41,9 @@ class XY509cert:
                     break
                 pem_str += l
         if not begin:
-            raise ValidationFailure("PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468")
+            raise ValidationError("PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468")
         if not end:
-            raise ValidationFailure("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
+            raise ValidationError("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
         return pem_str
 
     def getSubjectCN(self) -> str:

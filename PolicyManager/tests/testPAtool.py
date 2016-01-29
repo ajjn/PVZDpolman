@@ -57,6 +57,7 @@ class Test03_signED_invalidXSD(unittest.TestCase):
                                          entitydescriptor_file])
         with self.assertRaises(InvalidSamlXmlSchemaError) as context:
             PAtool.run_me(cliClient)
+        sys.tracebacklimit = 1000
 
 
 class Test04_deleteED(unittest.TestCase):
@@ -75,7 +76,6 @@ class Test05_revokeCert(unittest.TestCase):
         logging.info('  -- Test PAT05: create PMP import file to revoke a certificate')
         certificate_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer.pem')
         pmpinput_file = os.path.abspath('work/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')  # output
-        pmpref_file = os.path.abspath('testdata/PAT05_gondorMagwienGvAt_2011-cer_revoke.json')
         cliClient = CliPAtoolInvocation(['-v', '--certfile', certificate_file,
                                          'revokeCert',
                                          '--reason', 'testing revocation',
@@ -89,13 +89,23 @@ class Test06_caCert(unittest.TestCase):
         logging.info('  -- Test PAT06: create PMP import file for CA certificate')
         certificate_file = os.path.abspath('testdata/PAT06_StartComCa_root.pem')
         pmpinput_file = os.path.abspath('work/PAT06_StartComCa_root.json')  # output
-        pmpref_file = os.path.abspath('testdata/PAT06_StartComCa_root.json')
         cliClient = CliPAtoolInvocation(['-v', '--certfile', certificate_file,
                                          'caCert',
                                          '--pvprole', 'IDP',
                                          pmpinput_file])
         PAtool.run_me(cliClient)
         assertNoDiff(os.path.basename(pmpinput_file))
+
+
+class Test07_adminCert(unittest.TestCase):
+    def runTest(self):
+        logging.info('  -- Test PAT07: create PMP import file for admin certificate')
+        pmpinput_file = os.path.abspath('work/PAT07_add_admincert.json')  # output
+        cliClient = CliPAtoolInvocation(['-v',
+                                         'adminCert',
+                                         '--orgid', '4711',
+                                         pmpinput_file])
+        PAtool.run_me(cliClient)
 
 
 if __name__ == '__main__':
