@@ -25,17 +25,19 @@ class AODSFileHandler():
 
     def do_list_trustedcerts(self, trustCerts, signerCertificateEncoded):
         for cert in trustCerts:
-            logging.info('Certificates trusted to sign the policy journal. Certificate used fir current file is marked with ">>".')
-            if cert == signerCertificateEncoded:
-                logging.info('>>', end='')
+            logging.debug('--- List of  certificates trusted to sign the policy journal. '
+                         'Certificate for current journal is marked with ">>".')
+            linemarker = ('>>' if cert == signerCertificateEncoded else '')
             xy509cert = XY509cert(cert, 'PEM')
-            logging.info('s: ' + xy509cert.getSubject_str() + ', i:' + xy509cert.getIssuer_str() +
-                  'not after: ' + xy509cert.notValidAfter())
-            logging.info('--- end of list of trusted certificates ---')
+            logging.debug(linemarker + 's: ' + xy509cert.getSubject_str() +
+                         ', i:' + xy509cert.getIssuer_str() +
+                         'not after: ' + xy509cert.notValidAfter())
+        logging.debug('--- End of list of trusted certificates.')
 
     def create(self, s, xmlsign):
         if os.path.exists(self._aodsFile):
-            raise InvalidArgumentValueError('Must remove existing %s before creating a new AODS' % self._aodsFile)
+            raise InvalidArgumentValueError('Must remove existing %s before creating a new AODS' %
+                                            self._aodsFile)
         if xmlsign:
             j = json.dumps(s)
             x = creSignedXML(j, verbose=self.verbose)
@@ -56,8 +58,8 @@ class AODSFileHandler():
             with open(self.trustCertsFile) as f:
                 trustCerts = json.loads(f.read())
             if signerCertificateEncoded not in trustCerts:
-                raise ValidationError("Signature certificate not in trusted list. Signature cert is\n" +
-                                      signerCertificateEncoded)
+                raise ValidationError("Signature certificate not in trusted list. "
+                                      "Signature cert is\n" + signerCertificateEncoded)
             if self.list_trustedcerts:
                 self.do_list_trustedcerts(trustCerts, signerCertificateEncoded)
             # get contents

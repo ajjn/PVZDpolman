@@ -1,5 +1,5 @@
 import argparse, getpass, sys
-from userexceptions import *
+from userexceptions import ValidationError
 
 __author__ = 'r2h2'
 
@@ -61,32 +61,42 @@ class CliPmpInvocation(AbstractInvocation):
                                      getattr(self.args, 'poldirjson', False),
                                      getattr(self.args, 'journal', False))) > 1:
                 raise ValidationError("-j/--journal, -P/--poldirhtml and -p/--poldirjson are mutually exclusive")
-        if not self.args.verbose:
-            sys.tracebacklimit = 2
 
 
 class CliPepInvocation(AbstractInvocation):
     """ define CLI invocation for PEP.  Test runner can use this by passing testargs """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Policy Enforcement Point')
-        self._parser.add_argument('-a', '--aods', dest='aods', default='aods.json', help='Policy journal (append only data strcuture)')
-        self._parser.add_argument('-d', '--debug', dest='debug', action="store_true", help='trace hash chain computation')
+        self._parser.add_argument('-a', '--aods', dest='aods', required=True,
+                                  help='Policy journal (append only data strcuture)')
+        self._parser.add_argument('-d', '--debug', dest='debug', action="store_true",
+                                  help='trace hash chain computation')
+        self._parser.add_argument('-l', '--list_trustedcerts', action="store_true",
+                                  help='list trusted vertificates on startup (needs level=DEBUG)')
+        self._parser.add_argument('-L', '--loglevel', dest='loglevel_str',
+                                  help="Level for file logging: DEBUG, INFO, WARNING, ERROR")
         self._parser.add_argument('-r', '--pubrequ', dest='pubrequ', default='.',
                                   help='root path of git repo containing the publication request')
         self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json',
                                   help='file containing json-array of PEM-formatted certificates trusted to sign the policy journal')
-        self._parser.add_argument('-l', '--list_trustedcerts', action="store_true",
-                                  help='list trusted vertificates on startup')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
-        self._parser.add_argument('-x', '--xmlsign', action="store_true", help='use signed aods policy directory)')
+        self._parser.add_argument('-x', '--xmlsign', action="store_true",
+                                  help='use signed xml format for policy journal)')
 
         if (testargs):
             self.args = self._parser.parse_args(testargs)
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
 
-        if not self.args.verbose:
-            sys.tracebacklimit = 2
+        LOGLEVELS = {'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
+        if not hasattr(self.args, 'loglevel_str') or self.args.loglevel_str is None:
+            self.args.loglevel = LOGLEVELS['INFO']
+        else:
+            try:
+                self.args.loglevel = LOGLEVELS[self.args.loglevel_str]
+            except KeyError:
+                raise ValidationError('invalid loglevel "%s". Must be one of %s.' %
+                                      (self.args.loglevel_str, ', '.join(LOGLEVELS.keys())))
 
 
 class CliPAtoolInvocation(AbstractInvocation):
@@ -94,11 +104,8 @@ class CliPAtoolInvocation(AbstractInvocation):
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
         self._parser.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r'))
-        self._parser.add_argument('-e', '--entityid', dest='entityid', help="overwrite default entityId generated from "
-                                                                            "the certificate's subject-CN and role type")
-        #self._parser.add_argument('-m', '--metadatacerts', dest='metadatacerts', default='metadatacerts.json',
-        #                          help='file containing json-array of PEM-formatted certificates trusted to sign the'
-        #                               ' metadata aggregate')
+        self._parser.add_argument('-e', '--entityid', dest='entityid',
+                                  help="overwrite default entityId generated from the certificate's subject-CN and role type")
         self._parser.add_argument('-r', '--samlrole', dest='samlrole', default="")
         self._parser.add_argument('-s', '--signed_output', dest='signed_output',
                                   help='signED output file (default: s/(inputfile).xml/\1_signed.xml/)')
@@ -162,6 +169,3 @@ class CliPAtoolInvocation(AbstractInvocation):
                 raise ValidationError('must specify --orgid for command adminCert')
             if not getattr(self.args, 'output', False):
                 raise ValidationError('must specify output for command adminCert')
-
-        if not self.args.verbose:
-            sys.tracebacklimit = 2

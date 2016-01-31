@@ -12,7 +12,7 @@ def failIfSecurityLayerUnavailable():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     addr = ('127.0.0.1', 3495)
     if sock.connect_ex(addr) != 0:
-        sys.tracebacklimit = 0
+        #sys.tracebacklimit = 0
         raise SecurityLayerUnavailableError(SecurityLayerUnavailableError.__doc__)
     sock.close()
 
@@ -94,7 +94,7 @@ def creSignedXML(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=Fa
         raise ValidationError("Security layer failed with HTTP %s, message: \n\n%s" % (r.status_code, r.text))
     if r.text.find('sl:ErrorResponse') >= 0:
         if r.text.find('<sl:ErrorCode>6001</sl:ErrorCode>'):
-            sys.tracebacklimit = 0  # bug in py3 - not honored
+            #sys.tracebacklimit = 0  # bug in py3 - not honored
             raise SecurityLayerCancelledError('Signature cancelled by user')
         else:
             raise ValidationError("Security Layer responed with error message.\n" + r.text)

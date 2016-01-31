@@ -25,7 +25,7 @@ class SAMLEntityDescriptor:
         retmsg = saml_schema_validator.validate_xsd(self.ed_filename_abs)
         if retmsg is not None:
             self.ed_file_handle.close()
-            sys.tracebacklimit = 1
+            #sys.tracebacklimit = 1
             raise InvalidSamlXmlSchemaError('File ' + self.ed_filename_abs +
                                             ' is not schema valid:\n' + retmsg)
 

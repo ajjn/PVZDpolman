@@ -1,5 +1,6 @@
 import git
 import logging
+import logging.config
 import re
 import sys
 from os import path
@@ -11,6 +12,7 @@ from aodslisthandler import AodsListHandler
 from constants import *
 from githandler import GitHandler
 from invocation import CliPepInvocation
+import loggingconfig
 from samlentitydescriptor import SAMLEntityDescriptor
 from userexceptions import UnauthorizedSignerError, ValidationError
 from xmlsigverifyer import XmlSigVerifyer
@@ -159,12 +161,20 @@ class PEP:
 
 def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
+        # CLI args and logger set by unit test
         invocation = testrunnerInvocation
     else:
         invocation = CliPepInvocation()
+        logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
+        logging_config = loggingconfig.LoggingConfig(logbasename,
+                                                     console=False,
+                                                     file_level=invocation.args.loglevel)
+
     pep = PEP(invocation)
     policyDict = pep.getPolicyDict(invocation)
+    logging.debug('initialize IDP CA certs')
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')
+    logging.debug('initialize SP CA certs')
     SP_trustStore = Xy509certStore(policyDict, 'SP')
     logging.debug('   using repo ' + invocation.args.pubrequ)
     gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
@@ -201,9 +211,9 @@ def run_me(testrunnerInvocation=None):
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
-    logging.debug('files processed: ' + str(pep.file_counter) + '\n' + \
-                  'files accepted: ' + str(pep.file_counter_accepted) + '\n' + \
-                  'files rejected: ' + str(pep.file_counter_rejected) + '\n')
+    logging.info('files in request queue processed: ' + str(pep.file_counter) + \
+                 '; accepted: ' + str(pep.file_counter_accepted) + \
+                 '; rejected: ' + str(pep.file_counter_rejected) + '.')
 
 
 if __name__ == '__main__':

@@ -1,22 +1,22 @@
 ''' all tests not requiring citizen card signature '''
-
-import difflib, os, sys
+import difflib
+import logging
+import logging.config
+import os
+import re
+import sys
 import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
+import loggingconfig
 from userexceptions import *
 import PMP
 __author__ = 'r2h2'
 
 # Logging setup for unit tests
-import logging
-from logging.config import dictConfig
-from settings import *
-UT_LOGFILENAME = os.path.abspath(os.path.join('log', __name__ + '.debug'))
-UT_LOGGING = LOGGING
-UT_LOGGING['handlers']['file']['filename'] = UT_LOGFILENAME
-dictConfig(UT_LOGGING)
-logging.info('DEBUG log: ' + UT_LOGFILENAME)
+logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
+logging_config = loggingconfig.LoggingConfig(logbasename)
+logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):

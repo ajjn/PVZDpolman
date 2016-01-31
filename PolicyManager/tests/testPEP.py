@@ -1,7 +1,11 @@
+import logging
+import logging.config
 import os
+import re
 import unittest
-from githandler import GitHandler
+import githandler
 from invocation import CliPepInvocation
+import loggingconfig
 import PEP
 from samlentitydescriptor import SAMLEntityDescriptor
 from userexceptions import InvalidSamlXmlSchemaError
@@ -9,15 +13,24 @@ from userexceptions import InvalidSamlXmlSchemaError
 __author__ = 'r2h2'
 
 # Logging setup for unit tests
-import logging
-from logging.config import dictConfig
-from settings import *
-logdir = os.environ.get('LOGDIR', os.path.abspath(os.path.join('log'))
-UT_LOGFILENAME = os.path.abspath(os.path.join(logdir, __name__ + '.debug'))
-UT_LOGGING = LOGGING
-UT_LOGGING['handlers']['file']['filename'] = UT_LOGFILENAME
-dictConfig(UT_LOGGING)
-logging.info('DEBUG log: ' + UT_LOGFILENAME)
+logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
+logging_config = loggingconfig.LoggingConfig(logbasename)
+logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
+
+
+class Test00_cli(unittest.TestCase):
+    def runTest(self):
+        logging.info('  -- Test PEP00: testing CLI interface')
+        try:
+            cliClient = CliPepInvocation(['-v',
+                                          '-x', '-a', 'aods.json',
+                                          '--trustedcerts', 'certs.json',
+                                          '--pubreq', 'repodir/policydir',
+                                          '--list_trustedcerts',
+                                          '--loglevel', 'DEBUG', ])
+            self.assertEqual(cliClient.args.loglevel, logging.DEBUG)
+        except SystemExit:
+            self.assertTrue(False, meg='System Exit: argparse did not accept parameters (most likely)')
 
 
 class Test01_xsdval_valid(unittest.TestCase):
@@ -48,7 +61,7 @@ class Test03_basic_happy_cycle(unittest.TestCase):
                                       '--pubreq', os.path.abspath(repo_dir),
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
+        gitHandler = githandler.GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
         gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_basic', repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
@@ -66,7 +79,7 @@ class Test04_unauthorized_requests(unittest.TestCase):
                                       '--pubreq', os.path.abspath(repo_dir),
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
+        gitHandler = githandler.GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
         gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz', repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
