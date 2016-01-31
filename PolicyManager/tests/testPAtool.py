@@ -70,7 +70,6 @@ class Test04_deleteED(unittest.TestCase):
                                          '--entityid', 'https://redmine.identinetics.com',
                                          '--signed_output', entitydescriptor_file])
         PAtool.run_me(cliClient)
-        assertNoDiff(os.path.basename(entitydescriptor_file))
 
 
 class Test05_revokeCert(unittest.TestCase):
