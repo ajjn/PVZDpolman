@@ -134,7 +134,8 @@ class CliPAtoolInvocation(AbstractInvocation):
         self._parser_delete = _subparsers.add_parser('deleteED', help='create a request to delete an entityDescriptor')
         self._parser_delete.add_argument('-e', '--entityid', dest='entityid',
                                          help="overwrite default entityId generated from the certificate's subject-CN and role type")
-        self._parser_delete.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None, help='output file)')
+        self._parser_delete.add_argument('-s', '--signed_output', dest='signed_output', required=True,
+                                       help='signed output file')
 
         # create the parser for the "revokeCert" command
         self._parser_revoke = _subparsers.add_parser('revokeCert', help='create a PMP input file to revoke a certificate')

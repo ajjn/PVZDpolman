@@ -84,12 +84,11 @@ class PAtool:
         self.args.output.close()
 
 
-    def signED(self, projdir_abs):
+    def signED(self, projdir_abs, ed_fd):
         """ Validate XML-Schema and sign with enveloped signature.  """
-        ed = SAMLEntityDescriptor(self.args.input)
+        ed = SAMLEntityDescriptor(ed_fd)
         ed.validate_xsd()
-        unsigned_contents = self.args.input.read()
-        self.args.input.close()
+        unsigned_contents = ed_fd.read()
         md_namespace_prefix = ed.get_namespace_prefix()
         signed_contents = creSignedXML(unsigned_contents,
                                        sigType='enveloped',
@@ -106,7 +105,7 @@ class PAtool:
 
 
     def deleteED(self):
-        logging.debug('creating delete request for entitID ' + self.args.entityid)
+        logging.debug('creating delete request for entityID ' + self.args.entityid)
         entityDescriptor = """\
 <!-- DELETE entity descriptor from metadata -->
 <md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
@@ -118,9 +117,14 @@ class PAtool:
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
   </md:IDPSSODescriptor>
 </md:EntityDescriptor>""".format(eid=self.args.entityid)
-        logging.debug('writing ED to ' + self.args.output.name)
-        self.args.output.write(entityDescriptor)
-        self.args.output.close()
+        unsigned_xml = self.mk_temp_filename() + '.xml'
+        logging.debug('writing unsigned ED to ' + unsigned_xml)
+        with open(unsigned_xml, 'w') as fd:
+            fd.write(entityDescriptor)
+        with open(unsigned_xml, 'r') as fd:
+            logging.debug('signing ED to ' + self.args.signed_output)
+            self.signED(PROJDIR_ABS, fd)
+        os.remove(unsigned_xml)
 
 
     def revokeCert(self):
@@ -157,7 +161,7 @@ class PAtool:
     def adminCert(self):
         logging.debug('challenging admin to create a signature to extract signing cert')
         x = creSignedXML('sign this dummy text - result is used to extract signature certificate.')
-        fn = self.mk_temp_filename()
+        fn = self.mk_temp_filename() + '.xml'
         with open(fn, 'w') as f:
             f.write(x)
         xml_sig_verifyer = XmlSigVerifyer();
@@ -186,7 +190,8 @@ def run_me(testrunnerInvocation=None):
     if (invocation.args.subcommand == 'createED'):
         patool.createED()
     elif (invocation.args.subcommand == 'signED'):
-        patool.signED(PROJDIR_ABS)
+        patool.signED(PROJDIR_ABS, invocation.args.input)
+        invocation.args.input.close()
     elif (invocation.args.subcommand == 'extractED'):
         patool.extractED()
     elif (invocation.args.subcommand == 'deleteED'):

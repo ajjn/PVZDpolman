@@ -68,7 +68,7 @@ class Test04_deleteED(unittest.TestCase):
         entitydescriptor_file = os.path.abspath('work/PAT04_redmineIdentineticsOrg_ed_delete.xml')
         cliClient = CliPAtoolInvocation(['-v', 'deleteED',
                                          '--entityid', 'https://redmine.identinetics.com',
-                                         entitydescriptor_file])
+                                         '--signed_output', entitydescriptor_file])
         PAtool.run_me(cliClient)
         assertNoDiff(os.path.basename(entitydescriptor_file))
 
