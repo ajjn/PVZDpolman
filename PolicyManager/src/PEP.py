@@ -1,6 +1,7 @@
 import git
 import logging
 import logging.config
+import os
 import re
 import sys
 from os import path
@@ -9,7 +10,7 @@ from lxml import etree as ET
 from OpenSSL import crypto
 from aodsfilehandler import AODSFileHandler
 from aodslisthandler import AodsListHandler
-from constants import *
+from constants import LOGLEVELS, PROJDIR_ABS, XMLNS_MD
 from githandler import GitHandler
 from invocation import CliPepInvocation
 import loggingconfig
@@ -211,9 +212,10 @@ def run_me(testrunnerInvocation=None):
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
-    logging.info('files in request queue processed: ' + str(pep.file_counter) + \
-                 '; accepted: ' + str(pep.file_counter_accepted) + \
-                 '; rejected: ' + str(pep.file_counter_rejected) + '.')
+    lvl = (LOGLEVELS['DEBUG'] if invocation.args.unittest else LOGLEVELS['INFO'])
+    logging.log(lvl, 'files in request queue processed: ' + str(pep.file_counter) + \
+                     '; accepted: ' + str(pep.file_counter_accepted) + \
+                     '; rejected: ' + str(pep.file_counter_rejected) + '.')
 
 
 if __name__ == '__main__':
