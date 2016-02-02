@@ -93,10 +93,8 @@ class CliPepInvocation(AbstractInvocation):
 
         if (testargs):
             self.args = self._parser.parse_args(testargs)
-            self.args.unittest = True  # used to filter log events depending on prod vs. test
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
-            self.args.unittest = False
 
         if not hasattr(self.args, 'loglevel_str') or self.args.loglevel_str is None:
             self.args.loglevel_str = 'INFO'

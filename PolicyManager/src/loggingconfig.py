@@ -37,7 +37,7 @@ class LoggingConfig:
                       'formatter': 'long',
                       'level': file_level,
                       'filename': self.LOGFILENAME,
-                      'mode': 'w',
+                      'mode': 'a',
                 },
             },
             loggers = {'': handlers_dict},

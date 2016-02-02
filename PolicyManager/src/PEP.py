@@ -164,15 +164,21 @@ def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
         # CLI args and logger set by unit test
         invocation = testrunnerInvocation
+        exception_lvl = LOGLEVELS['DEBUG']
     else:
         invocation = CliPepInvocation()
         logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
         logging_config = loggingconfig.LoggingConfig(logbasename,
                                                      console=False,
                                                      file_level=invocation.args.loglevel)
+        exception_lvl = LOGLEVELS['ERROR']
 
     pep = PEP(invocation)
-    policyDict = pep.getPolicyDict(invocation)
+    try:
+        policyDict = pep.getPolicyDict(invocation)
+    except ValidationError as e:
+        logging.log(exception_lvl, str(e) + '\nterminating PEP.')
+        raise
     logging.debug('initialize IDP CA certs')
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')
     logging.debug('initialize SP CA certs')
@@ -208,12 +214,11 @@ def run_me(testrunnerInvocation=None):
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
         except ValidationError as e:
-            logging.debug(str(e))
+            logging.log(exception_lvl, str(e))
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
-    lvl = (LOGLEVELS['DEBUG'] if invocation.args.unittest else LOGLEVELS['INFO'])
-    logging.log(lvl, 'files in request queue processed: ' + str(pep.file_counter) + \
+    logging.log(exception_lvl, 'files in request queue processed: ' + str(pep.file_counter) + \
                      '; accepted: ' + str(pep.file_counter_accepted) + \
                      '; rejected: ' + str(pep.file_counter_rejected) + '.')
 

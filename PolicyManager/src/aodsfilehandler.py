@@ -58,8 +58,8 @@ class AODSFileHandler():
             with open(self.trustCertsFile) as f:
                 trustCerts = json.loads(f.read())
             if signerCertificateEncoded not in trustCerts:
-                raise ValidationError("Signature certificate not in trusted list. "
-                                      "Signature cert is\n" + signerCertificateEncoded)
+                raise ValidationError("Signature certificate of policy journal not in trusted list. "
+                                      "Certificate:\n" + signerCertificateEncoded)
             if self.list_trustedcerts:
                 self.do_list_trustedcerts(trustCerts, signerCertificateEncoded)
             # get contents
