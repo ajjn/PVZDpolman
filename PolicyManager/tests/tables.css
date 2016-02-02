@@ -19,7 +19,14 @@
     padding: 0.5em 1em; /* cell padding */
 }
 
-.pure-table th {
+.pure-table th{
+    max-width: 40em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pure-table  td>ul>li {
     max-width: 40em;
     overflow: hidden;
     text-overflow: ellipsis;
