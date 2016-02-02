@@ -12,4 +12,4 @@ $py3 $PROJ_HOME/PolicyManager/src/PEP.py \
     --pubreq $REPO_DIR \
     --trustedcerts $TRUSTEDCERTS \
     --list_trustedcerts \
-    --loglevel=INFO
+    --loglevel=$PEPLOGLEVEL

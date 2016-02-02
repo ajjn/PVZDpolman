@@ -28,4 +28,7 @@ else
     exit 1
 fi
 
-PEPLOGLEVEL=INFO
+export PEPLOGLEVEL=INFO
+
+mkdir -p $REPO_DIR
+mkdir -p $LOGDIR

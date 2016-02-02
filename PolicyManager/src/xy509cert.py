@@ -1,4 +1,5 @@
 import re
+import textwrap
 from datetime import datetime
 from OpenSSL import crypto
 from userexceptions import ValidationError
@@ -17,7 +18,9 @@ class XY509cert:
                     hasStartLine = True
                     break
             if not hasStartLine:
-                c =  '-----BEGIN CERTIFICATE-----\n' + cert_str + '\n-----END CERTIFICATE-----\n'
+                c =  '-----BEGIN CERTIFICATE-----\n' + \
+                     textwrap.wrap(cert_str) + \
+                     '\n-----END CERTIFICATE-----\n'
                 c = re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
             else:
                 c = cert_str

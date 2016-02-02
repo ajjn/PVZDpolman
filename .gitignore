@@ -1,0 +1,7 @@
+.idea
+**/.DS_Store
+dev_internal
+/bin
+LocalSign/work/
+*.pyc
+/pycharm-helper
