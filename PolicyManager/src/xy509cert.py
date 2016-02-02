@@ -11,6 +11,8 @@ class XY509cert:
         been done with a subclass as well)
     '''
     def __init__(self, cert_str, inform='PEM'):
+        # older versions of openssl (< 1.0.2?) require a max. line lenght of 76 characters
+        cert_str_wrapped = ''.join(textwrap.wrap(cert_str, 64))
         if inform == 'PEM':
             hasStartLine = False
             for l in cert_str.splitlines(True):
@@ -19,11 +21,11 @@ class XY509cert:
                     break
             if not hasStartLine:
                 c =  '-----BEGIN CERTIFICATE-----\n' + \
-                     textwrap.wrap(cert_str) + \
+                     cert_str_wrapped + \
                      '\n-----END CERTIFICATE-----\n'
                 c = re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
             else:
-                c = cert_str
+                c = cert_str_wrapped
             self.cert = crypto.load_certificate(crypto.FILETYPE_PEM, c)
         elif inform == 'DER':
             self.cert = crypto.load_certificate(crypto.FILETYPE_ASN1, cert_str)
