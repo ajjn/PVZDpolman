@@ -4,9 +4,9 @@ import requests
 import re
 import socket
 import localconfig
-if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
+if localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SECLAY:
     from plugins.cresignedxml_seclay import *
-elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
+elif localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SIGNXML:
     from plugins.cresignedxml_signxml import *
 
 __author__ = 'r2h2'
@@ -15,16 +15,17 @@ __author__ = 'r2h2'
 def creSignedXML(sig_data, sig_type='envelopingB64BZIP', sig_position=None, verbose=False):
     ''' Create XML signature using the configured XMLDSig library '''
 
-    if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
+    if localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SECLAY:
         return cre_signedxml_seclay(sig_data,
                                     sig_type=sig_type,
                                     sig_position=sig_position,
                                     verbose=verbose)
-    elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
-        return cre_signedxml_signxml(sig_data,
+    elif localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SIGNXML:
+        xml_str = cre_signedxml_signxml(sig_data,
                                      sig_type=sig_type,
                                      sig_position=sig_position,
                                      verbose=verbose)
+        return xml_str
     else:
         raise NotImplementedError
 

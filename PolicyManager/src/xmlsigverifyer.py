@@ -1,18 +1,18 @@
 import localconfig
-if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
+if localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SECLAY:
     from plugins.xmlsigverifyer_moasp import *
-elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
-    from plugins.xmlsigverifyer_signxml import *
+elif localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SIGNXML:
+    from plugins.xmlsigverifyer_signxml import XmlSigVerifyerSignxml
 
 __author__ = 'r2h2'
 
 
 class XmlSigVerifyer():
     def __init__(self):
-        if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
+        if localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SECLAY:
             self.xml_sig_verifier = XmlSigVerifyerMoasp()
-        elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
-            self.xml_sig_verifier = XmlSigVerifyerSignXml()
+        elif localconfig.xmldsiglib == localconfig.XMLDSIGLIB_SIGNXML:
+            self.xml_sig_verifier = XmlSigVerifyerSignxml()
         else:
             raise NotImplementedError
 
