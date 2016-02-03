@@ -12,7 +12,7 @@ from plugins.cresignedxml_signxml import *
 __author__ = 'r2h2'
 
 
-def creSignedXML(sig_data, sigType='envelopingB64BZIP', sigPosition=None, verbose=False):
+def creSignedXML(sig_data, sig_type='envelopingB64BZIP', sig_position=None, verbose=False):
     ''' Create XML signature using the configured XMLDSig library '''
 
     ###test###
@@ -20,14 +20,14 @@ def creSignedXML(sig_data, sigType='envelopingB64BZIP', sigPosition=None, verbos
 
     if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
         return cre_signedxml_seclay(sig_data,
-                                    sig_type=sigType,
-                                    sig_position=sigPosition,
+                                    sig_type=sig_type,
+                                    sig_position=sig_position,
                                     verbose=verbose)
     elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
         return cre_signedxml_signxml(sig_data,
-                                   sig_type=sigType,
-                                   sig_position=sigPosition,
-                                   verbose=verbose)
+                                     sig_type=sig_type,
+                                     sig_position=sig_position,
+                                     verbose=verbose)
     else:
         raise NotImplementedError
 
@@ -57,6 +57,6 @@ if __name__ == '__main__':
   </md:IDPSSODescriptor>
 </md:EntityDescriptor>'''
 
-        print(creSignedXML(ed, 'enveloped', sigPosition='/md:EntityDescriptor', verbose=True))
+        print(creSignedXML(ed, 'enveloped', sig_position='/md:EntityDescriptor', verbose=True))
     else:
         print('invalid argument')

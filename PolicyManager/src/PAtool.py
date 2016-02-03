@@ -91,8 +91,8 @@ class PAtool:
         unsigned_contents = ed_fd.read()
         md_namespace_prefix = ed.get_namespace_prefix()
         signed_contents = creSignedXML(unsigned_contents,
-                                       sigType='enveloped',
-                                       sigPosition='/' + md_namespace_prefix + ':EntityDescriptor',
+                                       sig_type='enveloped',
+                                       sig_position='/' + md_namespace_prefix + ':EntityDescriptor',
                                        verbose=self.args.verbose)
         if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
             output_filename = self.args.signed_output
