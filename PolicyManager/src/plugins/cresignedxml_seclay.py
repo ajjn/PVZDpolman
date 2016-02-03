@@ -8,7 +8,7 @@ from userexceptions import *
 
 __author__ = 'r2h2'
 
-def failIfSecurityLayerUnavailable():
+def fail_if_securitylayer_unavailable():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     addr = ('127.0.0.1', 3495)
     if sock.connect_ex(addr) != 0:
@@ -16,7 +16,7 @@ def failIfSecurityLayerUnavailable():
         raise SecurityLayerUnavailableError(SecurityLayerUnavailableError.__doc__)
     sock.close()
 
-def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
+def get_seclay_requesttemplate(sigType, sigPosition=None) -> str:
     ''' return an XML template to be merged with the data to be signed
         sigPosition is the XPath for the element under which an enveoped signature shall
         be positioned, e.g. <md:/EntitiyDescriptor>
@@ -65,7 +65,7 @@ def getSecLayRequestTemplate(sigType, sigPosition=None) -> str:
   </sl:SignatureInfo>
 </sl:CreateXMLSignatureRequest> ''' % ('%s', sigPosition)
 
-def creSignedXMLSecLay(data, sigType='envelopingB64BZIP', sigPosition=None, verbose=False):
+def cre_signedxml_seclay(sig_data, sig_type='envelopingB64BZIP', sig_position=None, verbose=False):
     ''' Create XAdES signature using AT Bürgerkarte/Security Layer
         There are two signature types:
             1. envelopingB64BZIP: compress, b64-encode and sign the data (enveloping)
@@ -75,15 +75,15 @@ def creSignedXMLSecLay(data, sigType='envelopingB64BZIP', sigPosition=None, verb
             (e.g. md: instead of urn:oasis:names:tc:SAML:2.0:metadata:)
     '''
 
-    if sigType not in ('envelopingB64BZIP', 'enveloped'):
-        raise ValidationError("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sigType)
-    failIfSecurityLayerUnavailable()
-    if sigType == 'envelopingB64BZIP':
-        dataObject = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(data.encode('utf-8'))).decode('ascii')
+    if sig_type not in ('envelopingB64BZIP', 'enveloped'):
+        raise ValidationError("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sig_type)
+    fail_if_securitylayer_unavailable()
+    if sig_type == 'envelopingB64BZIP':
+        dataObject = DATA_HEADER_B64BZIP + base64.b64encode(bz2.compress(sig_data.encode('utf-8'))).decode('ascii')
     else:
-        dataObject = re.sub('<\?xml.*>', '', data)  #remove xml-header - provided by SecLay request wrapper
+        dataObject = re.sub('<\?xml.*>', '', sig_data)  #remove xml-header - provided by SecLay request wrapper
     logging.debug('data to be signed:\n%s\n\n' % dataObject)
-    sigRequ = getSecLayRequestTemplate(sigType, sigPosition) % dataObject
+    sigRequ = get_seclay_requesttemplate(sig_type, sig_position) % dataObject
     logging.debug('SecLay request:\n%s\n' % sigRequ)
     try:
         r = requests.post('http://localhost:3495/http-security-layer-request',
