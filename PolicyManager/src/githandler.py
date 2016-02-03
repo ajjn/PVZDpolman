@@ -4,8 +4,13 @@ from constants import *
 __author__ = 'r2h2'
 
 class GitHandler:
-    def __init__(self, repo_dir, verbose):
-        self.repo = git.Repo(repo_dir)
+    def __init__(self, repo_dir, init=False, verbose=False):
+        #if not os.path.exists(repo_dir):
+        #    os.mkdir(repo_dir)
+        if init:
+            self.repo = git.Repo.init(repo_dir)
+        else:
+            self.repo = git.Repo(repo_dir)
         self.gitcmd = git.Git(repo_dir)
         repo_dir_abs = os.path.abspath(repo_dir)
         self.acceptpath = os.path.join(repo_dir_abs, GIT_ACCEPTED)

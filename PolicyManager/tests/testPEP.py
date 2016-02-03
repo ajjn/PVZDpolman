@@ -2,9 +2,11 @@ import logging
 import logging.config
 import os
 import re
+import shutil
 import unittest
 import githandler
 from invocation import CliPepInvocation
+import localconfig
 import loggingconfig
 import PEP
 from samlentitydescriptor import SAMLEntityDescriptor
@@ -16,6 +18,12 @@ __author__ = 'r2h2'
 logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
 logging_config = loggingconfig.LoggingConfig(logbasename)
 logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
+
+# copy prepared aods from testPMPws
+# non-interactive tests run with signxml library + SW-cert; production with MOA + citizen card)
+aods_fn_input = 'testdata/PMPws01_aods_%s.xml' % localconfig.AODS_INDICATOR
+aods_fn = 'work/PEP03_aods_%s.xml' % localconfig.AODS_INDICATOR
+shutil.copyfile(aods_fn_input, aods_fn)
 
 
 class Test00_cli(unittest.TestCase):
@@ -55,14 +63,17 @@ class Test02_xsdval_invalid(unittest.TestCase):
 class Test03_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP03: PEP happy cycle')
-        repo_dir = 'work/policyDirectory'
+        repo_dir = 'work/policyDirectory_basic'
         cliClient = CliPepInvocation(['--verbose',
-                                      '--aods', os.path.abspath('testdata/PMPws01_aods_journal.xml'), '-x',
+                                      '--aods', os.path.abspath(aods_fn), '-x',
                                       '--pubreq', os.path.abspath(repo_dir),
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = githandler.GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_basic', repo_dir)
+        gitHandler = githandler.GitHandler(cliClient.args.pubrequ,
+                                           init=True,
+                                           verbose=cliClient.args.verbose)
+        gitHandler.reset_repo_with_defined_testdata(
+                'testdata/policyDirectory_basic_%s' % localconfig.AODS_INDICATOR, repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
         requ1_result = os.path.abspath('work/policyDirectory/accepted/PAT02_redmineIdentineticsOrg_ed_req.xml')
@@ -73,14 +84,16 @@ class Test03_basic_happy_cycle(unittest.TestCase):
 class Test04_unauthorized_requests(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
-        repo_dir = 'work/policyDirectory'
+        repo_dir = 'work/policyDirectory_unauthz_MOA'
         cliClient = CliPepInvocation(['--verbose',
-                                      '--aods', os.path.abspath('testdata/PMPws01_aods_journal.xml'), '-x',
+                                      '--aods', os.path.abspath(aods_fn), '-x',
                                       '--pubreq', os.path.abspath(repo_dir),
                                       '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = githandler.GitHandler(cliClient.args.pubrequ, cliClient.args.verbose)
-        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz', repo_dir)
+        gitHandler = githandler.GitHandler(cliClient.args.pubrequ,
+                                           init=True,
+                                           verbose=cliClient.args.verbose)
+        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz_MOA', repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
         requ1_result = os.path.abspath('work/policyDirectory/rejected/PEP04a_gondorMagwienGvAt_ed_delete.xml')

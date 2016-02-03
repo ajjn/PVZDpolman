@@ -38,9 +38,11 @@ class XY509cert:
         return re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
 
     @staticmethod
-    def pem_remove_rfc7468_delimiters(cert_str: str) -> str:
+    def pem_remove_rfc7468_delimiters(cert_str,
+                                      optional_delimiter=False,
+                                      remove_whitespace=False) -> str:
         """ take a base64-encoded certificate and remove BEGIN/END lines
-            raise ValidationError if either is missing
+            raise ValidationError if either is missing, unless optional_delimiter is True
         """
         begin = False
         end = False
@@ -54,11 +56,17 @@ class XY509cert:
                     end = True
                     break
                 pem_str += l
-        if not begin:
-            raise ValidationError("PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468")
-        if not end:
-            raise ValidationError("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
-        return pem_str
+        if optional_delimiter:
+            pass
+        else:
+            if not begin:
+                raise ValidationError("PEM file must have '-----BEGIN CERTIFICATE-----' header conforming to RFC 7468")
+            if not end:
+                raise ValidationError("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
+        if remove_whitespace:
+            return re.sub('\s', '', pem_str)
+        else:
+            return pem_str
 
     def getPEM_str(self) -> str:
         return XY509cert.pem_remove_rfc7468_delimiters(self.cert_str)

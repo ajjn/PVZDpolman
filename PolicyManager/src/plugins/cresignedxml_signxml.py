@@ -22,12 +22,23 @@ def cre_signedxml_signxml(sig_data, sig_type='envelopingB64BZIP', sig_position=N
         signed_root = xmldsig(dataObject).sign(method=methods.enveloping, key=key, cert=cert)
     elif sig_type == 'enveloped':
         root = ElementTree.fromstring(sig_data)
-        signed_root = xmldsig(root).sign(method=methods.enveloped, key=key, cert=cert)
-        #verified_data = xmldsig(signed_root).verify()
+        if root.tag == '{urn:oasis:names:tc:SAML:2.0:metadata}EntityDescriptor':
+            # add <ds:Signature Id="placeholder"></ds:Signature> for signxml, ignoring sig_position
+            # see also: https://signxml.readthedocs.org/en/latest/index.html
+            DSIG_NS = 'http://www.w3.org/2000/09/xmldsig#'
+            NS_MAP = {'ds': DSIG_NS}
+            ds_placeholder_name = ElementTree.QName(DSIG_NS, 'Signature')
+            ds_placeholder = ElementTree.Element(ds_placeholder_name, nsmap=NS_MAP)
+            ds_placeholder.attrib['Id']='placeholder'
+            root.insert(0, ds_placeholder)
+        signed_root = xmldsig(root).sign(method=methods.enveloped,
+                                         key=key, cert=cert)
     else:
         raise ValidationError("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sig_type)
 
-    #xml_str = ElementTree.dump(signed_root)
-    xml_bytes = ElementTree.tostring(signed_root, xml_declaration=True, encoding='utf-8')
-    xml_str = xml_bytes.decode('utf-8')
+    xml_encoding = 'ascii'
+    xml_bytes = ElementTree.tostring(signed_root, xml_declaration=True, encoding=xml_encoding)
+    xml_str = xml_bytes.decode(xml_encoding)
+    # verify what has bees signed:
+    # verified_et_element = xmldsig(xml_str.encode(xml_encoding)).verify(x509_cert=cert)
     return xml_str

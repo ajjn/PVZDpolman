@@ -4,7 +4,8 @@ import logging.config
 import os
 import re
 import sys
-from os import path
+import signxml
+#from os import path
 from urllib.parse import urlparse
 from lxml import etree as ET
 from OpenSSL import crypto
@@ -184,7 +185,7 @@ def run_me(testrunnerInvocation=None):
     logging.debug('initialize SP CA certs')
     SP_trustStore = Xy509certStore(policyDict, 'SP')
     logging.debug('   using repo ' + invocation.args.pubrequ)
-    gitHandler = GitHandler(invocation.args.pubrequ, invocation.args.verbose)
+    gitHandler = GitHandler(invocation.args.pubrequ, verbose=invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
         if not filename.endswith('.xml'):
             logging.debug('   not .xml: ignoring ' + filename)
@@ -213,7 +214,7 @@ def run_me(testrunnerInvocation=None):
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
-        except ValidationError as e:
+        except (ValidationError, signxml.InvalidInput) as e:
             logging.log(exception_lvl, str(e))
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1

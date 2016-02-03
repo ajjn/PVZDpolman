@@ -9,6 +9,7 @@ import sys
 import unittest
 from assertNoDiff import assertNoDiff
 from invocation import CliPmpInvocation
+import localconfig
 import loggingconfig
 from userexceptions import *
 import PMP
@@ -23,7 +24,7 @@ logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
 class Test01_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PMPws01: happy cycle: create, append, read, verify (including xml sig)')
-        aodsfile_new = 'work/policyDirectory/policydir/aods.xml'
+        aodsfile_new = 'work/policyDirectory/policydir/PMPws01_aods_%s.xml' % localconfig.AODS_INDICATOR
         policydir_new = 'work/PMPws01_poldir.json'
         logging.debug('  removing existing aods file %s .. ' % aodsfile_new)
         cliClient = CliPmpInvocation(['-v', '-a', aodsfile_new, '-x', 'scratch'])
