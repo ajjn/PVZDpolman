@@ -6,17 +6,14 @@ import socket
 import localconfig
 if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
     from plugins.cresignedxml_seclay import *
-#elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
-from plugins.cresignedxml_signxml import *
+elif localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SIGNXML:
+    from plugins.cresignedxml_signxml import *
 
 __author__ = 'r2h2'
 
 
 def creSignedXML(sig_data, sig_type='envelopingB64BZIP', sig_position=None, verbose=False):
     ''' Create XML signature using the configured XMLDSig library '''
-
-    ###test###
-    localconfig.XMLDSIGLIB = localconfig.XMLDSIGLIB_SIGNXML
 
     if localconfig.XMLDSIGLIB == localconfig.XMLDSIGLIB_SECLAY:
         return cre_signedxml_seclay(sig_data,

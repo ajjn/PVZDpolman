@@ -11,32 +11,41 @@ class XY509cert:
         been done with a subclass as well)
     '''
     def __init__(self, cert_str, inform='PEM'):
-        # older versions of openssl (< 1.0.2?) require a max. line lenght of 76 characters
-        cert_str_wrapped = ''.join(textwrap.wrap(cert_str, 64))
         if inform == 'PEM':
-            hasStartLine = False
-            for l in cert_str.splitlines(True):
-                if l == '-----BEGIN CERTIFICATE-----\n':
-                    hasStartLine = True
-                    break
-            if not hasStartLine:
-                c =  '-----BEGIN CERTIFICATE-----\n' + \
-                     cert_str_wrapped + \
-                     '\n-----END CERTIFICATE-----\n'
-                c = re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
-            else:
-                c = cert_str_wrapped
+            c =  XY509cert.pem_add_rfc7468_delimiters(cert_str)
             self.cert = crypto.load_certificate(crypto.FILETYPE_PEM, c)
         elif inform == 'DER':
             self.cert = crypto.load_certificate(crypto.FILETYPE_ASN1, cert_str)
         self.cert_str = cert_str
 
-    def getPEM_str(self) -> str:
-        ''' from the multi-line string in self.cert_str extract text between -----BEGIN and END----- markers'''
+    @staticmethod
+    def pem_add_rfc7468_delimiters(cert_str: str) -> str:
+        """ take a base64-encoded certificate and add BEGIN/END lines if they are missing;
+            wrap lines > 76 characters, because older versions of openssl (< 1.0.2?) limit base64
+            lines like MIME
+        """
+        hasStartLine = False
+        for l in cert_str.splitlines(True):
+            if l == '-----BEGIN CERTIFICATE-----\n':
+                hasStartLine = True
+                break
+        if not hasStartLine:
+            c = '-----BEGIN CERTIFICATE-----\n' + \
+                ''.join(textwrap.wrap(cert_str, 64)) + \
+                '\n-----END CERTIFICATE-----\n'
+        else:
+            c = cert_str
+        return re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
+
+    @staticmethod
+    def pem_remove_rfc7468_delimiters(cert_str: str) -> str:
+        """ take a base64-encoded certificate and remove BEGIN/END lines
+            raise ValidationError if either is missing
+        """
         begin = False
         end = False
         pem_str = ''
-        for l in self.cert_str.splitlines(True):
+        for l in cert_str.splitlines(True):
             if l == '-----BEGIN CERTIFICATE-----\n':
                 begin = True
                 continue
@@ -50,6 +59,9 @@ class XY509cert:
         if not end:
             raise ValidationError("PEM file must have '-----END CERTIFICATE-----' header conforming to RFC 7468")
         return pem_str
+
+    def getPEM_str(self) -> str:
+        return XY509cert.pem_remove_rfc7468_delimiters(self.cert_str)
 
     def getSubjectCN(self) -> str:
         subject_dn = self.cert.get_subject()
