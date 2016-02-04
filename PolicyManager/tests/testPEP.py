@@ -63,7 +63,7 @@ class Test02_xsdval_invalid(unittest.TestCase):
 class Test03_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP03: PEP happy cycle')
-        repo_dir = 'work/policyDirectory_basic'
+        repo_dir = 'work/policyDirectory_basic_' + localconfig.AODS_INDICATOR
         cliClient = CliPepInvocation(['--verbose',
                                       '--aods', os.path.abspath(aods_fn), '-x',
                                       '--pubreq', os.path.abspath(repo_dir),
@@ -76,7 +76,7 @@ class Test03_basic_happy_cycle(unittest.TestCase):
                 'testdata/policyDirectory_basic_%s' % localconfig.AODS_INDICATOR, repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
-        requ1_result = os.path.abspath('work/policyDirectory/accepted/PAT02_redmineIdentineticsOrg_ed_req.xml')
+        requ1_result = os.path.abspath('%s/accepted/PAT02_redmineIdentineticsOrg_ed_req.xml' % repo_dir)
         os.path.isfile(requ1_result)
         assert os.path.isfile(os.path.abspath(requ1_result)), 'expected %s in accept directory' % requ1_result
 
@@ -84,7 +84,7 @@ class Test03_basic_happy_cycle(unittest.TestCase):
 class Test04_unauthorized_requests(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
-        repo_dir = 'work/policyDirectory_unauthz_MOA'
+        repo_dir = 'work/policyDirectory_unauth_' + localconfig.AODS_INDICATOR
         cliClient = CliPepInvocation(['--verbose',
                                       '--aods', os.path.abspath(aods_fn), '-x',
                                       '--pubreq', os.path.abspath(repo_dir),
@@ -93,12 +93,13 @@ class Test04_unauthorized_requests(unittest.TestCase):
         gitHandler = githandler.GitHandler(cliClient.args.pubrequ,
                                            init=True,
                                            verbose=cliClient.args.verbose)
-        gitHandler.reset_repo_with_defined_testdata('testdata/policyDirectory_unauthz_MOA', repo_dir)
+        gitHandler.reset_repo_with_defined_testdata(
+                'testdata/policyDirectory_unauthz_%s' % localconfig.AODS_INDICATOR, repo_dir)
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
-        requ1_result = os.path.abspath('work/policyDirectory/rejected/PEP04a_gondorMagwienGvAt_ed_delete.xml')
+        requ1_result = os.path.abspath('%s/rejected/PEP04a_gondorMagwienGvAt_ed_delete.xml' % repo_dir)
         os.path.isfile(requ1_result)
-        requ2_result = os.path.abspath('work/policyDirectory/rejected/PEP04b_idpExampleCom_req_sig_an.xml')
+        requ2_result = os.path.abspath('%s/rejected/PEP04b_idpExampleCom_req_sig_an.xml' % repo_dir)
         assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
         requ2_errmsg = 'Signer certificate not found in policy directory'
         with open(requ2_result + '.err') as f:

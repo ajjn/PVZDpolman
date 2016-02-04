@@ -62,7 +62,7 @@ class PEP:
 
     def validateSignature(self, filename_abs) -> str:
         # verify whether the signature is valid
-        xml_sig_verifyer = XmlSigVerifyer();
+        xml_sig_verifyer = XmlSigVerifyer(testhint='PEPrequest');
         signerCertificateEncoded = xml_sig_verifyer.verify(filename_abs)
         #if self.verbose:
         #    cert = XY509cert(signerCertificateEncoded, inform='DER') # TODO: check encoding

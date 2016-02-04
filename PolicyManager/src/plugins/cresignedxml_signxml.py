@@ -8,11 +8,15 @@ import localconfig
 
 __author__ = 'r2h2'
 
-def cre_signedxml_signxml(sig_data, sig_type='envelopingB64BZIP', sig_position=None, verbose=False):
+def cre_signedxml_signxml(sig_data, sig_type='envelopingB64BZIP',
+                          sig_position=None, verbose=False,
+                          sig_cert=None, sig_key=None):
     ''' Create XML signature using py signxml (based on lxml + openssl) '''
-    with open(localconfig.SIGNCERT) as fd:
+    sig_cert = (localconfig.AODSSIGCERT if sig_cert is None else sig_cert)
+    sig_key = (localconfig.AODSSIGKEY if sig_key is None else sig_key)
+    with open(sig_cert) as fd:
         cert = fd.read()
-    with open(localconfig.SIGNKEY) as fd:
+    with open(sig_key) as fd:
         key = fd.read().encode('ascii')
 
     if sig_type == 'envelopingB64BZIP':
@@ -36,9 +40,8 @@ def cre_signedxml_signxml(sig_data, sig_type='envelopingB64BZIP', sig_position=N
     else:
         raise ValidationError("Signature type must be one of 'envelopingB64BZIP', 'enveloped' but is " + sig_type)
 
-    xml_encoding = 'ascii'
-    xml_bytes = ElementTree.tostring(signed_root, xml_declaration=True, encoding=xml_encoding)
-    xml_str = xml_bytes.decode(xml_encoding)
+    xml_bytes = ElementTree.tostring(signed_root, xml_declaration=True, encoding=localconfig.XML_ENCODING)
+    xml_str = xml_bytes.decode(localconfig.XML_ENCODING)
     # verify what has bees signed:
     # verified_et_element = xmldsig(xml_str.encode(xml_encoding)).verify(x509_cert=cert)
     return xml_str

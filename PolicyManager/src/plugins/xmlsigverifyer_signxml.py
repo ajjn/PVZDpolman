@@ -10,17 +10,25 @@ __author__ = 'r2h2'
 
 class XmlSigVerifyerSignxml(XmlSigVerifyerAbstract):
     """ verify xml signatures using python signxml """
-    def __init__(self):
-        pass
+    def __init__(self, sig_cert=None):
+        self.sig_cert = sig_cert
 
     def verify(self, xml_file_name) -> str:
-        """ verify xmldsig and return signerCertificate """
+        """ verify xmldsig and return signerCertificate
+        option: validate against a specific signing certificate.
+        """
         with open(xml_file_name) as fd:
             xml_str = fd.read()
-        with open(localconfig.SIGNCERT) as fd:
-            cert = fd.read()
+        xml_bytes = xml_str.encode(localconfig.XML_ENCODING)
         try:
-            verified_et_element = signxml.xmldsig(xml_str.encode('utf-8')).verify(x509_cert=cert)
+            if self.sig_cert is None:  # TODO - does not work yet https://github.com/kislyuk/signxml/issues/41
+                verified_et_element = signxml.xmldsig(xml_bytes).verify(
+                        #ca_pem_file=localconfig.UNITTEST_CACERT,
+                        ca_path=localconfig.UNITTEST_CADIR)
+            else:
+                with open(self.sig_cert) as fd:
+                    cert = fd.read()
+                verified_et_element = signxml.xmldsig(xml_bytes).verify(x509_cert=cert)
         except signxml.InvalidDigest:
             logging.info('Invalid digest in ' + xml_file_name)
             raise
