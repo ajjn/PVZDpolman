@@ -5,7 +5,7 @@ ostype=${OSTYPE//[0-9.]/}
 if [[ "$ostype" == "linux-gnu" ]]; then
     #  tested with CentOS7
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
-    export PROJ_HOME=/opt/PVZD
+    export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
 elif [[ "$ostype" == "linux" ]]; then
     #  tested with RHEL6
