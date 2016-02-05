@@ -25,17 +25,22 @@ class XY509cert:
             lines like MIME
         """
         hasStartLine = False
+        new_cert = ''
         for l in cert_str.splitlines(True):
             if l == '-----BEGIN CERTIFICATE-----\n':
                 hasStartLine = True
-                break
+            elif hasStartLine:
+                l = '\n'.join(textwrap.wrap(l, 64))
+                print("line: " + l)
+            new_cert += l
         if not hasStartLine:
             c = '-----BEGIN CERTIFICATE-----\n' + \
-                ''.join(textwrap.wrap(cert_str, 64)) + \
+                '\n'.join(textwrap.wrap(cert_str, 64)) + \
                 '\n-----END CERTIFICATE-----\n'
         else:
-            c = cert_str
-        return re.sub('\n\s*\n', '\n', c) # openssl dislikes blank lines before the end line
+            c = new_cert
+            #print("Zertifikat: " + c)
+        return re.sub('\n\s*\n', '\n', c)  # openssl dislikes blank lines before the end line
 
     @staticmethod
     def pem_remove_rfc7468_delimiters(cert_str,

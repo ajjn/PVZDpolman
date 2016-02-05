@@ -16,7 +16,7 @@ from githandler import GitHandler
 from invocation import CliPepInvocation
 import loggingconfig
 from samlentitydescriptor import SAMLEntityDescriptor
-from userexceptions import UnauthorizedSignerError, ValidationError
+from userexceptions import *
 from xmlsigverifyer import XmlSigVerifyer
 from xy509certstore import Xy509certStore
 from xy509cert import XY509cert
