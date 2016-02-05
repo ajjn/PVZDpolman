@@ -30,8 +30,8 @@ class XY509cert:
             if l == '-----BEGIN CERTIFICATE-----\n':
                 hasStartLine = True
             elif hasStartLine:
-                l = '\n'.join(textwrap.wrap(l, 64))
-                print("line: " + l)
+                l = '\n'.join(textwrap.wrap(l, 64)) + '\n'
+                #print("line: " + l)
             new_cert += l
         if not hasStartLine:
             c = '-----BEGIN CERTIFICATE-----\n' + \
