@@ -1,7 +1,7 @@
 import logging
-from invocation import *
 from aodslisthandler import *
 from aodsfilehandler import *
+from invocation.clipmp import CliPmp
 __author__ = 'r2h2'
 
 
@@ -11,7 +11,7 @@ def run_me(testrunnerInvocation=None):
     if (testrunnerInvocation):
         invocation = testrunnerInvocation
     else:
-        invocation = CliPmpInvocation()
+        invocation = CliPmp()
 
     aodsFileHandlder = AODSFileHandler(invocation)
     aodsListHandler = AodsListHandler(aodsFileHandlder, invocation.args)

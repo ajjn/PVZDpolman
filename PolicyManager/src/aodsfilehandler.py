@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from constants import DATA_HEADER_B64BZIP
 from cresignedxml import creSignedXML
 from wrapperrecord import *
-from userexceptions import EmptyAODSError, InvalidArgumentValueError, ValidationError
+from userexceptions import *
 from xmlsigverifyer import XmlSigVerifyer
 from xy509cert import XY509cert
 __author__ = 'r2h2'
@@ -38,6 +38,7 @@ class AODSFileHandler():
         if os.path.exists(self._aodsFile):
             raise InvalidArgumentValueError('Must remove existing %s before creating a new AODS' %
                                             self._aodsFile)
+        os.makedirs(os.path.dirname(self._aodsFile), exist_ok=True)
         if xmlsign:
             j = json.dumps(s)
             x = creSignedXML(j, verbose=self.verbose)

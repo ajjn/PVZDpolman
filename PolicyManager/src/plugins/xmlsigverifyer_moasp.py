@@ -2,7 +2,7 @@ import base64, bz2, datetime, os, re, sys
 from jnius import autoclass
 from constants import PROJDIR_ABS
 from plugins.xmlsigverifyer_abstract import XmlSigVerifyerAbstract
-from userexceptions import ValidationError
+from userexceptions import *
 
 __author__ = 'r2h2'
 

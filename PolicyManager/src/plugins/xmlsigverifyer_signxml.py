@@ -3,7 +3,7 @@ import signxml
 from constants import PROJDIR_ABS
 import localconfig
 from plugins.xmlsigverifyer_abstract import XmlSigVerifyerAbstract
-from userexceptions import ValidationError
+from userexceptions import *
 from xy509cert import XY509cert
 __author__ = 'r2h2'
 

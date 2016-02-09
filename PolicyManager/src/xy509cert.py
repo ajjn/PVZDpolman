@@ -2,7 +2,7 @@ import re
 import textwrap
 from datetime import datetime
 from OpenSSL import crypto
-from userexceptions import ValidationError
+from userexceptions import *
 __author__ = 'r2h2'
 
 

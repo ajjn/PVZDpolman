@@ -2,9 +2,10 @@ import os
 __author__ = 'r2h2'
 
 GIT_REQUESTQUEUE = 'request_queue'
-GIT_ACCEPTED = 'accepted'
+GIT_DELETED = 'deleted'
 GIT_REJECTED = 'rejected'
-
+GIT_POLICYDIR = 'policydir'
+GIT_PUBLISHED = 'published'
 
 DATA_HEADER_B64BZIP = '{signed data format: base64(bzip2)}\n'
 
@@ -16,4 +17,3 @@ XMLNS_MD = '{urn:oasis:names:tc:SAML:2.0:metadata}'
 
 # loglevles valid for this project
 LOGLEVELS = {'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
-

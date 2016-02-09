@@ -1,7 +1,7 @@
-import logging, tempfile
+import logging, sys, tempfile
 from aodsfilehandler import *
 from constants import PROJDIR_ABS
-from invocation import *
+from invocation.clipatool import CliPatool
 from samlentitydescriptor import *
 from userexceptions import *
 from xmlsigverifyer import XmlSigVerifyer
@@ -27,10 +27,10 @@ class PAtool:
     #    pass # TODO implement
 
 
-    def get_entityid(self, x509cert) -> str:
+    def get_entityid(self, xy509cert) -> str:
         if not (getattr(self.args, 'entityid', False) and getattr(self.args, 'samlrole', False)):
             raise MissingArgumentError('createED requires both entityid and samlrole arguments')
-        entityId = self.args.entityid + '/' + self.args.samlrole.lower()
+        entityId = self.args.entityid
         #entityId = 'https://' + x509cert.getSubjectCN() + '/' + self.args.samlrole.lower()
         if hasattr(self.args, 'entityid_suffix') and len(self.args.entityid_suffix) > 0:
             if self.args.entityid_suffix[0:1] != '/':
@@ -41,47 +41,22 @@ class PAtool:
 
     def createED(self):
         logging.debug('reading certificate from ' + self.args.cert.name)
-        x509cert = XY509cert(self.args.cert.read())
+        xy509cert = XY509cert(self.args.cert.read())
         self.args.cert.close()
-        entityId = self.get_entityid(x509cert)
-        if self.args.samlrole == 'IDP':
-            entityDescriptor = """\
-<md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
-  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:KeyDescriptor use="signing">
-      <ds:KeyInfo>
-        <ds:X509Data>
-           <ds:X509Certificate>
-{pem}
-           </ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
-    </md:KeyDescriptor>
-    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
-  </md:IDPSSODescriptor>
-</md:EntityDescriptor>""".format(eid=entityId, pem=x509cert.getPEM_str())
-        elif self.args.samlrole == 'SP':
-            entityDescriptor = """\
-<md:EntityDescriptor entityID="{eid}" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
-  <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:KeyDescriptor use="signing">
-      <ds:KeyInfo>
-        <ds:X509Data>
-           <ds:X509Certificate>
-{pem}
-           </ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
-      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/acs/unused" index="0" isDefault="true"/>
-    </md:KeyDescriptor>
-  </md:SPSSODescriptor>
-</md:EntityDescriptor>""".format(eid=entityId, pem=x509cert.getPEM_str())
-        else:
-            raise EntityRoleNotSupportedError("Only IDP and SP entity roles implemented, but %s given" % self.args.samlrole)
-
-        logging.debug('writing ED to ' + self.args.output.name)
-        self.args.output.write(entityDescriptor)
-        self.args.output.close()
+        entitydescriptor = SAMLEntityDescriptor(createfromcertstr=xy509cert.getPEM_str(),
+                                                entityid=self.get_entityid(xy509cert),
+                                                samlrole=self.args.samlrole)
+        fn = entitydescriptor.get_filename()
+        unsigned_basefn = re.sub(r'\.xml$', '.unsigned.xml', fn)
+        unsigned_fn = os.path.join(self.args.output_dir, unsigned_basefn)
+        logging.debug('writing EntityDescriptor to ' + unsigned_fn)
+        with open(unsigned_fn, 'w') as fd:
+            fd.write(entitydescriptor.get_xml_str())
+        if self.args.sign:
+            unsigned_fn = os.path.join(self.args.output_dir, entitydescriptor.get_filename())
+            with open(unsigned_xml, 'r') as fd:
+                logging.debug('signing ED to ' + self.args.signed_output)
+                self.signED(PROJDIR_ABS, fd)
 
 
     def signED(self, projdir_abs, ed_fd):
@@ -94,35 +69,22 @@ class PAtool:
                                        sig_type='enveloped',
                                        sig_position='/' + md_namespace_prefix + ':EntityDescriptor',
                                        verbose=self.args.verbose)
-        if hasattr(self.args, 'signed_output') and self.args.signed_output is not None:
-            output_filename = self.args.signed_output
-            logging.debug('writing signed document ' + output_filename)
-        else:
-            output_filename = self.args.input.name[:-4] + '_req.xml'
-            logging.debug('writing signed document with default name ' + output_filename)
-        with open(output_filename, 'w') as f:
-            f.write(signed_contents)
+        output_fn = os.path.join(self.args.output_dir, ed.get_filename())
+        logging.debug('writing signed EntityDescriptor to ' + output_fn)
+        with open(output_fn, 'w') as fd:
+            fd.write(signed_contents)
 
 
     def deleteED(self):
         logging.debug('creating delete request for entityID ' + self.args.entityid)
-        entityDescriptor = """\
-<!-- DELETE entity descriptor from metadata -->
-<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
-    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
-    pvzd:disposition="delete">
-  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/idp/unused"/>
-  </md:IDPSSODescriptor>
-</md:EntityDescriptor>""".format(eid=self.args.entityid)
+        entitydescriptor = SAMLEntityDescriptor(delete_entityid=self.args.entityid)
+
         unsigned_xml = self.mk_temp_filename() + '.xml'
         logging.debug('writing unsigned ED to ' + unsigned_xml)
         with open(unsigned_xml, 'w') as fd:
-            fd.write(entityDescriptor)
+            fd.write(entitydescriptor.get_xml_str())
         with open(unsigned_xml, 'r') as fd:
-            logging.debug('signing ED to ' + self.args.signed_output)
+            logging.debug('signing ED to ' + unsigned_xml)
             self.signED(PROJDIR_ABS, fd)
         os.remove(unsigned_xml)
 
@@ -183,7 +145,7 @@ def run_me(testrunnerInvocation=None):
     if testrunnerInvocation:
         invocation = testrunnerInvocation
     else:
-        invocation = CliPAtoolInvocation()
+        invocation = CliPatool()
 
 
     patool = PAtool(invocation.args)
@@ -192,8 +154,8 @@ def run_me(testrunnerInvocation=None):
     elif (invocation.args.subcommand == 'signED'):
         patool.signED(PROJDIR_ABS, invocation.args.input)
         invocation.args.input.close()
-    elif (invocation.args.subcommand == 'extractED'):
-        patool.extractED()
+    #elif (invocation.args.subcommand == 'extractED'):
+    #    patool.extractED()
     elif (invocation.args.subcommand == 'deleteED'):
         patool.deleteED()
     elif (invocation.args.subcommand == 'revokeCert'):

@@ -13,7 +13,7 @@ from aodsfilehandler import AODSFileHandler
 from aodslisthandler import AodsListHandler
 from constants import LOGLEVELS, PROJDIR_ABS, XMLNS_MD
 from githandler import GitHandler
-from invocation import CliPepInvocation
+from invocation.clipep import CliPep
 import loggingconfig
 from samlentitydescriptor import SAMLEntityDescriptor
 from userexceptions import *
@@ -142,22 +142,27 @@ class PEP:
             * not expired
             * issued by a CA listed as issuer in the related trust store
         """
-        for cert_pem in self.getCerts(ed, 'IDP'):
+        for cert_pem in self.getCerts(ed, 'IDP'):   # certs in IDPSSODescriptor elements
             cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
-                raise CertExpiredError('certificate has a notValidAfter date in the past')
+                raise CertExpiredError('Certificate is expired')
             x509storeContext = crypto.X509StoreContext(IDP_trustStore.x509store, cert.cert)
             try:
                 x509storeContext.verify_certificate()
             except crypto.X509StoreContextError as e:
-                raise CertInvalidError(('Invalid certificate. Issuer not in policy directory: ' + cert.getIssuer_str()))
+                raise CertInvalidError(('Certificate validation failed. ' + str(e) + ' ' +
+                                        cert.getIssuer_str()))
 
-        for cert_pem in self.getCerts(ed, 'SP'):
+        for cert_pem in self.getCerts(ed, 'SP'):   # certs in SPSSODescriptor elements
             cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
-                raise CertExpiredError('certificate has a notValidAfter date in the past')
+                raise CertExpiredError('Certificate is expired')
             x509storeContext = crypto.X509StoreContext(SP_trustStore.x509store, cert.cert)
-            x509storeContext.verify_certificate()
+            try:
+                x509storeContext.verify_certificate()
+            except crypto.X509StoreContextError as e:
+                raise CertInvalidError(('Certificate validation failed. ' + str(e) + ' ' +
+                                        cert.getIssuer_str()))
 
 
 
@@ -180,12 +185,14 @@ def run_me(testrunnerInvocation=None):
     except ValidationError as e:
         logging.log(exception_lvl, str(e) + '\nterminating PEP.')
         raise
-    logging.debug('initialize IDP CA certs')
+    logging.debug('initialize IDP CA cert store')
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')
-    logging.debug('initialize SP CA certs')
+    logging.debug('initialize SP CA cert store')
     SP_trustStore = Xy509certStore(policyDict, 'SP')
     logging.debug('   using repo ' + invocation.args.pubrequ)
-    gitHandler = GitHandler(invocation.args.pubrequ, verbose=invocation.args.verbose)
+    gitHandler = GitHandler(invocation.args.pubrequ,
+                            invocation.args.pepoutdir,
+                            verbose=invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
         if not filename.endswith('.xml'):
             logging.debug('   not .xml: ignoring ' + filename)
@@ -196,11 +203,12 @@ def run_me(testrunnerInvocation=None):
         try:
             logging.debug('== processing ' + filename_base)
             if pep.isDeletionRequest(filename_abs):
-                gitHandler.remove_from_accepted(filename)
+                gitHandler.move_to_deleted(filename)
             else:
                 logging.debug('validating XML schema')
                 with open(filename_abs) as f:
                     ed = SAMLEntityDescriptor(f)
+                ed.verify_filename(filename_base)
                 ed.validate_xsd()
                 ed.validate_schematron()
                 logging.debug('validating signature')
@@ -214,7 +222,7 @@ def run_me(testrunnerInvocation=None):
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
             gitHandler.move_to_accepted(filename)
             pep.file_counter_accepted += 1
-        except (ValidationError, signxml.InvalidInput) as e:
+        except (ValidationError, signxml.InvalidInput, InputValueError) as e:
             logging.log(exception_lvl, str(e))
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1

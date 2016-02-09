@@ -10,6 +10,7 @@ fi
 $py3 $PROJ_HOME/PolicyManager/src/PEP.py \
     --aods $POLICY_JOURNAL -x \
     --pubreq $REPO_DIR \
+    --pepoutdir $PEPOUTDIR \
     --trustedcerts $TRUSTEDCERTS \
     --list_trustedcerts \
     --loglevel=$PEPLOGLEVEL
