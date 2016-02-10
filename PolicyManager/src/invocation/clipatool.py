@@ -86,3 +86,7 @@ class CliPatool(AbstractInvocation):
                 url = urllib.parse.urlparse(self.args.entityid)
                 if url[0] != 'https':
                     raise ValidationError('entityId must be a URL with https schema')
+        elif self.args.subcommand == 'signED':
+            self.args.input_fn = self.args.input.name
+            self.args.input.close()
+

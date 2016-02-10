@@ -156,7 +156,8 @@ class PEP:
         for cert_pem in self.getCerts(ed, 'SP'):   # certs in SPSSODescriptor elements
             cert = XY509cert(cert_pem)
             if not cert.isNotExpired():
-                raise CertExpiredError('Certificate is expired')
+                raise CertExpiredError('Certificate is expired since ' + cert.notValidAfter() +
+                                       '; subject: ' + cert.getSubject_str)
             x509storeContext = crypto.X509StoreContext(SP_trustStore.x509store, cert.cert)
             try:
                 x509storeContext.verify_certificate()
@@ -182,8 +183,8 @@ def run_me(testrunnerInvocation=None):
     pep = PEP(invocation)
     try:
         policyDict = pep.getPolicyDict(invocation)
-    except ValidationError as e:
-        logging.log(exception_lvl, str(e) + '\nterminating PEP.')
+    except Exception as e:
+        logging.log('CRITICAL', str(e) + '\nterminating PEP.')
         raise
     logging.debug('initialize IDP CA cert store')
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')
@@ -227,9 +228,14 @@ def run_me(testrunnerInvocation=None):
             gitHandler.move_to_rejected(filename)
             pep.file_counter_rejected += 1
             gitHandler.add_reject_message(filename_base, str(e))
-    logging.log(exception_lvl, 'files in request queue processed: ' + str(pep.file_counter) + \
-                     '; accepted: ' + str(pep.file_counter_accepted) + \
-                     '; rejected: ' + str(pep.file_counter_rejected) + '.')
+
+    if pep.file_counter == 0 or testrunnerInvocation:
+        summary_loglevel = LOGLEVELS['DEBUG']
+    else:
+        summary_loglevel = LOGLEVELS['INFO']
+    logging.log(summary_loglevel, 'files in request queue processed: ' + str(pep.file_counter) + \
+                '; accepted: ' + str(pep.file_counter_accepted) + \
+                '; rejected: ' + str(pep.file_counter_rejected) + '.')
 
 
 if __name__ == '__main__':

@@ -59,11 +59,12 @@ class PAtool:
                 self.signED(PROJDIR_ABS, fd)
 
 
-    def signED(self, projdir_abs, ed_fd):
+    def signED(self, fn):
         """ Validate XML-Schema and sign with enveloped signature.  """
-        ed = SAMLEntityDescriptor(ed_fd)
+        with open(fn) as ed_fd:
+            ed = SAMLEntityDescriptor(ed_fd)
         ed.validate_xsd()
-        unsigned_contents = ed_fd.read()
+        unsigned_contents = ed.get_xml_str()
         md_namespace_prefix = ed.get_namespace_prefix()
         signed_contents = creSignedXML(unsigned_contents,
                                        sig_type='enveloped',
@@ -79,14 +80,13 @@ class PAtool:
         logging.debug('creating delete request for entityID ' + self.args.entityid)
         entitydescriptor = SAMLEntityDescriptor(delete_entityid=self.args.entityid)
 
-        unsigned_xml = self.mk_temp_filename() + '.xml'
-        logging.debug('writing unsigned ED to ' + unsigned_xml)
-        with open(unsigned_xml, 'w') as fd:
+        unsigned_xml_fn = self.mk_temp_filename() + '.xml'
+        logging.debug('writing unsigned ED to ' + unsigned_xml_fn)
+        with open(unsigned_xml_fn, 'w') as fd:
             fd.write(entitydescriptor.get_xml_str())
-        with open(unsigned_xml, 'r') as fd:
-            logging.debug('signing ED to ' + unsigned_xml)
-            self.signED(PROJDIR_ABS, fd)
-        os.remove(unsigned_xml)
+        logging.debug('signing ED to ' + unsigned_xml_fn)
+        self.signED(unsigned_xml_fn)
+        os.remove(unsigned_xml_fn)
 
 
     def revokeCert(self):
@@ -152,8 +152,7 @@ def run_me(testrunnerInvocation=None):
     if (invocation.args.subcommand == 'createED'):
         patool.createED()
     elif (invocation.args.subcommand == 'signED'):
-        patool.signED(PROJDIR_ABS, invocation.args.input)
-        invocation.args.input.close()
+        patool.signED(invocation.args.input_fn)
     #elif (invocation.args.subcommand == 'extractED'):
     #    patool.extractED()
     elif (invocation.args.subcommand == 'deleteED'):
