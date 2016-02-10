@@ -53,10 +53,8 @@ class PAtool:
         with open(unsigned_fn, 'w') as fd:
             fd.write(entitydescriptor.get_xml_str())
         if self.args.sign:
-            unsigned_fn = os.path.join(self.args.output_dir, entitydescriptor.get_filename())
-            with open(unsigned_xml, 'r') as fd:
-                logging.debug('signing ED to ' + self.args.signed_output)
-                self.signED(PROJDIR_ABS, fd)
+            logging.debug('signing ED')
+            self.signED(unsigned_fn)
 
 
     def signED(self, fn):

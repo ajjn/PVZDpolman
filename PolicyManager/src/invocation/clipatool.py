@@ -22,7 +22,7 @@ class CliPatool(AbstractInvocation):
             help='directory of signed output file. Filename is derived from entityId')
         self._parser_create.add_argument('-r', '--samlrole', dest='samlrole',
                                          required=True, choices=('IDP', 'SP'))
-        self._parser.add_argument('-s', '--sign', dest='sign', action="store_true",
+        self._parser_create.add_argument('-s', '--sign', dest='sign', action="store_true",
              help='sign after create')
         self._parser_create.add_argument('-S', '--entityidSuffix', dest='entityid_suffix', default='',
             help="used to distinguish multiple entities with a single FQDN")
