@@ -222,7 +222,7 @@ def run_me(testrunnerInvocation=None):
                 pep.validateDomainNames(ed, allowedDomains)
                 logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
-            gitHandler.move_to_accepted(filename)
+            gitHandler.move_to_accepted(filename, xml_sig_verifyer_response.sigdata)
             pep.file_counter_accepted += 1
         except (ValidationError, signxml.InvalidInput, InputValueError) as e:
             logging.log(exception_lvl, str(e))

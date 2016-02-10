@@ -29,10 +29,11 @@ class GitHandler:
         self.repo.index.add([os.path.join(self.deletedpath, os.path.basename(file))])
         self.repo.index.commit('deleted')
 
-    def move_to_accepted(self, file):
+    def move_to_accepted(self, file, sigdata):
         """ the accepted directory must be outside git to prevent any manipulation from outside """
         logging.debug('moving to accept path')
-        shutil.copy(os.path.join(self.repo_dir_abs, file), self.pepout_dir)
+        with open(os.path.join(self.pepout_dir, os.path.basename(file)), 'w') as fd:
+            fd.write(sigdata)
         self.repo.index.remove([file])
         self.repo.index.commit('accepted')
 
