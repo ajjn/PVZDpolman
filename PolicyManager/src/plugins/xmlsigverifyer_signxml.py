@@ -35,6 +35,13 @@ class XmlSigVerifyerSignxml(XmlSigVerifyerAbstract):
         except signxml.InvalidInput:
             logging.info('Invalid input in ' + xml_file_name)
             raise
-        return XY509cert.pem_remove_rfc7468_delimiters(cert,
-                                                       optional_delimiter=True,
-                                                       remove_whitespace=True)
+
+        signed_data_bytes = ElementTree.tostring(verified_et_element,
+                                                 xml_declaration=True,
+                                                 encoding=localconfig.XML_ENCODING)
+        signed_data_str = signed_data_bytes.decode(localconfig.XML_ENCODING)
+        cert_b64 = XY509cert.pem_remove_rfc7468_delimiters(cert,
+                                                           optional_delimiter=True,
+                                                           remove_whitespace=True)
+        r = XmlSigVerifyerResponse(signed_data_str, cert_b64)
+        return r

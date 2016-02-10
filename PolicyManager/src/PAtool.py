@@ -127,9 +127,9 @@ class PAtool:
         with open(fn, 'w') as f:
             f.write(x)
         xml_sig_verifyer = XmlSigVerifyer();
-        signerCertificateEncoded = xml_sig_verifyer.verify(fn, verify_file_extension=False)
+        xml_sig_verifyer_response = xml_sig_verifyer.verify(fn, verify_file_extension=False)
         x509cert = XY509cert('-----BEGIN CERTIFICATE-----\n' + \
-             signerCertificateEncoded + \
+             xml_sig_verifyer_response.signer_cert_pem + \
              '\n-----END CERTIFICATE-----\n')
         x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
         pmp_input = '[\n{"record": ["userprivilege", "{cert}%s", "%s", "%s"], "delete": false}\n]' % \

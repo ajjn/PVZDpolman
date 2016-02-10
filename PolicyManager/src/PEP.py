@@ -62,12 +62,13 @@ class PEP:
 
     def validateSignature(self, filename_abs) -> str:
         # verify whether the signature is valid
+
         xml_sig_verifyer = XmlSigVerifyer(testhint='PEPrequest');
-        signerCertificateEncoded = xml_sig_verifyer.verify(filename_abs)
+        xml_sig_verifyer_response = xml_sig_verifyer.verify(filename_abs)
         #if self.verbose:
         #    cert = XY509cert(signerCertificateEncoded, inform='DER') # TODO: check encoding
         #    print('Subject CN: ' + cert.getIssuer_str)
-        return signerCertificateEncoded
+        return xml_sig_verifyer_response
 
     def getOrgID(self, signerCert, policyDict) -> str:
         """ return associated organizazions for signer. There are two possible paths:
@@ -213,9 +214,9 @@ def run_me(testrunnerInvocation=None):
                 ed.validate_xsd()
                 ed.validate_schematron()
                 logging.debug('validating signature')
-                signerCert = pep.validateSignature(filename_abs)
+                xml_sig_verifyer_response = pep.validateSignature(filename_abs)
                 logging.debug('validating signer cert, loading allowed domains')
-                org_id = pep.getOrgID(signerCert, policyDict)
+                org_id = pep.getOrgID(xml_sig_verifyer_response.signer_cert_pem, policyDict)
                 logging.debug('validating signer\'s privileges to use domain names in URLs')
                 allowedDomains = pep.getAllowedDomainsForOrg(org_id, policyDict)
                 pep.validateDomainNames(ed, allowedDomains)

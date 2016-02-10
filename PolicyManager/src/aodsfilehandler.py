@@ -52,15 +52,15 @@ class AODSFileHandler():
         if self._aodsFile[-4:] == '.xml':
             # verify whether the signature is valid
             xml_sig_verifyer = XmlSigVerifyer(testhint='aods signature');
-            signerCertificateEncoded = xml_sig_verifyer.verify(self._aodsFile)
+            xml_sig_verifyer_response = xml_sig_verifyer.verify(self._aodsFile)
             # verify whether the signer is authorized
             if not os.path.isfile(self.trustCertsFile):
                 raise ValidationError('Trust certs file not found: %s' % self.trustCertsFile)
             with open(self.trustCertsFile) as f:
                 trustCerts = json.loads(f.read())
-            if signerCertificateEncoded not in trustCerts:
+            if xml_sig_verifyer_response.signer_cert_pem not in trustCerts:
                 raise ValidationError("Signature certificate of policy journal not in trusted list. "
-                                      "Certificate:\n" + signerCertificateEncoded)
+                                      "Certificate:\n" + xml_sig_verifyer_response.signer_cert_pem)
             if self.list_trustedcerts:
                 self.do_list_trustedcerts(trustCerts, signerCertificateEncoded)
             # get contents

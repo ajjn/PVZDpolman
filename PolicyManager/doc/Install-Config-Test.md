@@ -58,3 +58,8 @@ The key file and directory locations for the PolicyManager are:
 * REPO_DIR        (Repository root)
 * TRUSTEDCERTS    (List of signing certificates for the policy journal)
 
+# Plugins
+XMLDsig can be implemented by different libraries installed as modules in the plug-in directory.
+Currently there are 2 plugins:
+1. MOA-SP + the Austrian citizen card security layer, doing XADeS: https://joinup.ec.europa.eu/site/moa-idspss/
+2. Python signxml, a XMLDsig implementiaton, currently only used for internal testing: https://github.com/kislyuk/signxml
