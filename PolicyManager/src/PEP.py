@@ -183,7 +183,7 @@ def run_me(testrunnerInvocation=None):
     try:
         policyDict = pep.getPolicyDict(invocation)
     except Exception as e:
-        logging.log('CRITICAL', str(e) + '\nterminating PEP.')
+        logging.log( LOGLEVELS['CRITICAL'], str(e) + '\nterminating PEP.')
         raise
     logging.debug('initialize IDP CA cert store')
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')

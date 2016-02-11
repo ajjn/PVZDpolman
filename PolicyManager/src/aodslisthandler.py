@@ -65,19 +65,29 @@ class AodsListHandler:
         logging.debug("0 seedVal: " + seedVal_bytes.decode('ascii'))
         self.aodsFileHandler.create({"AODS": [wrapperRec.getRec(0, seedVal_bytes.decode('ascii'))]}, self.args.xmlsign)
 
-    def update_policy_dict(self, policyDict, rec):
-        if rec.rectype == "userprivilege":
-            # attr[0] is a list; must handle insert/update delete explicitly
+    def update_policy_dict(self, policyDict, rec, deleteflag):
+        if deleteflag:
             try:
-                orgids = policyDict["userprivilege"][rec.primarykey][0]
+                del policyDict[rec.rectype][rec.primarykey]
             except KeyError:
-                orgids = []
-            if rec.attr[0] not in orgids:
-                orgids += [rec.attr[0]]
-                rec.attr[0] = orgids
-            policyDict[rec.rectype].update({rec.primarykey: rec.attr})
+                raise HashChainError('Input error: deleting record without previous entry: ' + rec.rectype + ', ' + rec.primarykey)
         else:
-            policyDict[rec.rectype].update({rec.primarykey: rec.attr})
+            try:
+                if rec.rectype == "userprivilege":
+                    # attr[0] is a list; must handle insert/update delete explicitly
+                    try:
+                        orgids = policyDict["userprivilege"][rec.primarykey][0]
+                    except KeyError:
+                        orgids = []
+                    if rec.attr[0] not in orgids:
+                        orgids += [rec.attr[0]]
+                        rec.attr[0] = orgids
+                    policyDict[rec.rectype].update({rec.primarykey: rec.attr})
+                else:
+                    policyDict[rec.rectype].update({rec.primarykey: rec.attr})
+            except KeyError as e:
+                logging.error(str(wrap) + ' ' + str(rec), file=sys.stderr)
+                raise e
 
     def aods_read(self) -> dict:
         '''   read aods from input file and transform into policyDict structure
@@ -103,17 +113,7 @@ class AodsListHandler:
                 continue
             if wrap.validateWrap(self.prevHash) != True:
                 raise HashChainError('AODS hash chain is broken -> data not trustworthy, revert to previous version')
-            if wrap.deleteflag:
-                try:
-                    del policyDict[rec.rectype][rec.primarykey]
-                except KeyError:
-                    raise HashChainError('Input error: deleting record without previous entry: ' + rec.rectype + ', ' + rec.primarykey)
-            else:
-                try:
-                    self.update_policy_dict(policyDict, rec)
-                except KeyError as e:
-                    logging.error(str(wrap) + ' ' + str(rec), file=sys.stderr)
-                    raise e
+            self.update_policy_dict(policyDict, rec, wrap.deleteflag)
         if getattr(self.args, 'journal', False):
             output.write(']')
             output.close()
