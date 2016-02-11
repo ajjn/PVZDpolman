@@ -11,7 +11,7 @@ __author__ = 'r2h2'
 
 class WrapperRecord:
     """ Create an object from either input record or an aods record.
-        A wrapper record is the list header that provides administrative such as the hash,
+        A wrapper record is the list header that provides administrative data such as the hash,
         sequence number and delete flag around content records, followed by the datetimestamp,
         registrant and submitter.
     """

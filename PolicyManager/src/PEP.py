@@ -70,25 +70,23 @@ class PEP:
         #    print('Subject CN: ' + cert.getIssuer_str)
         return xml_sig_verifyer_response
 
-    def getOrgID(self, signerCert, policyDict) -> str:
-        """ return associated organizazions for signer. There are two possible paths:
-                signer-cert -> portaladmin -> org
-                signer-cert -> identity-link/ssid -> portaladmin -> org (not implemented)
+    def getOrgIDs(self, signerCert, policyDict) -> str:
+        """ return associated organizations for signer. There are two possible paths:
+                signer-cert -> portaladmin -> [orgid]
+                signer-cert -> identity-link/ssid -> portaladmin -> [orgid] (not implemented)
         """
         try:
-            org_id = policyDict["userprivilege"]['{cert}'+signerCert][0]
+            org_ids = policyDict["userprivilege"]['{cert}'+signerCert][0]
         except KeyError:
             raise UnauthorizedSignerError('Signer certificate not found in policy directory')
-        return org_id
+        return org_ids
 
-    def getAllowedDomainsForOrg(self, org_id, policyDict) -> list:
-        """ return allowed domains for signer. There are two possible paths:
-                signer-cert -> portaladmin -> org -> domain
-                signer-cert -> identity-link/ssid -> portaladmin -> org -> domain (not implemented)
+    def getAllowedDomainsForOrgs(self, org_ids, policyDict) -> list:
+        """ return allowed domains for a list of organizations.
         """
         allowedDomains = []
         for dn in policyDict["domain"].keys():
-            if policyDict["domain"][dn][0] == org_id:
+            if policyDict["domain"][dn][0] in org_ids:
                 allowedDomains.append(dn)
         return allowedDomains
 
@@ -216,9 +214,9 @@ def run_me(testrunnerInvocation=None):
                 logging.debug('validating signature')
                 xml_sig_verifyer_response = pep.validateSignature(filename_abs)
                 logging.debug('validating signer cert, loading allowed domains')
-                org_id = pep.getOrgID(xml_sig_verifyer_response.signer_cert_pem, policyDict)
+                org_ids = pep.getOrgIDs(xml_sig_verifyer_response.signer_cert_pem, policyDict)
                 logging.debug('validating signer\'s privileges to use domain names in URLs')
-                allowedDomains = pep.getAllowedDomainsForOrg(org_id, policyDict)
+                allowedDomains = pep.getAllowedDomainsForOrgs(org_ids, policyDict)
                 pep.validateDomainNames(ed, allowedDomains)
                 logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
