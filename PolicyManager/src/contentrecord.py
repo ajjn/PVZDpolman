@@ -18,8 +18,8 @@ class ContentRecord:
     def validateRec(self, dir, deleteflag):
         if not isinstance(self.primarykey, str): raise InputFormatError('primary key of record must be of type string')
         if self.primarykey == '': raise InputValueError('primary key of record must not be empty')
-        if deleteflag and dir[self.rectype][self.primarykey] is None:
-            raise InputValueError('adding delete command for non-existing record')
+        if deleteflag and self.primarykey not in dir[self.rectype]:
+            raise InputValueError('delete command for non-existing record, rec=' + ', '.join(self.raw))
         if self.rectype == "domain":
             if len(self.attr) != 1: raise InputFormatError('domain record must have exactly 1 attribute (the org-id)')
             if not isinstance(self.attr[0], str):

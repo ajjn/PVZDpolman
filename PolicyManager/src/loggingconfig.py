@@ -11,7 +11,8 @@ class LoggingConfig:
                  module: str,
                  console=True,
                  console_level=logging.INFO,
-                 file_level=logging.DEBUG):
+                 file_level=logging.DEBUG,
+                 mode='a'):
         logdir = os.environ.get('LOGDIR', os.path.abspath(os.path.join('log')))
         if not os.path.exists(logdir):
             os.makedirs(logdir)
@@ -37,7 +38,7 @@ class LoggingConfig:
                       'formatter': 'long',
                       'level': file_level,
                       'filename': self.LOGFILENAME,
-                      'mode': 'a',
+                      'mode': mode,
                 },
             },
             loggers = {'': handlers_dict},

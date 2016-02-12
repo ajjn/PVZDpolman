@@ -10,6 +10,7 @@ from datetime import datetime
 __author__ = 'r2h2'
 assert sys.version_info >= (3,4), 'modules used here support unicode and require python 3. Tested version is 3.4.3'
 
+
 class AodsListHandler:
     ''' The append-only data structure is agnostic of the record type, which is defined in as content record. Its
         primitives are create, append and read and scretch.
@@ -22,6 +23,7 @@ class AodsListHandler:
         self.lastSeq = None
         self.lastHash = None
         self.prevHash = None
+
 
     def aods_append(self):
         try:
@@ -46,7 +48,7 @@ class AodsListHandler:
             inputRec = InputRecord(inputDataRaw)
             wrapperRec = WrapperRecord('elements', inputRec, self.args)
             inputRecSeq += 1
-            policyDict = self.aods_read()  # get latest version
+            policyDict = self.aods_read(use='internal')  # get latest version
             logging.debug("%d rectype=%s pk=%s" % (inputRecSeq, inputRec.rec.rectype, inputRec.rec.primarykey))
             inputRec.validate(policyDict)
             lastHash = self.aods['AODS'][self.lastSeq][0]
@@ -55,8 +57,12 @@ class AodsListHandler:
             self.aods['AODS'].append(wrapperRec_final)
         self.aodsFileHandler.save(self.aods, self.args.xmlsign)
 
+
     def aods_create(self):
-        inputDataRaw = {"record": ["header", "", "columns: hash, seq, delete, [rectype, pk, a1, a2, ..], datetimestamp, registrant, submitter]" ], "delete": False}
+        inputDataRaw = {"record": ["header", "",
+                                   "columns: hash, seq, delete, [rectype, pk, a1, a2, ..], "
+                                   "datetimestamp, registrant, submitter]" ],
+                        "delete": False}
         inputRec = InputRecord(inputDataRaw)
         wrapperRec = WrapperRecord('elements', inputRec, self.args)
         seedVal_str = str(datetime.now())
@@ -65,31 +71,59 @@ class AodsListHandler:
         logging.debug("0 seedVal: " + seedVal_bytes.decode('ascii'))
         self.aodsFileHandler.create({"AODS": [wrapperRec.getRec(0, seedVal_bytes.decode('ascii'))]}, self.args.xmlsign)
 
-    def update_policy_dict(self, policyDict, rec, deleteflag):
+
+    def write_entry_into_policy_dict(self, policyDict, new_rec, deleteflag):
+        """ Update the policy directory with a journal entry, that may insert a new entry or
+            update or delete and existing one. Multiple userprivilege records with the same key
+            are accumulated into a single entry with a list of orgids.
+        """
         if deleteflag:
-            try:
-                del policyDict[rec.rectype][rec.primarykey]
-            except KeyError:
-                raise HashChainError('Input error: deleting record without previous entry: ' + rec.rectype + ', ' + rec.primarykey)
+            if new_rec.rectype == "userprivilege":
+                # attr[0] is a list; delete updates list of orgids if len(orgids) > 1
+                try:
+                    oldrec_attr = policyDict["userprivilege"][new_rec.primarykey]
+                except KeyError:
+                    raise InputValueError('Input error: deleting userprivilege record without previous entry for this cert: ' +
+                                          new_rec.primarykey + ', orgid: ' + new_rec.attr[0])
+                orgids = oldrec_attr[0]
+                if new_rec.attr[0] in orgids:
+                    orgids.remove(new_rec.attr[0])
+                else:
+                    raise InputValueError('Input error: deleting userprivilege record without orgid for this cert: ' +
+                                          new_rec.primarykey + ', orgid: ' + new_rec.attr[0])
+                if len(orgids) > 0:
+                    new_rec.attr[0] = orgids
+                    policyDict[new_rec.rectype].update({new_rec.primarykey: new_rec.attr})
+                else:
+                    del policyDict[new_rec.rectype][new_rec.primarykey]
+            else:
+                try:
+                    del policyDict[new_rec.rectype][new_rec.primarykey]
+                except KeyError:
+                    raise InputValueError('Input error: deleting record without previous entry: ' +
+                                          new_rec.rectype + ', ' + new_rec.primarykey)
         else:
             try:
-                if rec.rectype == "userprivilege":
-                    # attr[0] is a list; must handle insert/update delete explicitly
+                if new_rec.rectype == "userprivilege":
+                    # attr[0] is a list of orgids; if record exists for this certificate then
+                    # merge existing orgids with the new one
+                    # note: using dict.update() to either insert or overwrite the dict entry
                     try:
-                        orgids = policyDict["userprivilege"][rec.primarykey][0]
+                        orgids = policyDict["userprivilege"][new_rec.primarykey][0]
                     except KeyError:
                         orgids = []
-                    if rec.attr[0] not in orgids:
-                        orgids += [rec.attr[0]]
-                        rec.attr[0] = orgids
-                    policyDict[rec.rectype].update({rec.primarykey: rec.attr})
-                else:
-                    policyDict[rec.rectype].update({rec.primarykey: rec.attr})
+                    if new_rec.attr[0] not in orgids:  # insert orgid
+                        orgids += [new_rec.attr[0]]
+                        new_rec.attr[0] = orgids
+                    else: # duplicate orgid, keep previous state
+                        new_rec.attr[0] = policyDict["userprivilege"][new_rec.primarykey][0]
+                policyDict[new_rec.rectype].update({new_rec.primarykey: new_rec.attr})
             except KeyError as e:
-                logging.error(str(wrap) + ' ' + str(rec), file=sys.stderr)
+                logging.error(str(wrap) + ' ' + str(new_rec), file=sys.stderr)
                 raise e
 
-    def aods_read(self) -> dict:
+
+    def aods_read(self, use='external') -> dict:
         '''   read aods from input file and transform into policyDict structure
               option: output policiy directory or journal in various formats
         '''
@@ -98,12 +132,12 @@ class AodsListHandler:
         if self.aods['AODS'][0][3][0] != 'header':
             raise ValidationError('Cannot locate aods header record')
         policyDict = {"domain": {}, "issuer": {}, "organization": {}, "revocation": {}, "userprivilege": {}}
-        if getattr(self.args, 'journal', False):
-            output = sys.stdout if self.args.output is None else self.args.output
-            output.write('[\n')
+        if use == 'external' and getattr(self.args, 'journal', False):
+            dump_journal_fd = open(self.args.journal, 'w')
+            dump_journal_fd.write('[\n')
         for w in self.aods['AODS']:
-            if getattr(self.args, 'journal', False):
-                output.write(json.dumps(w) + '\n')
+            if use == 'external' and getattr(self.args, 'journal', False):
+                dump_journal_fd.write(json.dumps(w) + '\n')
             wrap = WrapperRecord('rawStruct', w, self.args)
             rec = ContentRecord(wrap.record)
             self.prevHash = self.lastHash
@@ -113,21 +147,26 @@ class AodsListHandler:
                 continue
             if wrap.validateWrap(self.prevHash) != True:
                 raise HashChainError('AODS hash chain is broken -> data not trustworthy, revert to previous version')
-            self.update_policy_dict(policyDict, rec, wrap.deleteflag)
-        if getattr(self.args, 'journal', False):
-            output.write(']')
-            output.close()
-        if getattr(self.args, 'poldirhtml', False):
-            output = sys.stdout if self.args.output is None else self.args.output
-            html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" href="../tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
-            tabhtml = json2html.convert(json=policyDict, table_attributes='class="pure-table"')
-            output.write(html % tabhtml)
-            output.close()
-        if getattr(self.args, 'poldirjson', False):
-            output = sys.stdout if self.args.output is None else self.args.output
-            output.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
-            output.close()
+            self.write_entry_into_policy_dict(policyDict, rec, wrap.deleteflag)
+        if use == 'external':   # avoid dumps for each append iteration
+            if use == 'external' and getattr(self.args, 'journal', False):
+                dump_journal_fd.write(']\n')
+                dump_journal_fd.close()
+            self.dump_poldir(policyDict)
         return policyDict
+
+
+    def dump_poldir(self, policyDict):
+        if getattr(self.args, 'poldirhtml', False):
+            html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" ' \
+                   'href="../tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
+            tabhtml = json2html.convert(json=policyDict, table_attributes='class="pure-table"')
+            self.args.poldirhtml.write(html % tabhtml)
+            self.args.poldirhtml.close()
+        if getattr(self.args, 'poldirjson', False):
+            self.args.poldirjson.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
+            self.args.poldirjson.close()
+
 
     def aods_scratch(self):
         self.aodsFileHandler.removeFile()

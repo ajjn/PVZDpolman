@@ -30,18 +30,16 @@ class CliPmp(AbstractInvocation):
         # create the parser for the "append" command
         self._parser_append = _subparsers.add_parser('append', help='append a record to the journal')
         self._parser_append.add_argument('input', type=argparse.FileType('r'),
-                                         help='file containing the records to be added in JSON')
+             help='file containing the records to be added in JSON')
 
         # create the parser for the "read" command
         self._parser_append = _subparsers.add_parser('read', help='read, verify and transform the journal')
-        self._parser_append.add_argument('-P', '--poldirhtml', action="store_true",
+        self._parser_append.add_argument('-P', '--poldirhtml', type=argparse.FileType('w'),
              help='output policy directory as HTML)')
-        self._parser_append.add_argument('-p', '--poldirjson', action="store_true",
+        self._parser_append.add_argument('-p', '--poldirjson', type=argparse.FileType('w'),
              help='dump policy directory as JSON)')
-        self._parser_append.add_argument('-j', '--journal', action="store_true",
+        self._parser_append.add_argument('-j', '--journal', type=argparse.FileType('w'),
              help='output Journal as JSON)')
-        self._parser_append.add_argument('output', type=argparse.FileType('w'), nargs='?', default=None,
-             help='dump policy directory/journal file)')
         # TODO: implement range and diff listings
         #self._parser_append.add_argument('-r', '--range', choices=['all', 'from', 'new'], default='all',
         #                                 help='read all (starting with the big bang), or new (what has changes since last time)')
@@ -50,7 +48,7 @@ class CliPmp(AbstractInvocation):
         # create the parser for the "revokeCert" command
         self._parser_revoke = _subparsers.add_parser('revokeCert', help='revoke certificate')
         self._parser_revoke.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None,
-                                         help='certificate to be revoked')
+             help='certificate to be revoked')
 
 
         if (testargs):
@@ -60,7 +58,8 @@ class CliPmp(AbstractInvocation):
             self.args = self._parser.parse_args()  # regular case: use sys.argv
         self.args.list_trustedcerts = False  # only used in PEP
         if self.args.subcommand == 'read':
-            if sum(bool(x) for x in (getattr(self.args, 'poldirhtml', False),
-                                     getattr(self.args, 'poldirjson', False),
-                                     getattr(self.args, 'journal', False))) > 1:
-                raise ValidationError("-j/--journal, -P/--poldirhtml and -p/--poldirjson are mutually exclusive")
+            if getattr(self.args, 'journal', False):
+                # close file an pass as name
+                fn = self.args.journal.name
+                self.args.journal.close()
+                self.args.journal = fn

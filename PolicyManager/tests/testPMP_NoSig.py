@@ -15,7 +15,7 @@ __author__ = 'r2h2'
 
 # Logging setup for unit tests
 logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
-logging_config = loggingconfig.LoggingConfig(logbasename)
+logging_config = loggingconfig.LoggingConfig(logbasename, mode='w')
 logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
 
 class Test00_cli(unittest.TestCase):
@@ -42,27 +42,53 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
         logging.debug('=== create done.')
 
-        inputfile = os.path.abspath('testdata/PMP/ns01/pmp_initial_policy.json')
+        inputfile = os.path.abspath('testdata/PMP/ns01/append01_OK.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
         cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
-        logging.debug('=== reading aods file, dumping policy directory as json .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'read', '--poldirjson',
-                            os.path.abspath('work/PMP/ns01/poldir.json')])
-        PMP.run_me(cliClient)
+        inputfile = os.path.abspath('testdata/PMP/ns01/append02_delete_non_exist_rec.json')
+        logging.debug('=== appending input file %s .. ' % inputfile)
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        with self.assertRaises(InputValueError) as context:
+            PMP.run_me(cliClient)
+        logging.debug('=== append done.')
 
-        logging.debug('=== reading aods file, dumping policy directory as html .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'read', '--poldirhtml',
-                            os.path.abspath('work/PMP/ns01/poldir.html')])
-        PMP.run_me(cliClient)
+        inputfile = os.path.abspath('testdata/PMP/ns01/append03_delete_non_exist_orgid.json')
+        logging.debug('=== appending input file %s .. ' % inputfile)
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        with self.assertRaises(InputValueError) as context:
+            PMP.run_me(cliClient)
+        logging.debug('=== append done.')
 
-        logging.debug('=== reading aods file, dumping journal as json .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'read', '--journal',
-                            os.path.abspath('work/PMP/ns01/pol_journal.json')])
+        inputfile = os.path.abspath('testdata/PMP/ns01/append04_OK.json')
+        logging.debug('=== appending input file %s .. ' % inputfile)
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
         PMP.run_me(cliClient)
-        assertNoDiff('poldir.json', subdir='PMP/ns01')
+        logging.debug('=== append done.')
+
+        logging.debug('=== reading & dumping policy journal as json, directory as json & html .. ')
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'read',
+                            '--poldirjson', os.path.abspath('work/PMP/ns01/poldir1.json'),
+                            '--poldirhtml', os.path.abspath('work/PMP/ns01/poldir1.html'),
+                            '--journal', os.path.abspath('work/PMP/ns01/pol_journal1.json')])
+        PMP.run_me(cliClient)
+        assertNoDiff('poldir1.json', subdir='PMP/ns01')
+
+        inputfile = os.path.abspath('testdata/PMP/ns01/append05_OK.json')
+        logging.debug('=== appending input file %s .. ' % inputfile)
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        PMP.run_me(cliClient)
+        logging.debug('=== append done.')
+
+        logging.debug('=== reading & dumping policy journal as json, directory as json & html .. ')
+        cliClient = CliPmp(['-v', '-a', policy_journal, 'read',
+                            '--poldirjson', os.path.abspath('work/PMP/ns01/poldir2.json'),
+                            '--poldirhtml', os.path.abspath('work/PMP/ns01/poldir2.html'),
+                            '--journal', os.path.abspath('work/PMP/ns01/pol_journal2.json')])
+        PMP.run_me(cliClient)
+        assertNoDiff('poldir2.json', subdir='PMP/ns01')
 
 
 class Test02_broken_hash_chain(unittest.TestCase):
