@@ -172,7 +172,7 @@ def run_me(testrunnerInvocation=None):
         invocation = testrunnerInvocation
         exception_lvl = LOGLEVELS['DEBUG']
     else:
-        invocation = CliPepInvocation()
+        invocation = CliPep()
         logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
         logging_config = loggingconfig.LoggingConfig(logbasename,
                                                      console=False,

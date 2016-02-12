@@ -20,7 +20,7 @@ class CliPep(AbstractInvocation):
              help='Level for file logging')
         self._parser.add_argument('-n', '--noxmlsign', action="store_true",
              help='do not sign policy journal with xml signature')
-        self._parser.add_argument('-o', '--pepoutdir', dest='pepoutdir', required=True,
+        self._parser.add_argument('-o', '--pepoutdir', dest='pepoutdir',
              help='directory where PEP stores accepted entity descriptors')
         self._parser.add_argument('-r', '--repodir', dest='repodir', default='.',
              help='root path of git repo containing the publication request')
