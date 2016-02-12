@@ -31,32 +31,32 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         policydir_json = 'work/PMP/ws01/poldir.json'
         policydir_html = 'work/PMP/ws01/poldir.html'
         logging.debug('  removing existing aods file %s .. ' % pol_journal)
-        cliClient = CliPmp(['-v', '-a', pol_journal, '-x', 'scratch'])
+        cliClient = CliPmp(['-v', '-a', pol_journal, 'scratch'])
         PMP.run_me(cliClient)
 
         logging.debug('  creating aods file .. ')
-        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, '-x', 'create']);
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'create']);
         PMP.run_me(cliClient)
 
         inputfile = os.path.abspath('testdata/PMP/ws01/pmp_initial_policy.json')
         logging.debug('  appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, '-x', 'append',
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'append',
                                       inputfile])
         PMP.run_me(cliClient)
 
         logging.debug('  reading policy journal, exporting policy journal as json.')
-        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, '-x', 'read', \
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'read', \
                                    '--journal', policyjournal_export])
         PMP.run_me(cliClient)
 
         logging.debug('  reading policy journal, exporting policy directory as json.')
-        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, '-x', 'read', \
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'read', \
                                    '--poldirjson', policydir_json])
         PMP.run_me(cliClient)
         assertNoDiff('poldir.json', subdir=subdir)
 
         logging.debug('  reading policy journal, exporting policy directory as html.')
-        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, '-x', 'read', \
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'read', \
                                    '--poldirhtml', policydir_html])
         PMP.run_me(cliClient)
 

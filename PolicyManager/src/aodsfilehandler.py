@@ -17,9 +17,9 @@ class AODSFileHandler():
         self.verbose = cliClient.args.verbose
         self.list_trustedcerts = cliClient.args.list_trustedcerts
 
-        if cliClient.args.xmlsign and self._aodsFile[-4:] != '.xml':
+        if not cliClient.args.noxmlsign and self._aodsFile[-4:] != '.xml':
             self._aodsFile += '.xml'
-        if not cliClient.args.xmlsign and self._aodsFile[-5:] != '.json':
+        if cliClient.args.noxmlsign and self._aodsFile[-5:] != '.json':
             self._aodsFile += '.json'
         self.trustCertsFile = os.path.abspath(cliClient.args.trustedcerts)
 
@@ -34,19 +34,19 @@ class AODSFileHandler():
                          'not after: ' + xy509cert.notValidAfter())
         logging.debug('--- End of list of trusted certificates.')
 
-    def create(self, s, xmlsign):
+    def create(self, s, noxmlsign):
         if os.path.exists(self._aodsFile):
             raise InvalidArgumentValueError('Must remove existing %s before creating a new AODS' %
                                             self._aodsFile)
         os.makedirs(os.path.dirname(self._aodsFile), exist_ok=True)
-        if xmlsign:
+        if noxmlsign:
+            with open(self._aodsFile, 'w') as f:
+                f.write(json.dumps(s))
+        else:
             j = json.dumps(s)
             x = creSignedXML(j, verbose=self.verbose)
             with open(self._aodsFile, 'w') as f:
                 f.write(x)
-        else:
-            with open(self._aodsFile, 'w') as f:
-                f.write(json.dumps(s))
 
     def readFile(self):
         if self._aodsFile[-4:] == '.xml':
@@ -86,15 +86,15 @@ class AODSFileHandler():
             if e.errno != 2:
                 raise e
 
-    def save(self, s, xmlsign):
-        if xmlsign:
+    def save(self, s, noxmlsign):
+        if noxmlsign:
+            with open(self._aodsFile, 'w') as f:
+                f.truncate()
+                f.write(json.dumps(s))
+        else:
             xml = creSignedXML(json.dumps(s))
             if len(xml) == 0:  # just for defense, should not happen
                 raise EmptyAODSError('Journal empty, not saved - signature failed?')
             with open(self._aodsFile, 'w') as f:
                 f.truncate()
                 f.write(xml)
-        else:
-            with open(self._aodsFile, 'w') as f:
-                f.truncate()
-                f.write(json.dumps(s))

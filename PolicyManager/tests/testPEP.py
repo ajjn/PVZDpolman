@@ -26,10 +26,10 @@ class Test00_cli(unittest.TestCase):
         logging.info('  -- Test PEP00: testing CLI interface')
         try:
             cliClient = CliPep(['-v',
-                                '-x', '-a', 'aods.json',
+                                '-a', 'aods.json',
                                 '--trustedcerts', 'certs.json',
                                 '--pepout', 'pepout',
-                                '--pubreq', 'repodir/policydir',
+                                '--repodir', 'repodir/policydir',
                                 '--list_trustedcerts',
                                 '--loglevel', 'DEBUG', ])
             self.assertEqual(cliClient.args.loglevel, logging.DEBUG)
@@ -68,12 +68,12 @@ class Test03_basic_happy_cycle(unittest.TestCase):
         repo_dir = 'work/PEP/03/policyDirectory_basic_' + localconfig.AODS_INDICATOR
         pepoutdir = 'work/PEP/03/pepout/'
         cliClient = CliPep(['--verbose',
-                            '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), '-x',
+                            '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), 
                             '--pepoutdir', pepoutdir,
-                            '--pubreq', os.path.abspath(repo_dir),
+                            '--repodir', os.path.abspath(repo_dir),
                             '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = githandler.GitHandler(cliClient.args.pubrequ,
+        gitHandler = githandler.GitHandler(cliClient.args.repodir,
                                            pepoutdir,
                                            init=True,
                                            verbose=cliClient.args.verbose)
@@ -92,12 +92,12 @@ class Test04_unauthorized_requests(unittest.TestCase):
         repo_dir = 'work/PEP/04/policyDirectory_unauth_' + localconfig.AODS_INDICATOR
         pepoutdir = 'work/PEP/04/pepout/'
         cliClient = CliPep(['--verbose',
-                            '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), '-x',
+                            '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), 
                             '--pepoutdir', 'work/pepout/',
-                            '--pubreq', os.path.abspath(repo_dir),
+                            '--repodir', os.path.abspath(repo_dir),
                             '--trustedcerts', os.path.abspath('testdata/trustedcerts.json')])
         logging.debug('    - creating fresh git repo in ' + repo_dir + ', adding test data')
-        gitHandler = githandler.GitHandler(cliClient.args.pubrequ,
+        gitHandler = githandler.GitHandler(cliClient.args.repodir,
                                            pepoutdir,
                                            init=True,
                                            verbose=cliClient.args.verbose)

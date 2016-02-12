@@ -189,15 +189,15 @@ def run_me(testrunnerInvocation=None):
     IDP_trustStore = Xy509certStore(policyDict, 'IDP')
     logging.debug('initialize SP CA cert store')
     SP_trustStore = Xy509certStore(policyDict, 'SP')
-    logging.debug('   using repo ' + invocation.args.pubrequ)
-    gitHandler = GitHandler(invocation.args.pubrequ,
+    logging.debug('   using repo ' + invocation.args.repodir)
+    gitHandler = GitHandler(invocation.args.repodir,
                             invocation.args.pepoutdir,
                             verbose=invocation.args.verbose)
     for filename in gitHandler.getRequestQueueItems():
         if not filename.endswith('.xml'):
             logging.debug('   not .xml: ignoring ' + filename)
             continue
-        filename_abs = invocation.args.pubrequ + '/' + filename
+        filename_abs = invocation.args.repodir + '/' + filename
         filename_base = os.path.basename(filename)
         pep.file_counter += 1
         try:

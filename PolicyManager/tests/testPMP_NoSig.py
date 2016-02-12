@@ -22,7 +22,7 @@ class Test00_cli(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PMPns00: testing CLI interface for create subcommand')
         try:
-            cliClient = CliPmp(['-v', '-x', '-a', 'aods.json', 'create', ])
+            cliClient = CliPmp(['-v', '-n', '-n', '-a', 'aods.json', 'create', ])
             self.assertEqual(cliClient.args.subcommand, 'create')
             self.assertEqual(cliClient.args.aods, 'aods.json')
         except SystemExit:
@@ -34,42 +34,42 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify')
         policy_journal = os.path.abspath('work/PMP/ns01/aods.json')
         logging.debug('=== removing existing aods file .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'scratch'])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'scratch'])
         PMP.run_me(cliClient)
 
         logging.debug('=== creating aods file .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'create'])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'create'])
         PMP.run_me(cliClient)
         logging.debug('=== create done.')
 
         inputfile = os.path.abspath('testdata/PMP/ns01/append01_OK.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'append', inputfile])
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         inputfile = os.path.abspath('testdata/PMP/ns01/append02_delete_non_exist_rec.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         inputfile = os.path.abspath('testdata/PMP/ns01/append03_delete_non_exist_orgid.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         inputfile = os.path.abspath('testdata/PMP/ns01/append04_OK.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'append', inputfile])
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         logging.debug('=== reading & dumping policy journal as json, directory as json & html .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'read',
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'read',
                             '--poldirjson', os.path.abspath('work/PMP/ns01/poldir1.json'),
                             '--poldirhtml', os.path.abspath('work/PMP/ns01/poldir1.html'),
                             '--journal', os.path.abspath('work/PMP/ns01/pol_journal1.json')])
@@ -78,12 +78,12 @@ class Test01_basic_happy_cycle(unittest.TestCase):
 
         inputfile = os.path.abspath('testdata/PMP/ns01/append05_OK.json')
         logging.debug('=== appending input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'append', inputfile])
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
         logging.debug('=== reading & dumping policy journal as json, directory as json & html .. ')
-        cliClient = CliPmp(['-v', '-a', policy_journal, 'read',
+        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'read',
                             '--poldirjson', os.path.abspath('work/PMP/ns01/poldir2.json'),
                             '--poldirhtml', os.path.abspath('work/PMP/ns01/poldir2.html'),
                             '--journal', os.path.abspath('work/PMP/ns01/pol_journal2.json')])
@@ -96,7 +96,7 @@ class Test02_broken_hash_chain(unittest.TestCase):
         logging.info('  -- Test PMPns02: detect broken hash chain')
         aodsfile = os.path.abspath('testdata/PMP/ns02/aods_broken_hashchain.json')
         logging.debug('reading aods file with broken hash chain .. ')
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'read'])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'read'])
         with self.assertRaises(HashChainError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
@@ -108,7 +108,7 @@ class Test03_broken_input_for_append(unittest.TestCase):
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
         inputfile = os.path.abspath('testdata/PMP/ns03/pmpinput_brokenjson.json')
         logging.debug('appending broken input file %s .. ' % inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(JSONdecodeError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + ''.join(context.exception.args))
@@ -120,7 +120,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
         inputfile = os.path.abspath('testdata/PMP/ns04/pmpinput_noarray.json')
         logging.debug('appending invalid input file ' + inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(PMPInputRecNoDictError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
@@ -128,7 +128,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         logging.info('  -- Test PMPns04/2: handle broken input for append/validation: FK references non-existing domain')
         inputfile = os.path.abspath('testdata/PMP/ns04/pmpinput_fk_invalid_domain.json')
         logging.debug('appending invalid input file ' + inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
@@ -136,7 +136,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         logging.info('  -- Test PMPns04/3: handle broken input for append/validation: wrong type of PK (bool not String)')
         inputfile = os.path.abspath('testdata/PMP/ns04/pmpinput_pk_no_str.json')
         logging.debug('appending invalid input file ' + inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
@@ -144,7 +144,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         logging.info('  -- Test PMPns04/4: handle broken input for append/validation: wrong type of PK (int not String)')
         inputfile = os.path.abspath('testdata/PMP/ns04/pmpinput_pk_no_str.json.json')
         logging.debug('appending invalid input file ' + inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputFormatError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
@@ -152,7 +152,7 @@ class Test04_broken_input_for_validation(unittest.TestCase):
         logging.info('  -- Test PMPns04/5: handle broken input for append/validation: FK in user privilege references non-existing organization')
         inputfile = os.path.abspath('testdata/PMP/ns04/pmpinput_fk_invalid_org.json.json')
         logging.debug('appending invalid input file ' + inputfile)
-        cliClient = CliPmp(['-v', '-a', aodsfile, 'append', inputfile])
+        cliClient = CliPmp(['-v', '-n', '-a', aodsfile, 'append', inputfile])
         with self.assertRaises(InputValueError) as context:
             PMP.run_me(cliClient)
         logging.debug('Expected exception caught: ' + str(context.expected) + ': ' + context.exception.args[0])
