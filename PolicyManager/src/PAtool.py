@@ -50,6 +50,8 @@ class PAtool:
         unsigned_basefn = re.sub(r'\.xml$', '.unsigned.xml', fn)
         unsigned_fn = os.path.join(self.args.output_dir, unsigned_basefn)
         logging.debug('writing EntityDescriptor to ' + unsigned_fn)
+        if not os.path.isdir(unsigned_fn):
+            raise InvalidArgumentValueError('output dir must be an existing directory')
         with open(unsigned_fn, 'w') as fd:
             fd.write(entitydescriptor.get_xml_str())
         if self.args.sign:
