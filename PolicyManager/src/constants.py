@@ -14,6 +14,7 @@ PROJDIR_ABS = os.path.abspath(PROJDIR_REL)
 
 #XML namespaces for etree
 XMLNS_MD = '{urn:oasis:names:tc:SAML:2.0:metadata}'
+XMLNS_PVZD = '{http://egov.gv.at/pvzd1.xsd}'
 
 # loglevles valid for this project
 LOGLEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}

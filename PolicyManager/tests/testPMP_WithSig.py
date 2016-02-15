@@ -27,7 +27,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         pol_journal_fn = 'pol_journal.xml'
         subdir = 'PMP/ws01/'
         pol_journal = os.path.join('work', subdir, pol_journal_fn)
-        policyjournal_export = 'work/PMP/ws01/poljournal_export.json'
+        policyjournal_export = 'work/PMP/ws01/pol_journal_export.json'
         policydir_json = 'work/PMP/ws01/poldir.json'
         policydir_html = 'work/PMP/ws01/poldir.html'
         logging.debug('  removing existing aods file %s .. ' % pol_journal)

@@ -11,7 +11,7 @@ from lxml import etree as ET
 from OpenSSL import crypto
 from aodsfilehandler import AODSFileHandler
 from aodslisthandler import AodsListHandler
-from constants import LOGLEVELS, PROJDIR_ABS, XMLNS_MD
+from constants import LOGLEVELS, PROJDIR_ABS, XMLNS_MD, XMLNS_PVZD
 from githandler import GitHandler
 from invocation.clipep import CliPep
 import loggingconfig
@@ -52,8 +52,9 @@ class PEP:
         self.file_counter_accepted = 0
         self.file_counter_rejected = 0
 
-    def isDeletionRequest(self, filename_abs):
-        return os.path.getsize(filename_abs) == 0    # TODO: replace with test for signed request with custom delete attribute
+    def isDeletionRequest(self, filename):
+        dom = ET.parse(filename)
+        return dom.getroot().get(XMLNS_PVZD + 'disposition') == 'delete'
 
     def getPolicyDict(self, invocation) -> dict:
         aodsFileHandler = AODSFileHandler(invocation)
@@ -203,7 +204,7 @@ def run_me(testrunnerInvocation=None):
         try:
             logging.debug('== processing ' + filename_base)
             if pep.isDeletionRequest(filename_abs):
-                gitHandler.move_to_deleted(filename)
+                gitHandler.move_to_deleted(filename_base)
             else:
                 logging.debug('validating XML schema')
                 with open(filename_abs) as f:
@@ -220,7 +221,7 @@ def run_me(testrunnerInvocation=None):
                 pep.validateDomainNames(ed, allowedDomains)
                 logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
-            gitHandler.move_to_accepted(filename, xml_sig_verifyer_response.sigdata)
+                gitHandler.move_to_accepted(filename_abs, xml_sig_verifyer_response.sigdata)
             pep.file_counter_accepted += 1
         except (ValidationError, signxml.InvalidInput, InputValueError) as e:
             logging.log(exception_lvl, str(e))

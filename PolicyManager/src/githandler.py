@@ -1,6 +1,7 @@
 import logging, os, shutil
 import git
 from constants import *
+from userexceptions import *
 __author__ = 'r2h2'
 
 class GitHandler:
@@ -16,6 +17,7 @@ class GitHandler:
         self.repo_dir_abs = os.path.abspath(repo_dir)
         self.pepout_dir = pepout_dir
         self.rejectedpath = os.path.join(self.repo_dir_abs, GIT_REJECTED)
+        self.requestedpath = os.path.join(self.repo_dir_abs, GIT_REQUESTQUEUE)
         self.deletedpath = os.path.join(self.repo_dir_abs, GIT_DELETED)
         self.verbose = verbose
 
@@ -25,7 +27,10 @@ class GitHandler:
 
     def move_to_deleted(self, file):
         logging.debug('deleting file from accept directory ')
-        shutil.move(os.path.join(pepout_dir, file), self.deletedpath)
+        file_to_delete = os.path.join(self.pepout_dir, file)
+        if not os.path.exists(file_to_delete):
+            raise ValidationError('rejected deletion request for non existing EntityDescriptor: '+ file)
+        shutil.move(file_to_delete, self.deletedpath)
         self.repo.index.add([os.path.join(self.deletedpath, os.path.basename(file))])
         self.repo.index.commit('deleted')
 
@@ -34,7 +39,9 @@ class GitHandler:
         logging.debug('moving to accept path')
         with open(os.path.join(self.pepout_dir, os.path.basename(file)), 'w') as fd:
             fd.write(sigdata)
-        self.repo.index.remove([file])
+        file_abs = os.path.abspath(file)
+        self.repo.index.remove([file_abs])
+        os.remove(file_abs)
         self.repo.index.commit('accepted')
 
     def move_to_rejected(self, file):
@@ -56,3 +63,11 @@ class GitHandler:
         repo = git.Repo.init(repo_dir)
         repo.index.add([os.path.join(repo_dir_abs, '*')])
         repo.index.commit('initial testdata loaded')
+
+    def add_request_message(self, filename):
+        """ used for unit tests """
+        base_fn = os.path.basename(filename)
+        target_fn = os.path.join(self.repo_dir_abs, GIT_REQUESTQUEUE, base_fn)
+        shutil.copyfile(filename, target_fn)
+        self.repo.index.add([target_fn])
+        self.repo.index.commit('add requested')

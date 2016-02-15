@@ -20,4 +20,5 @@ def assertNoDiff(testresult_filename, subdir=None):
     except AssertionError as e:
         logging.error('     result (' + testresult_filename + ')is not equal to reference data.')
         logging.debug(e)
+        raise
 
