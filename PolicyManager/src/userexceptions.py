@@ -85,6 +85,11 @@ class UnauthorizedSignerError(ValidationError):
     pass
 
 
+class UnauthorizedAODSSignerError(ValidationError):
+    """ Signer certificate of policy journal not found not found in policy directory """
+    pass
+
+
 class SignatureVerificationError(ValidationError):
     """ Signature verification failed """
     pass

@@ -21,6 +21,11 @@ logging_config = loggingconfig.LoggingConfig(logbasename)
 logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
 
 
+def check_dirs(path) -> str:
+    """ create directories in the path that do not exits """
+    os.makedirs(os.path.dir(path), exist_ok=True)
+    return path
+
 class Test00_cli(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP00: testing CLI interface')
@@ -66,7 +71,7 @@ class Test03_basic_happy_cycle(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP03: PEP happy cycle')
         repo_dir = 'work/PEP/03/policyDirectory_basic_' + localconfig.AODS_INDICATOR
-        pepoutdir = 'work/PEP/03/pepout/'
+        pepoutdir = check_dirs('work/PEP/03/pepout/')
         request_queue = os.path.join(repo_dir, constants.GIT_REQUESTQUEUE)
         cliClient = CliPep(['--verbose',
                             '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), 
@@ -103,7 +108,7 @@ class Test04_unauthorized_requests(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
         repo_dir = 'work/PEP/04/policyDirectory_unauth_' + localconfig.AODS_INDICATOR
-        pepoutdir = 'work/PEP/04/pepout/'
+        pepoutdir = check_dirs('work/PEP/04/pepout/')
         cliClient = CliPep(['--verbose',
                             '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), 
                             '--pepoutdir', pepoutdir,

@@ -58,7 +58,7 @@ class CliPatool(AbstractInvocation):
         self._parser_revoke.add_argument('-R', '--reason', dest='reason', required=True,
             help='test explaining the reason for the revocation')
         self._parser_revoke.add_argument('output', type=argparse.FileType('w'), default=None,
-            help='PMP input file)')
+            help='PMP input file')
 
         # create the parser for the "caCert" command
         self._parser_caCert = _subparsers.add_parser('caCert',
