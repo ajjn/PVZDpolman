@@ -18,3 +18,4 @@ XMLNS_PVZD = '{http://egov.gv.at/pvzd1.xsd}'
 
 # loglevles valid for this project
 LOGLEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
+LOGLEVELS_BY_INT = dict((v, k) for k, v in LOGLEVELS.items())

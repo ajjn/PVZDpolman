@@ -11,7 +11,7 @@ from lxml import etree as ET
 from OpenSSL import crypto
 from aodsfilehandler import AODSFileHandler
 from aodslisthandler import AodsListHandler
-from constants import LOGLEVELS, PROJDIR_ABS, XMLNS_MD, XMLNS_PVZD
+from constants import LOGLEVELS, LOGLEVELS_BY_INT, PROJDIR_ABS, XMLNS_MD, XMLNS_PVZD
 from githandler import GitHandler
 from invocation.clipep import CliPep
 import loggingconfig
@@ -179,6 +179,7 @@ def run_me(testrunnerInvocation=None):
                                                      console=False,
                                                      file_level=invocation.args.loglevel)
         exception_lvl = LOGLEVELS['ERROR']
+        logging.debug('logging level=' + LOGLEVELS_BY_INT[invocation.args.loglevel])
 
     pep = PEP(invocation)
     try:

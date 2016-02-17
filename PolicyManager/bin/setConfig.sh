@@ -14,18 +14,21 @@ if [[ "$ostype" == "linux-gnu" ]]; then
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
+    export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
     export LOGDIR=/var/log/pvzd
 elif [[ "$ostype" == "linux" ]]; then
     #  tested with RHEL6
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
+    export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
     export LOGDIR=/var/log/pvzd
 elif [[ "$ostype" == "darwin" ]]; then
     #  used for OSX development env
     export POLMAN_REPODIR=$PROJ_HOME/PolicyManager/tests/work/policyDirectory
     export POLMAN_PEPOUTDIR=$PROJ_HOME/PolicyManager/tests/work/pepoutdir
-    export POLMAN_AODS=$PROJ_HOME/PolicyManager/tests/work/PMPws01_aods_journal.xml
+    export POLMAN_AODS=$PROJ_HOME/PolicyManager/tests/work/PEP/03/policyDirectory_basic_MOA/policydir/pol_journal.xml
+    export POLMAN_TRUSTEDCERTS=$PROJ_HOME/PolicyManager/tests/testdata/trustedcerts.json
     export LOGDIR=$PROJ_HOME/PolicyManager/tests/log
 else
     echo "no environment defined for $ostype"

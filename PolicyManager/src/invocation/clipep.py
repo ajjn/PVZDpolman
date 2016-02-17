@@ -46,7 +46,7 @@ class CliPep(AbstractInvocation):
         if not getattr(self.args, argname, False):
             env_name = 'POLMAN_%s' % argname.upper()
             if env_name in os.environ:
-                self.args.aods = os.environ[env_name]
+                setattr(self.args, argname, os.environ[env_name])
             else:
                 raise InvalidArgumentValueError('neither --%s nor %s provided' % (argname, env_name))
 
