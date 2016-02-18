@@ -62,7 +62,7 @@ class AODSFileHandler():
                 raise UnauthorizedAODSSignerError("Signature certificate of policy journal not in "
                     "trusted list. Certificate:\n" + xml_sig_verifyer_response.signer_cert_pem)
             if self.list_trustedcerts:
-                self.do_list_trustedcerts(trustCerts, signerCertificateEncoded)
+                self.do_list_trustedcerts(trustCerts, xml_sig_verifyer_response.signer_cert_pem)
             # get contents
             tree = ET.parse(self._aodsFile)
             content = tree.findtext('{http://www.w3.org/2000/09/xmldsig#}Object')

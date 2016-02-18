@@ -180,6 +180,10 @@ def run_me(testrunnerInvocation=None):
                                                      file_level=invocation.args.loglevel)
         exception_lvl = LOGLEVELS['ERROR']
         logging.debug('logging level=' + LOGLEVELS_BY_INT[invocation.args.loglevel])
+        for opt in [a for a in dir(invocation.args) if not a.startswith('_')]:
+            #print(opt + '=' + str(getattr(invocation.args, opt)))
+            logging.debug(opt + '=' + str(getattr(invocation.args, opt)))
+
 
     pep = PEP(invocation)
     try:

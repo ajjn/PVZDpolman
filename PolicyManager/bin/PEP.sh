@@ -9,7 +9,7 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 fi
 
 if [ "$1" == "-d" ] || [ "$1" == "--debug" ]; then
-    PEPLOGLEVEL=DEBUG
+    export PEPLOGLEVEL=DEBUG
 fi
 
 $py3 $PROJ_HOME/PolicyManager/src/PEP.py --list_trustedcerts --loglevel=$PEPLOGLEVEL
