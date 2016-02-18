@@ -14,11 +14,13 @@ class CliPmp(AbstractInvocation):
              help='trace hash chain computation')
         self._parser.add_argument('-n', '--noxmlsign', action="store_true",
              help='do not sign policy journal with xml signature')
+        self._parser.add_argument('-p', '--print-args', dest='printargs', action="store_true",
+             help='print invocation arguments')
         self._parser.add_argument('-r', '--registrant', dest='registrant', default='',
              help='Person adding the input record (current user)')
         self._parser.add_argument('-s', '--submitter', dest='submitter', default=getpass.getuser(),
              help='Person that submitted the input record')
-        self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts', default='trustedcerts.json',
+        self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts',
              help='file containing json-array of PEM-formatted certificates trusted to sign the aods')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
@@ -68,12 +70,16 @@ class CliPmp(AbstractInvocation):
                 self.args.journal.close()
                 self.args.journal = fn
 
+        if self.args.printargs:
+            for opt in [a for a in dir(self.args) if not a.startswith('_')]:
+                print(opt + '=' + str(getattr(self.args, opt)))
+
 
     def get_from_env(self, argname):
         if not getattr(self.args, argname, False):
             env_name = 'POLMAN_%s' % argname.upper()
             if env_name in os.environ:
-                self.args.aods = os.environ[env_name]
+                setattr(self.args, argname, os.environ[env_name])
             else:
                 raise InvalidArgumentValueError('neither --%s nor %s provided' % (argname, env_name))
 
