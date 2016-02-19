@@ -100,18 +100,13 @@ class Test03_basic_happy_cycle(unittest.TestCase):
             assert os.path.isfile(requ1_result), 'expected %s in pepoutdir directory: ' % requ1_result
             assert not os.path.isfile(requ1_source), 'expected %s not to be in request_queue: ' % requ1_result
 
-        for fn in ('redmineIdentineticsOrg_req.xml', ):
-            requ1_source = os.path.join(request_queue, fn)
-            requ1_result = os.path.join(repo_dir, constants.GIT_REJECTED, fn)
-            assert os.path.isfile(requ1_result), 'expected %s in rejected directory: ' % requ1_result
-            assert not os.path.isfile(requ1_source), 'expected %s not to be in request_queue: ' % requ1_result
-
 
 
 class Test04_unauthorized_requests(unittest.TestCase):
     def runTest(self):
         logging.info('  -- Test PEP04: reject a batch of invalid/unauthorized requests')
         repo_dir = 'work/PEP/04/policyDirectory_unauth_' + localconfig.AODS_INDICATOR
+        request_queue = os.path.join(repo_dir, constants.GIT_REQUESTQUEUE)
         pepoutdir = make_dirs('work/PEP/04/pepout/', dir=True)
         cliClient = CliPep(['--verbose',
                             '--aods', os.path.join(repo_dir, constants.GIT_POLICYDIR, 'pol_journal.xml'), 
@@ -125,29 +120,27 @@ class Test04_unauthorized_requests(unittest.TestCase):
                                            verbose=cliClient.args.verbose)
         gitHandler.reset_repo_with_defined_testdata(
                 'testdata/PEP/04/policyDirectory_unauthz_%s' % localconfig.AODS_INDICATOR, repo_dir)
+
         logging.debug('    - processing request queue')
         PEP.run_me(cliClient)
 
-        requ1_result = os.path.abspath('%s/rejected/gondorWienGvAt_delete.xml' % repo_dir)
-        os.path.isfile(requ1_result)
+        # ttab is a list of 2-tuples containing file expected in the reject dir, and
+        # the start of the accompaning error message
+        ttab = (('fatamorganaIdentineticsCom.xml','rejected deletion request for non existing EntityDescriptor'),
+                ('gondorWienGvAt_delete.xml','Invalid format for EntitiyDescriptor filename'),
+                ('idpExampleCom_idpXmlUnsigned.xml','Signature verification failed'),
+                ('idpExampleCom_idpXml.xml','Signer certificate not found in policy directory'),
+                ('redmineIdentineticsOrg_req.xml', 'Invalid format for EntitiyDescriptor filename'),
+                )
 
-        requ2_result = os.path.abspath('%s/rejected/idpExampleCom_idpXml.xml' % repo_dir)
-        assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ2_result
-        requ2_errmsg = 'Signer certificate not found in policy directory'
-        with open(requ2_result + '.err') as f:
-            assert f.read() == requ2_errmsg, 'expected error log to contain "' + requ2_errmsg + '"'
-
-        requ3_result = os.path.abspath('%s/rejected/idpExampleCom_idpXmlUnsigned.xml' % repo_dir)
-        assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ3_result
-        requ3_errmsg = 'Signature verification failed'
-        with open(requ3_result + '.err') as f:
-            assert f.read().startswith(requ3_errmsg), 'expected error log to contain "' + requ3_errmsg + '"'
-
-        requ4_result = os.path.abspath('%s/rejected/fatamorganaIdentineticsCom.xml' % repo_dir)
-        assert os.path.isfile(os.path.abspath(requ2_result)), 'expected %s in reject directory' % requ3_result
-        requ4_errmsg = 'rejected deletion request for non existing EntityDescriptor'
-        with open(requ4_result + '.err') as f:
-            assert f.read().startswith(requ4_errmsg), 'expected error log to contain "' + requ3_errmsg + '"'
+        for (fn, requ_errmsg) in ttab:
+            requ_srcpath = os.path.join(request_queue, fn)
+            requ_destpath = os.path.join(repo_dir, constants.GIT_REJECTED, fn)
+            assert os.path.isfile(requ_destpath), 'expected %s in rejected directory: ' % requ_destpath
+            assert not os.path.isfile(requ_srcpath), '%s should not be left in request_queue: ' % requ_destpath
+            with open(requ_destpath + '.err') as f:
+                assert f.read().startswith(requ_errmsg), 'expected error log to contain "' + \
+                                                         requ_errmsg + '" for file ' + fn
 
 
 class Test05_delete_ok_cycle(unittest.TestCase):

@@ -116,13 +116,16 @@ class PEP:
         entityID_url = ed.dom.attrib['entityID']
         entityID_hostname = urlparse(entityID_url).hostname
         if not self.isInAllowedDomains(entityID_hostname, allowedDomains):
-            raise InvalidFQDNError('FQDN of entityID %s not in allowed domains: %s' % (entityID_hostname, allowedDomains))
+            raise InvalidFQDNError('FQDN of entityID %s not in allowed domains: %s' %
+                                   (entityID_hostname, allowedDomains))
         logging.debug('signer is allowed to use %s as entityID' % entityID_hostname)
         for element in ed.dom.xpath('//@location'):
             location_hostname = urlparse(element.attrib['Location']).hostname
             if self.isInAllowedDomains(location_hostname, allowedDomains):
-                raise InvalidFQDNError('%s in %s not in allowed domains: %s' % (location_hostname, element.tag, allowedDomains))
-            logging.debug('signer is allowed to use %s in %' % (location_hostname, element.tag.split('}')))
+                raise InvalidFQDNError('%s in %s not in allowed domains: %s' %
+                                       (location_hostname, element.tag, allowedDomains))
+            logging.debug('signer is allowed to use %s in %' %
+                          (location_hostname, element.tag.split('}')))
         return True
 
     def getCerts(self, ed, role) -> list:
@@ -208,13 +211,13 @@ def run_me(testrunnerInvocation=None):
         pep.file_counter += 1
         try:
             logging.debug('== processing ' + filename_base)
+            with open(filename_abs) as f:
+                ed = SAMLEntityDescriptor(f)
+            ed.verify_filename(filename_base) # enforce fixed filename based on entityID to match change/delete
             if pep.isDeletionRequest(filename_abs):
                 gitHandler.move_to_deleted(filename_base)
             else:
                 logging.debug('validating XML schema')
-                with open(filename_abs) as f:
-                    ed = SAMLEntityDescriptor(f)
-                ed.verify_filename(filename_base)
                 ed.validate_xsd()
                 ed.validate_schematron()
                 logging.debug('validating signature')
