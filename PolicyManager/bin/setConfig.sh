@@ -21,7 +21,7 @@ elif [[ "$ostype" == "linux" ]]; then
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
-    export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
+    export POLMAN_TRUSTEDCERTS=/etc/pki/sign/trustedcerts.json
     export LOGDIR=/var/log/pvzd
 elif [[ "$ostype" == "darwin" ]]; then
     #  used for OSX development env
