@@ -248,5 +248,5 @@ def run_me(testrunnerInvocation=None):
 
 if __name__ == '__main__':
     if sys.version_info < (3, 4):
-        raise "must use python 3.4 or greater"
+        raise "must use python 3.4 or higher"
     run_me()

@@ -35,4 +35,4 @@ else
     exit 1
 fi
 
-PEPLOGLEVEL=INFO
+export PEPLOGLEVEL='INFO'
