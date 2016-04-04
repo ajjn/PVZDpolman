@@ -8,16 +8,7 @@ README = open(os.path.join(here, 'README.md')).read()
 
 version = '0.4.0dev'
 
-install_requires = [
-    'cffi>=1.2.1',
-    'lxml >=3.0',
-    'GitPython>=1.0.1',
-    'lxml>=3.4.1',
-    'Cython>=0.23.4',
-    'pyOpenSSL>=0.15.1',
-    'requests',
-    'simplejson'
-]
+install_requires = open('requirements.txt'.readlines())
 # resolve these dependencies manually:
     #json2html>=1.0.1
     # YAmikep has py3 fix: https://github.com/YAmikep/json2html.git
