@@ -5,3 +5,4 @@ Cython>=0.23.4
 pyOpenSSL>=0.15.1
 requests
 simplejson
+json2html>=1.0.1
