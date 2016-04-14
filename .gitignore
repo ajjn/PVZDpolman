@@ -4,6 +4,7 @@
 bin
 deploy
 dependent_pkg/**
+!dependent_pkg/configure.sh
 lib/lib.iml
 lib/moa-spss-lib-2.0.3/
 lib/pvzdValidateXsd.jar
