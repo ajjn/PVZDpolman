@@ -2,9 +2,10 @@
 **/.DS_Store
 **/*.pyc
 bin
+conf/conf.iml
 deploy
 dependent_pkg/**
-!dependent_pkg/configure.sh
+!dependent_pkg/download.sh
 lib/lib.iml
 lib/moa-spss-lib-2.0.3/
 lib/pvzdValidateXsd.jar
