@@ -13,6 +13,7 @@ PolicyManager/bin/setConfig.sh
 PolicyManager/bin/setEnv.sh
 !PolicyManager/bin/setConfig.sh.default
 !PolicyManager/bin/setEnv.sh.default
+PolicyManager/doc/PEPtest03matrix.numbers
 PolicyManager/src/localconfig.py
 PolicyManager/tests/testdata/signxml_ca/cadir/
 worklog.txt
