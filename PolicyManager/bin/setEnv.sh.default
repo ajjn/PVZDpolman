@@ -8,7 +8,7 @@ if [[ "$ostype" == "linux-gnu" ]]; then
     export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
 elif [[ "$ostype" == "linux" ]]; then
-    #  tested with RHEL6
+    #  vmdev9015.adv.magwien.gv.at on RHEL6
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
     export py3='scl enable rh-python34 -- python'

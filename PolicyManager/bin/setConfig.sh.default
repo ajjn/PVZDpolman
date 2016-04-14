@@ -17,7 +17,7 @@ if [[ "$ostype" == "linux-gnu" ]]; then
     export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
     export LOGDIR=/var/log/pvzd
 elif [[ "$ostype" == "linux" ]]; then
-    #  tested with RHEL6
+    # vmdev9015.adv.magwien.gv.at on RHEL6
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
