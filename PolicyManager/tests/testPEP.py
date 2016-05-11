@@ -15,6 +15,31 @@ from userexceptions import *
 
 __author__ = 'r2h2'
 
+def setUpModule():
+    try:
+        os.environ['PYJNIUS_ACTIVATE']
+    except KeyError:
+        import javabridge
+        try:
+            # include user added classpath
+            classpath = os.environ['CLASSPATH']
+            classpath = classpath.split(os.pathsep)
+            javabridge.JARS.extend(classpath)
+        except KeyError:
+            None
+
+        javabridge.start_vm()
+        javabridge.attach()
+
+
+def tearDownModule():
+    try:
+        os.environ['PYJNIUS_ACTIVATE']
+    except KeyError:
+        import javabridge
+        javabridge.detach()
+        javabridge.kill_vm()
+
 # Logging setup for unit tests
 logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
 logging_config = loggingconfig.LoggingConfig(logbasename)

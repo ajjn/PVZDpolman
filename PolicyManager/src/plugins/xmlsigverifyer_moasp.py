@@ -1,5 +1,4 @@
 import base64, bz2, datetime, os, re, sys
-from jnius import autoclass
 import lxml.etree as ET
 from constants import PROJDIR_ABS
 import localconfig
@@ -24,18 +23,45 @@ xslt_str = """<?xml version="1.0" ?>
 class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
     """ Python wrapper for the PvzdVerifySig Java class """
     def __init__(self):
-        self.pywrapper = autoclass('at.wien.ma14.pvzd.verifysigapi.PvzdVerifySig')
+        # name of class in foo/bar/Baz form (not foo.bar.Baz)
+        self.pvzd_verify_sig_pkg = 'at/wien/ma14/pvzd/verifysigapi'
+        self.pvzd_verify_sig = self.pvzd_verify_sig_pkg + '/' + 'PvzdVerifySig'
+        try:
+            os.environ['PYJNIUS_ACTIVATE']
+            from jnius import autoclass
+            self.pywrapper = autoclass(self.pvzd_verify_sig)
+        except KeyError:
+            None
 
     def verify(self, xml_file_name) -> str:
         """ verify xmldsig and return signerCertificate """
-        pvzdverifysig = self.pywrapper(
-            os.path.join(PROJDIR_ABS, 'conf/moa-spss/MOASPSSConfiguration.xml'),
-            os.path.join(PROJDIR_ABS, 'conf/log4j.properties'),
-            xml_file_name)
-        response  = pvzdverifysig.verify()
-        if response.pvzdCode != 'OK':
-            raise ValidationError("Signature verification failed, code=" +
-                                  response.pvzdCode + "; " + response.pvzdMessage)
+        moaspss_conf = os.path.join(PROJDIR_ABS, 'conf/moa-spss/MOASPSSConfiguration.xml')
+        log4j_conf   = os.path.join(PROJDIR_ABS, 'conf/log4j.properties')
+        sig_doc      = xml_file_name
+
+        try:
+            os.environ['PYJNIUS_ACTIVATE']
+            pvzdverifysig = self.pywrapper(
+                moaspss_conf,
+                log4j_conf,
+                sig_doc)
+            response  = pvzdverifysig.verify()
+            if response.pvzdCode != 'OK':
+                raise ValidationError("Signature verification failed, code=" +
+                                      response.pvzdCode + "; " + response.pvzdMessage)
+        except KeyError:
+            import javabridge
+            # constructor takes three string parameters
+            pvzdverifysig = javabridge.make_instance(self.pvzd_verify_sig,
+                "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+                 moaspss_conf, log4j_conf, sig_doc)
+            # method verify returns response object
+            response = javabridge.call(pvzdverifysig, "verify",
+                "()" + "L" + self.pvzd_verify_sig_pkg + "/" + "PvzdVerifySigResponse;")
+            if javabridge.get_field(response, "pvzdCode", "Ljava/lang/String;") != 'OK':
+                raise ValidationError("Signature verification failed, code=" +
+                    javabridge.get_field(response, "pvzdCode", "Ljava/lang/String;") + "; " +
+                    javabridge.get_field(response, "pvzdMessage", "Ljava/lang/String;"))
 
         # One should follow "see-what-you-signed" -> W3C XMLDsig Recommendenations
         # MOA-SP does not return (?) signed data, hence we try to remove the ds:Signature element
@@ -53,5 +79,10 @@ class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
                                             encoding=localconfig.XML_ENCODING)
             signed_data_str = signed_data_bytes.decode(localconfig.XML_ENCODING)
 
-        r = XmlSigVerifyerResponse(signed_data_str, response.signerCertificateEncoded)
+        try:
+            os.environ['PYJNIUS_ACTIVATE']
+            r = XmlSigVerifyerResponse(signed_data_str, response.signerCertificateEncoded)
+        except KeyError:
+            import javabridge
+            r = XmlSigVerifyerResponse(signed_data_str, javabridge.get_field(response, "signerCertificateEncoded", "Ljava/lang/String;"))
         return r
