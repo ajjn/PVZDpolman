@@ -4,5 +4,4 @@ lxml>=3.4.1
 Cython>=0.23.4
 pyOpenSSL>=0.15.1
 requests
-simplejson
-#json2html 1.0.1 hat non-ascii char in README.mdremove
+#json2html 1.0.1 had non-ascii char in README.md -> remove

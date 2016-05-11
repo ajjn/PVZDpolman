@@ -1,7 +1,7 @@
 from __future__ import print_function
 import base64, hashlib, datetime, sys
 import logging
-import simplejson as json
+import json
 #from inputRecord import InputRecord
 __author__ = 'r2h2'
 

@@ -1,6 +1,6 @@
 import base64, hashlib, sys
 import logging
-import simplejson as json
+import json
 from json2html import *
 from inputrecord import InputRecord
 from contentrecord import ContentRecord

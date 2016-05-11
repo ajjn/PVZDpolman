@@ -1,6 +1,6 @@
 import base64, bz2, datetime, os, re, sys
 import logging
-import simplejson as json
+import json
 import xml.etree.ElementTree as ET
 from constants import DATA_HEADER_B64BZIP
 from cresignedxml import creSignedXML
