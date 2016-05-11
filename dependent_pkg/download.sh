@@ -15,12 +15,12 @@ cd $(dirname `which $0`)  # cd to script dir
 
 # --- json2html ---
 repodir='json2html'   # TODO: use wildcard to remove version
-repourl='https://github.com/YAmikep/json2html.git'
+repourl='https://github.com/rhoerbe/json2html.git'
 get_or_update_repo
 
 
 # --- pyjnius ---
-if [[ "$ostype" == "darwin" ]]; then
+if [[ "$ostype" == 'darwin' ]]; then
     repodir='benson-basis/pyjnius'
     repourl='https://github.com/benson-basis/pyjnius.git'
 else
