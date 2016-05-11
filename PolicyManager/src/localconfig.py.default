@@ -8,6 +8,7 @@ xmldsiglib = XMLDSIGLIB_SECLAY
 XML_ENCODING = 'utf-8'
 
 try:
+    # SIGNXML is not used currently, only for testing as alternative to MOA-SS/Citizen Card
     if os.environ['XMLDSIGLIB'] == XMLDSIGLIB_SIGNXML:
         xmldsiglib = XMLDSIGLIB_SIGNXML
         # set default signing certs
