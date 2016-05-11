@@ -31,7 +31,7 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         policydir_json = 'work/PMP/ws01/poldir.json'
         policydir_html = 'work/PMP/ws01/poldir.html'
         logging.debug('  removing existing aods file %s .. ' % pol_journal)
-        cliClient = CliPmp(['-v', '-a', pol_journal, 'scratch'])
+        cliClient = CliPmp(['-v', '-t', 'testdata/trustedcerts.json', '-a', pol_journal, 'scratch'])
         PMP.run_me(cliClient)
 
         logging.debug('  creating aods file .. ')
