@@ -10,29 +10,28 @@ Following Java libraries need to be downloaded.
 
     cd $PROJ_HOME/lib
     # moa-spss-lib-x.x.x
-    curl -O https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
+    curl -LO https://joinup.ec.europa.eu/system/files/project/moa-spss-lib-2.0.3.zip
     unzip moa-spss-lib-2.0.3.zip
     ln -s moa-spss-lib-2.0.3 moa-spss-lib
+    rm moa-spss-lib-2.0.3.zip
 
 ### PVZDjava
 
-    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdValidateXsd/pvzdValidateXsd.jar
-    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdVerifySig/pvzdVerifySig.jar
-
+    curl -LO https://github.com/rhoerbe/PVZDjava/files/260806/pvzdjava_1.0.zip
+    unzip -j pvzdjava_1.0.zip
+    rm pvzdjava_1.0.zip
+    
 ## Python Packages not to be installed from package index
 Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
 
 ### pyjnius
-* kivy (upstream master): python3 "import jnius" OK for OSX + RHEL6, but not OK for CentOS7
+kivy/master: python3 OK for OSX, RHEL6 and CentOS7
+
     https://github.com/kivy/pyjnius.git
-* benson-basis: python3 "import jnius" OK for CentOS7, but not OK for OSX
-    https://github.com/benson-basis/pyjnius.git
 
 ### json2html
-* YAmikep has py3 fix:
-    https://github.com/YAmikep/json2html.git
-* ordereddict:
-    load tarball from https://pypi.python.org/pypi/ordereddict
+For has py3 fixes:
+    https://github.com/rhoerbe/json2html.git
 
 ## Run unittests (keep sequence because of test data dependencies)
 
