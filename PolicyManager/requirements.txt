@@ -4,4 +4,8 @@ lxml>=3.4.1
 Cython>=0.23.4
 pyOpenSSL>=0.15.1
 requests
+# numpy required for javabridge
+numpy
+# javabridge only required if pyjnius is not used (PYJNIUS_ACTIVATE not set -> fallback)
+javabridge
 #json2html 1.0.1 had non-ascii char in README.md -> remove
