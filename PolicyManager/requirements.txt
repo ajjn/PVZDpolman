@@ -1,6 +1,7 @@
 cffi>=1.2.1
-GitPython>=1.0.1
 Cython>=0.23.4
+GitPython>=1.0.1
+lxml
 pyOpenSSL>=0.15.1
 requests
 # numpy required for javabridge
