@@ -23,7 +23,7 @@ get_or_update_repo
 repodir='kivy/pyjnius'
 repourl='https://github.com/kivy/pyjnius.git'
 get_or_update_repo
-ln -s $repodir pyjnius
+[ -e "$repodir/pyjnius" ] || ln -s $repodir pyjnius
 
 
 
