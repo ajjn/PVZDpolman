@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" entityID="https://www.test.portalverbund.gv.at"><dsig:Signature Id="Signature-4c13c643-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-4c13c643-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-4c13c643-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>sD31zo6HbklQwhFlLOobfAbwAvMN/sMhiiDk44faPKE=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-4c13c643-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-4c13c643-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>6ktxy3MjPT4j2mBYCPa8B3FhfaMdwhWFa9OM/NoP1ko=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-4c13c643-1">AUS7JWB4RhNT5I1mkeZMYb3bEHvIoGkEm2gOHiyRlY6CFQmSyNOrZH6I4SzhgjM3
+UzhM0Wm2fhhNtXeMGDYyDQ==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-4c13c643-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-4c13c643-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-4c13c643-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-02-14T22:18:59Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-4c13c643-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIFBjCCA+6gAwIBAgIQRfpJvy56f5TYmt8o7qOWHDANBgkqhkiG9w0BAQsFADB4
+MQswCQYDVQQGEwJJTDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjEpMCcGA1UECxMg
+U3RhcnRDb20gQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxJjAkBgNVBAMTHVN0YXJ0
+Q29tIENsYXNzIDEgRFYgU2VydmVyIENBMB4XDTE2MDIxMzA3MTUxOFoXDTE3MDIx
+MzA3MTUxOFowJzElMCMGA1UEAwwcd3d3LnRlc3QucG9ydGFsdmVyYnVuZC5ndi5h
+dDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK7HHFreqAKbjrUi/P43
+p7RdMyw1aMChxZQUsZ9VFlL7M2gJffv9HGXT3r9wynBYPQpFDQfXngRV3W0xx8uN
+MSAAj+u24W8L8tWN96J+ckICE7kODsE3uAi5kpC67WQg6OoF+hfSkhojFB/pmFV2
+lc+/r1//Ez63zOTfUTwM9SwpBbb+qkIPFgiU2rIsZD9QzDRXVWrHgSqK+e6TL50/
+YoIQSzr93wtavjTuh0XlY6eejcnFwjVznAH/aqH42v3lS7StmBplHhBVhgtA+yjN
+oQRezwuFPNjDnXNIZxREffm6ia/G18eB1IMg3hvB3HPqi8dlivtvTy6pgGvR5xWL
+wskCAwEAAaOCAdswggHXMAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcD
+AgYIKwYBBQUHAwEwCQYDVR0TBAIwADAdBgNVHQ4EFgQUPP5SHQph5H3XWDCYjcHD
+w7FuGQ4wHwYDVR0jBBgwFoAU15FOAcSwv/jIZ5NEnOcz+q2TDK8wbwYIKwYBBQUH
+AQEEYzBhMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5zdGFydHNzbC5jb20wOQYI
+KwYBBQUHMAKGLWh0dHA6Ly9haWEuc3RhcnRzc2wuY29tL2NlcnRzL3NjYS5zZXJ2
+ZXIxLmNydDA4BgNVHR8EMTAvMC2gK6AphidodHRwOi8vY3JsLnN0YXJ0c3NsLmNv
+bS9zY2Etc2VydmVyMS5jcmwwPAYDVR0RBDUwM4Icd3d3LnRlc3QucG9ydGFsdmVy
+YnVuZC5ndi5hdIITcG9ydGFsdmVyYnVuZC5ndi5hdDAjBgNVHRIEHDAahhhodHRw
+Oi8vd3d3LnN0YXJ0c3NsLmNvbS8wUAYDVR0gBEkwRzAIBgZngQwBAgEwOwYLKwYB
+BAGBtTcBAgQwLDAqBggrBgEFBQcCARYeaHR0cDovL3d3dy5zdGFydHNzbC5jb20v
+cG9saWN5MA0GCSqGSIb3DQEBCwUAA4IBAQBA7HpM0B1w1vY636ODzUsp1os1sMtf
++LmJ8QjJP4fis6Ks+eGL0tbpjUVdg1ZlmfDfSlKAdqLDQ3ZTRkdcGS/AsZ652lmR
+LoI/CLzDAwOBJiNWx9iilLhw8cXYRztjtRWn0YJLq8l8n0UehD9Vr1shCJFNdJLi
+Kcr4im3cf/wYQyKqnW4Y1Cptj1dcN/joE6Oh87kBIA7B2jYl03AO8dyRucbFiyvN
+8uI6abmJrlm7+Oe+yaIygrmNdrO6q/L8/8CdTemVZS6WcHP6YzCZMe8zLX4i19Sk
+IvjrtPBo4SN7q1pcbBCY9FNaWfhXZ9lejiJ3ahkPUgn8zccZLg/8gqEE
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://www.test.portalverbund.gv.at/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
