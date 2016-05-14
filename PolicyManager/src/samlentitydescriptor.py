@@ -36,7 +36,7 @@ class SAMLEntityDescriptor:
 
 
     def get_entityid(self):
-        return self.dom.attrib['entityID']
+        return 'https://dummy.entityid.test/xx'
 
 
     def get_xml_str(self):
