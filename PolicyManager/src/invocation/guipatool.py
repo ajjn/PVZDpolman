@@ -6,7 +6,7 @@ from userexceptions import *
 __author__ = 'r2h2'
 
 
-class CliPatool(AbstractInvocation):
+class GuiPatool(AbstractInvocation):
     """ define CLI invocation for PAtool. Test runner can use this by passing testargs  """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
