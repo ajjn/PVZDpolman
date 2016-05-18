@@ -6,10 +6,8 @@ conf/conf.iml
 deploy
 dependent_pkg/**
 !dependent_pkg/download.sh
-lib/lib.iml
-lib/moa-spss-lib-2.0.3/
-lib/pvzdValidateXsd.jar
-lib/pvzdVerifySig.jar
+lib/**
+!lib/README
 PolicyManager/PolicyManager.iml
 PolicyManager/bin/setConfig.sh
 PolicyManager/bin/setEnv.sh
