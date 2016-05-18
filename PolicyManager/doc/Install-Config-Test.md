@@ -16,8 +16,8 @@ Following Java libraries need to be downloaded.
 
 ### PVZDjava
 
-    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdValidateXsd/pvzdValidateXsd.jar
-    curl -O https://github.com/rhoerbe/PVZDjava/blob/master/bin/artifacts/pvzdVerifySig/pvzdVerifySig.jar
+    curl -LO https://github.com/rhoerbe/PVZDjava/files/260806/pvzdjava_1.0.zip
+    unzip -j pvzdjava_1.0.zip
 
 ## Python Packages not to be installed from package index
 Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
