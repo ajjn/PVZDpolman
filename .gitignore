@@ -6,7 +6,7 @@ conf/conf.iml
 deploy
 dependent_pkg/**
 !dependent_pkg/download.sh
-lib/**
+lib/*
 !lib/README
 PolicyManager/PolicyManager.iml
 PolicyManager/bin/setConfig.sh
