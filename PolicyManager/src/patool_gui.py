@@ -30,10 +30,16 @@ class PAtoolGUI(tk.Frame):
     def update_directory_listing(self):
         self.set_input_entry(self.get_input_dir())
         self.set_output_entry(self.get_output_dir())
-        for file in os.listdir(self.get_input_dir()):
-            self.add_input_file(file)
-        for file in os.listdir(self.get_output_dir()):
-            self.add_output_file(file)
+        try:
+            for file in os.listdir(self.get_input_dir()):
+                self.add_input_file(file)
+        except:
+            logging.error("Could not list dir")
+        try:
+            for file in os.listdir(self.get_output_dir()):
+                self.add_output_file(file)
+        except:
+            logging.error("Could not list dir")
         
     def define_bindings(self):
         # Define key bindings
@@ -182,6 +188,10 @@ class PAtoolGUI(tk.Frame):
 
 
         # Middle column has tree buttons
+        b0f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
+                       width=BUTTON_WIDTH)
+        b0f.pack_propagate(0)
+        b0f.pack(anchor=tk.CENTER, expand=True)
         b1f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
                        width=BUTTON_WIDTH)
         b1f.pack_propagate(0)
