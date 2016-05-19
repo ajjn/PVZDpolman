@@ -1,7 +1,8 @@
 #!/bin/bash
 
-source ./setEnv.sh
-source ./setConfig.sh
+SCRIPTDIR=$(dirname $BASH_SOURCE[0])
+source $SCRIPTDIR/setEnv.sh
+source $SCRIPTDIR/setConfig.sh
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     $py3 $PROJ_HOME/PolicyManager/src/PEP.py $1 $2
