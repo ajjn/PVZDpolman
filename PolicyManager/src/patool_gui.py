@@ -1,195 +1,18 @@
 from patool_gui_settings import *
 import tkinter as tk
+from CreateEDDialog import CreateEDDialog
+from DeleteEDDialog import DeleteEDDialog
+from Recents import Recents
 from tkinter import filedialog
+from tkinter import messagebox
+from send_mail import send_files_via_email
+import pickle
 import sys
 import os
-import os.path
+import re
+import logging
 from PAtool import run_me
 
-class DeleteEDDialog(tk.Toplevel):
-    def __init__(self, master=None):
-        tk.Toplevel.__init__(self, master)
-        self.parent = master
-        self.title("Create deletion request for an eEtity")
-        self.create_widgets()
-
-    def create_widgets(self):
-        # Create four rows as frames
-        row1 = tk.Frame(self)
-        row1.pack(fill=tk.BOTH, expand=True)
-        row2 = tk.Frame(self)
-        row2.pack(fill=tk.X, expand=True)
-
-        # Row 1 has entityID Entry and 
-        # recent entityIDs dropdownlist
-        tk.Label(row1, text="entityID: ").pack(side=tk.LEFT,
-                                                    padx=self.parent.get_padding(),
-                                                    pady=self.parent.get_padding())
-
-        self.entityID_entry = tk.Entry(row1)
-        self.entityID_entry.pack(side=tk.LEFT, fill=tk.X,
-                              expand=True, padx=self.parent.get_padding(),
-                              pady=self.parent.get_padding())
-
-        self.recent_entityID = tk.StringVar()
-        self.recent_entityID.set("") # default value
-
-        tk.OptionMenu(row1, self.recent_entityID, "one", "two",
-                      "three").pack(side=tk.LEFT,
-                                 padx=self.parent.get_padding(),
-                                 pady=self.parent.get_padding(),
-                                 fill=tk.X, expand=True)
-
-        # Row 2 has two buttons
-        tk.Button(row2,
-                  text="Create and sign",
-                  command=self.create_and_sign_deletion_request).pack(side=tk.LEFT,
-                                                       padx=self.parent.get_padding(),
-                                                       pady=self.parent.get_padding(),
-                                                       expand=True)
-        tk.Button(row2,
-                  text="Cancel",
-                  command=self.cancel).pack(side=tk.LEFT,
-                                            padx=self.parent.get_padding(),
-                                            pady=self.parent.get_padding(),
-                                            expand=True)
-
-    def get_entityID_entry(self):
-        return(self.entityID_entry.get())
-    
-    def create_and_sign_deletion_request(self):
-        self.parent.set_entityID(self.get_entityID_entry())
-        self.parent.deleteED()
-        self.destroy()
-        
-    def cancel(self):
-        self.destroy()
-
-    
-class CreateEDDialog(tk.Toplevel):
-    def __init__(self, master=None):
-        tk.Toplevel.__init__(self, master)
-        self.parent = master
-        self.title("Create ED from cert")
-        self.create_widgets()
-
-    def create_widgets(self):
-        # Create four rows as frames
-        row1 = tk.Frame(self)
-        row1.pack(fill=tk.BOTH, expand=True)
-        row2 = tk.Frame(self)
-        row2.pack(fill=tk.X, expand=True)
-        row3 = tk.Frame(self)
-        row3.pack(fill=tk.BOTH, expand=True)
-        row4 = tk.Frame(self)
-        row4.pack(fill=tk.BOTH, expand=True)
-
-        # Row 1 has SAML role radiobuttons
-        tk.Label(row1, text="SAML role: ").pack(side=tk.LEFT,
-                                                 padx=self.parent.get_padding(),
-                                                 pady=self.parent.get_padding())
-
-        self.saml = tk.IntVar()
-        tk.Radiobutton(row1, text="IDP", variable=self.saml,
-                       value=1).pack(side=tk.LEFT,
-                                     padx=self.parent.get_padding(),
-                                     pady=self.parent.get_padding())
-        tk.Radiobutton(row1, text="SP", variable=self.saml,
-                       value=2).pack(side=tk.LEFT,
-                                     padx=self.parent.get_padding(),
-                                     pady=self.parent.get_padding())
-
-
-        # Row 2 has entityID entry and dropdownlist
-
-        tk.Label(row2, text="entityID: ").pack(side=tk.LEFT,
-                                                    padx=self.parent.get_padding(),
-                                                    pady=self.parent.get_padding())
-
-        self.entityID_entry = tk.Entry(row2)
-        self.entityID_entry.pack(side=tk.LEFT, fill=tk.X,
-                              expand=True, padx=self.parent.get_padding(),
-                              pady=self.parent.get_padding())
-
-        self.recent_entityID = tk.StringVar()
-        self.recent_entityID.set("") # default value
-
-        tk.OptionMenu(row2, self.recent_entityID, "one", "two",
-                      "three").pack(side=tk.LEFT,
-                                 padx=self.parent.get_padding(),
-                                 pady=self.parent.get_padding(),
-                                 fill=tk.X, expand=True)
-
-        # Row 3 has entityID suffix entry and dropdownlist
-        tk.Label(row3, text="entityID Suffix: ").pack(side=tk.LEFT,
-                                                           padx=self.parent.get_padding(),
-                                                           pady=self.parent.get_padding())
-
-        self.entityID_suffix_entry = tk.Entry(row3)
-        self.entityID_suffix_entry.pack(side=tk.LEFT, fill=tk.X,
-                              expand=True, padx=self.parent.get_padding(),
-                              pady=self.parent.get_padding())
-
-        self.entityID_suffix = tk.StringVar()
-        self.entityID_suffix.set("") # default value
-
-        tk.OptionMenu(row3, self.entityID_suffix, "one", "two",
-                      "three").pack(side=tk.LEFT,
-                                 padx=self.parent.get_padding(),
-                                 pady=self.parent.get_padding(),
-                                 fill=tk.X, expand=True)
-
-        # Row 4 has three buttons
-        tk.Button(row4,
-                  text="Create",
-                  command=self.createED).pack(side=tk.LEFT,
-                                              padx=self.parent.get_padding(),
-                                              pady=self.parent.get_padding(),
-                                              expand=True)
-        tk.Button(row4,
-                  text="Create and sign",
-                  command=self.create_and_signED).pack(side=tk.LEFT,
-                                                       padx=self.parent.get_padding(),
-                                                       pady=self.parent.get_padding(),
-                                                       expand=True)
-        tk.Button(row4,
-                  text="Cancel",
-                  command=self.cancel).pack(side=tk.LEFT,
-                                            padx=self.parent.get_padding(),
-                                            pady=self.parent.get_padding(),
-                                            expand=True)
-
-
-    def get_entityID_entry(self):
-        return(self.entityID_entry.get())
-
-    def get_entityID_suffix_entry(self):
-        return(self.entityID_suffix_entry.get())
-
-    def get_samlrole(self):
-        if self.saml.get() == 1:
-            return("IDP")
-        elif self.saml.get() == 2:
-            return("SP")
-        else:
-            return ("")
-        
-    def createED(self):
-        # Invoke the creation and destroy the dialog
-        self.parent.set_entityID(self.get_entityID_entry())
-        self.parent.set_entityID_suffix(self.get_entityID_suffix_entry())
-        self.parent.set_samlrole(self.get_samlrole())
-        self.parent.createED()
-        self.destroy()
-
-    def create_and_signED(self):
-        self.parent.create_and_signED()
-        self.destroy()
-
-    def cancel(self):
-        self.destroy()
-
-        
 class PAtoolGUI(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -198,18 +21,113 @@ class PAtoolGUI(tk.Frame):
         self.pack( fill=tk.BOTH, expand=True)
         self.initialize_variables()
         self.create_widgets()
+        self.define_bindings()
 
+    def updateGUI():
+        self.update_directory_listing()
+        self.parent.after(1000, updateGUI) # run itself again after 1000 ms
+
+    def update_directory_listing(self):
+        self.set_input_entry(self.get_input_dir())
+        self.set_output_entry(self.get_output_dir())
+        for file in os.listdir(self.get_input_dir()):
+            self.add_input_file(file)
+        for file in os.listdir(self.get_output_dir()):
+            self.add_output_file(file)
+        
+    def define_bindings(self):
+        # Define key bindings
+        self.input_entry.bind("<Return>", self.add_input_file_from_entry)
+        self.output_entry.bind("<Return>", self.add_output_file_from_entry)
+        # Bind window closing event
+        self.parent.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def on_closing(self):
+        print("Quiting")
+        # Save settings
+        self.save_variables()
+        self.parent.destroy()
+
+    def load_variables(self):
+        try:
+            f = open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'rb' )
+            settings = pickle.load(f)
+            f.close()
+            self.set_input_dir(settings['input_dir'])
+            self.set_output_dir(settings['output_dir'])
+            self.set_padding(settings['padding'])
+            self.set_recent_entityIDs(settings['recent_entityIDs'])
+            self.set_recent_entityID_suffices(settings['recent_entityID_suffices'])
+            self.set_geometry(settings['geometry'])
+        except:
+            self.initialize_saveable_variables()
+    
+    def save_variables(self):
+        settings = {}
+        settings['input_dir'] = self.get_input_dir()
+        settings['output_dir'] = self.get_output_dir()
+        settings['padding'] = self.get_padding()
+        settings['recent_entityIDs'] = self.get_recent_entityIDs()
+        settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
+        settings['geometry'] = self.get_geometry()
+        try:
+            f = open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'wb' )
+            pickle.dump( settings, f )
+            f.close()
+        except:
+            logging.warning("Could not save GUI settings")
+            
+    def initialize_saveable_variables(self):
+        self.set_input_dir(".")
+        self.set_output_dir(".")
+        # Default size
+        sw = self.get_screen_width()
+        sh = self.get_screen_height()
+        # Put to the middle of the screen by default
+        x = int((sw - MAIN_WINDOW_WIDTH) / 2)
+        y = int((sh - MAIN_WINDOW_HEIGHT) / 2)
+        geometry = "%dx%d+%d+%d" % (MAIN_WINDOW_WIDTH,
+                                    MAIN_WINDOW_HEIGHT,
+                                    x, y)
+
+        self.parent.geometry(geometry)
+        self.set_padding(PADDING)
+        self.set_recent_entityIDs(Recents())
+        self.set_recent_entityID_suffices(Recents())
         
     def initialize_variables(self):
-        self.set_padding(5)
+        self.load_variables()
         self.set_input_file("")
-        self.set_input_dir("")
-        self.set_output_dir("")
         self.set_output_files([])
         self.set_entityID("")
         self.set_entityID_suffix("")
         self.set_samlrole("")
         
+    def get_window_x(self):
+        return self.parent.winfo_x()
+        
+    def get_window_y(self):
+        return self.parent.winfo_y()
+        
+    def get_window_width(self):
+        return self.parent.winfo_width()
+
+    def get_window_height(self):
+        return self.parent.winfo_height()
+
+    def get_screen_width(self):
+        return self.parent.winfo_screenwidth()
+
+    def get_screen_height(self):
+        return self.parent.winfo_screenheight()
+
+    def get_geometry(self):
+        return self.parent.geometry()
+
+    def set_geometry(self, geometry):
+        self.parent.geometry(geometry)
+
+    
     def create_widgets(self):
         # Create three rows as frames
         row1 = tk.Frame(self)
@@ -223,7 +141,7 @@ class PAtoolGUI(tk.Frame):
         row1c1 = tk.Frame(row1)
         row1c1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         row1c2 = tk.Frame(row1)
-        row1c2.pack(side=tk.LEFT, fill=tk.BOTH)
+        row1c2.pack(side=tk.LEFT, fill=tk.Y, expand=True)
         row1c3 = tk.Frame(row1)
         row1c3.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -264,16 +182,34 @@ class PAtoolGUI(tk.Frame):
 
 
         # Middle column has tree buttons
-        tk.Button(row1c2, text="create ED\nfrom cert",
-                  command=self.createED_dialog).pack(padx=self.get_padding(),
+        b1f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
+                       width=BUTTON_WIDTH)
+        b1f.pack_propagate(0)
+        b1f.pack(anchor=tk.CENTER, expand=True)
+        tk.Button(b1f, text="create ED\nfrom cert",
+                  command=self.createED_dialog).pack(fill=tk.BOTH,
+                                                     expand=True,
+                                                     padx=self.get_padding(),
                                                      pady=self.get_padding())
 
-        tk.Button(row1c2, text="sign ED",
-                  command=self.signED).pack(padx=self.get_padding(),
+        b2f = tk.Frame(row1c2, height=BUTTON_HEIGHT,
+                       width=BUTTON_WIDTH)
+        b2f.pack_propagate(0)
+        b2f.pack(anchor=tk.CENTER, expand=True)
+        tk.Button(b2f, text="sign ED",
+                  command=self.signED).pack(fill=tk.BOTH,
+                                            expand=True,
+                                            padx=self.get_padding(),
                                             pady=self.get_padding())
 
-        tk.Button(row1c2, text='create request\n"delete ED"',
-                  command=self.deleteED_dialog).pack(padx=self.get_padding(),
+        b3f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
+                       width=BUTTON_WIDTH)
+        b3f.pack_propagate(0)
+        b3f.pack(anchor=tk.CENTER, expand=True)
+        tk.Button(b3f, text='create request\n"delete ED"',
+                  command=self.deleteED_dialog).pack(fill=tk.BOTH,
+                                                     expand=True,
+                                                     padx=self.get_padding(),
                                                      pady=self.get_padding())
 
 
@@ -333,84 +269,101 @@ class PAtoolGUI(tk.Frame):
                           padx=self.get_padding(), pady=self.get_padding(), expand=True)
         self.log_view_scrollbar.config(command=self.log_view.yview)
 
-        # Define key bindings
-        self.input_entry.bind("<Return>", self.add_input_file_from_entry)
-        self.output_entry.bind("<Return>", self.add_output_file_from_entry)
+
+        # Update directories
+        self.update_directory_listing()
+
+
+    def set_recent_entityIDs(self, recents):
+        self.recent_entityIDs = recents
+
+    def get_recent_entityIDs(self):
+        return self.recent_entityIDs
+
+    def set_recent_entityID_suffices(self, recents):
+        self.recent_entityID_suffices = recents
+
+    def get_recent_entityID_suffices(self):
+        return self.recent_entityID_suffices
 
     def set_padding(self, padding):
         self.padding = padding
 
     def get_padding(self):
-        return(self.padding)
+        return self.padding
 
     def set_entityID(self, entityID):
         self.entityID = entityID
 
     def get_entityID(self):
-        return(self.entityID)
+        return self.entityID
 
     def set_entityID_suffix(self, id_suffix):
         self.entityID_suffix = id_suffix
 
     def get_entityID_suffix(self):
-        return(self.entityID_suffix)
+        return self.entityID_suffix
 
     def get_selected_input(self):
         indices = self.input_file_list.curselection()
-        self.log(self.input_file_list.get(indices[0]))
-        return(self.input_file_list.get(indices[0]))
+        if len(indices) > 0:
+            return self.input_file_list.get(indices[0])
+        else:
+            return False
 
     def get_selected_output(self):
         indices = self.output_file_list.curselection()
-        self.log(self.output_file_list.get(indices[0]))
         output = []
         for index in indices:
             output.append(self.output_file_list.get(index))
-        return(output)
+        return output
 
     def set_input_file(self, input):
         self.input_file = input
     
     def get_input_file(self):
-        return(self.input_file)
+        return self.input_file
 
     def set_input_dir(self, input):
-        self.input_dir = input
+        self.input_dir = os.path.abspath(input)
 
     def get_input_dir(self):
-        return(self.input_dir)
+        return self.input_dir
 
     def set_output_dir(self, output):
-        self.output_dir = output
+        self.output_dir = os.path.abspath(output)
 
     def get_output_dir(self):
-        return(self.output_dir)
+        return self.output_dir
 
     def set_output_files(self, output):
         self.output_files = output
 
     def get_output_files(self):
-        return(self.output_files)
+        return self.output_files
 
     def set_input_entry(self, text):
         self.input_entry.delete(0, 'end')
-        self.input_entry.insert(0,text)
-    
+        self.input_entry.insert(0, text)
+        self.set_input_dir(text)
+
+        
     def get_input_entry(self):
-        return(self.input_entry.get())
+        return self.input_entry.get()
             
     def set_output_entry(self, text):
         self.output_entry.delete(0, 'end')
         self.output_entry.insert(0,text)
+        self.set_output_dir(text)
     
     def get_output_entry(self):
-        return(self.output_entry.get())
+        return self.output_entry.get()
 
     def set_samlrole(self, samlrole):
         self.samlrole = samlrole
     
     def get_samlrole(self):
-        return(self.samlrole)
+        return self.samlrole
 
     def log(self, text):
         self.log_view.config(state='normal')
@@ -428,8 +381,15 @@ class PAtoolGUI(tk.Frame):
         self.input_file_list.insert(tk.END, filename)
 
     def add_input_file_from_entry(self, event):
+        # Validate directory
+        directory = self.get_input_entry()
+        if not self.validate_dir(directory):
+            messagebox.showinfo("Input directory",
+                                "Cannot open input directory\n%s" % directory)
+            return
+        
+        self.set_input_dir(directory)
         self.clear_input_list()
-        directory = self.input_entry.get()
         for file in os.listdir(directory):
             self.add_input_file(file)
         
@@ -437,8 +397,15 @@ class PAtoolGUI(tk.Frame):
         self.output_file_list.insert(tk.END, filename)
 
     def add_output_file_from_entry(self, event):
-        self.clear_output_list()
         directory = self.output_entry.get()
+        # Validate directory
+        if not self.validate_dir(directory):
+            messagebox.showinfo("Output directory",
+                                "Cannot open output directory\n%s" % directory)
+            return
+
+        self.set_output_dir(directory)
+        self.clear_output_list()
         for file in os.listdir(directory):
             self.add_output_file(file)
 
@@ -468,15 +435,101 @@ class PAtoolGUI(tk.Frame):
                 messagebox.showerror(text)
         self.set_output_entry(directory)
 
+    def validate_dir(self, dir):
+        # Validate selected file and directory as a proper file
+        if os.path.isdir(dir):
+            return True
+        else:
+            return False
+        
+    def validate_dir_file(self, dir, file):
+        # Validate selected file and directory as a proper file
+        if not self.validate_dir(dir):
+            return False
+        if os.path.isfile(os.path.join(dir, file)):
+            return True
+        else:
+            return False
+
+    def validate_entityID(self, url):
+        # Taken from
+        # http://stackoverflow.com/questions/827557/how-do-you-validate-a-url-with-a-regular-expression-in-python
+        regex = re.compile(
+            r'^https?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        return url is not None and regex.search(url)
+
     def createED_dialog(self):
+        # Validate input directory
+        if not self.validate_dir(self.get_input_entry()):
+            messagebox.showinfo("Input directory",
+                                "Cannot open input directory\n%s" % self.get_input_entry())
+            return
+            
+        # Validate selection
+        if not self.get_selected_input():
+            messagebox.showinfo("Input selection",
+                                "Please, select an input file")
+            return
+        # Validate file
+        if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
+            messagebox.showinfo(
+                "Input file is invalid",
+                "Cannot open this file\n%s" % self.get_selected_input())
+            return
+
+        # Validate output directory
+        if not self.validate_dir(self.get_output_entry()):
+            messagebox.showinfo("Output directory",
+                                "Cannot open output directory\n%s" % self.get_output_entry())
+            return
+
+        # Set user entries
         self.set_input_file(self.get_selected_input())
         self.set_input_dir(self.get_input_entry())
         self.set_output_dir(self.get_output_entry())
+
+        # Calculate the dialog position
+        x = self.get_window_width() + self.get_window_x()
+        y = int(self.get_window_height()/3) + self.get_window_y()
+        self.createED_window_geometry = "%dx%d+%d+%d" % (CREATE_ED_WINDOW_WIDTH,
+                                                         CREATE_ED_WINDOW_HEIGHT,
+                                                         x,y)
         CreateEDDialog(self)
 
     def deleteED_dialog(self):
+        # Validate input directory
+        if not self.validate_dir(self.get_input_entry()):
+            messagebox.showinfo("Input directory",
+                                "Cannot open directory\n%s" % self.get_input_entry())
+            return
+            
+        # Validate selection
+        if not self.get_selected_input():
+            messagebox.showinfo("Input selection",
+                                "Please, select an input file")
+            return
+        # Validate file
+        if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
+            messagebox.showinfo(
+                "Input file is invalid",
+                "Cannot open this file\n%s" % self.get_selected_input())
+            return
+
+        # Set user entries
         self.set_input_file(self.get_selected_input())
         self.set_input_dir(self.get_input_entry())
+
+        # Calculate the dialog position
+        x = self.get_window_width() + self.get_window_x()
+        y = int(self.get_window_height()/3) + self.get_window_y()
+        self.deleteED_window_geometry = "%dx%d+%d+%d" % (DELETE_ED_WINDOW_WIDTH,
+                                                         DELETE_ED_WINDOW_HEIGHT,
+                                                         x,y)
         DeleteEDDialog(self)
 
     def createED(self):
@@ -484,8 +537,10 @@ class PAtoolGUI(tk.Frame):
         cli += " -e " + str(self.get_entityID())
         cli += " -o " + str(self.get_output_dir())
         cli += " -r " + str(self.get_samlrole())
-        cli += " -S " + str(self.get_entityID_suffix())
-        cli += " " + str(os.path.join(self.get_input_dir(), self.get_input_file()))
+        if self.get_entityID_suffix() != "":
+            cli += " -S " + str(self.get_entityID_suffix())
+        cli += " " + str(os.path.join(self.get_input_dir(),
+                                      self.get_input_file()))
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
@@ -497,7 +552,8 @@ class PAtoolGUI(tk.Frame):
         cli += " -r " + str(self.get_samlrole())
         cli += " -S " + str(self.get_entityID_suffix())
         cli += " -s " 
-        cli += str(os.path.join(self.get_input_dir(), self.get_input_file()))
+        cli += str(os.path.join(self.get_input_dir(),
+                                self.get_input_file()))
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
@@ -509,7 +565,8 @@ class PAtoolGUI(tk.Frame):
 
         cli = "PAtool.py signED"
         cli += " -o " + str(self.get_output_dir())
-        cli += " " + str(os.path.join(self.get_input_dir(), self.get_input_file()))
+        cli += " " + str(os.path.join(self.get_input_dir(),
+                                      self.get_input_file()))
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
@@ -525,8 +582,14 @@ class PAtoolGUI(tk.Frame):
 
     def send(self):
         self.set_output_files(self.get_selected_output())
+        print (self.get_output_files())
         self.log("Invoking send")
-
+        result = send_files_via_email(self.get_output_dir(), self.get_output_files())
+        if result:
+            self.log("Files sent!")
+        else:
+            self.log("Could not send files!")
+        
     def rewrite_sys_argv(self, command_line_string):
         sys.argv = command_line_string.split()
 

@@ -1,7 +1,23 @@
 SMTP_SMART_HOST = "localhost"
 ACCOUNT = "account"
 PASSWORD = "password"
-USE_TLS = True
-RECIPIENT = "recipient@domain"
+USE_TLS = False
+RECIPIENT = "rainer@hoerbe.at"
 TITLE = "email_title"
 FROM = "sender@domain"
+
+# Default window sizes
+MAIN_WINDOW_HEIGHT = 600
+MAIN_WINDOW_WIDTH = 600
+CREATE_ED_WINDOW_HEIGHT = 150
+CREATE_ED_WINDOW_WIDTH = 350
+DELETE_ED_WINDOW_HEIGHT = 120
+DELETE_ED_WINDOW_WIDTH = 350
+
+# other GUI options
+PADDING = 5
+RECENTS_MAX_SIZE = 8
+BUTTON_HEIGHT = 45
+TWO_LINES_BUTTON_HEIGHT = 60
+BUTTON_WIDTH = 140
+GUI_SAVED_SETTINGS_FILE = ".patool_gui_saved_settings"
