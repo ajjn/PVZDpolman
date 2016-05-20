@@ -647,19 +647,24 @@ class PAtoolGUI(tk.Frame):
     def signED(self):
         # Validate input directory
         if not self.validate_dir(self.get_input_entry()):
-            messagebox.showinfo("Input directory",
+            messagebox.showinfo("Invalid directory",
                                 "Cannot open input directory\n%s" % self.get_input_entry())
             return
             
         # Validate selection
         if not self.get_selected_input():
             messagebox.showinfo("Input selection",
-                                "Please, select an input file")
+                                "Select an input file")
             return
         # Validate file
         if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
             messagebox.showinfo(
-                "Input file is invalid",
+                "Invalid input file",
+                "Cannot open this file\n%s" % self.get_selected_input())
+            return
+        if not self.get_selected_input()[-4:] == '.xml':
+            messagebox.showinfo(
+                "Invalid input file",
                 "Cannot open this file\n%s" % self.get_selected_input())
             return
 
@@ -698,9 +703,9 @@ class PAtoolGUI(tk.Frame):
         self.log("Invoking send")
         result = send_files_via_email(self.get_output_dir(), self.get_output_files())
         if result:
-            self.log("Files sent!")
+            self.log("Files sent.")
         else:
-            self.log("Could not send files!")
+            self.log("Failed to send files.")
         
     def rewrite_sys_argv(self, command_line_string):
         sys.argv = command_line_string.split()
