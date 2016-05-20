@@ -525,10 +525,9 @@ class PAtoolGUI(tk.Frame):
             return False
 
     def validate_entityID(self, url):
-        # Taken from
-        # http://stackoverflow.com/questions/827557/how-do-you-validate-a-url-with-a-regular-expression-in-python
+        # Validate URL format
         regex = re.compile(
-            r'^https?://'  # http:// or https://
+            r'^https://'  # https://  only
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
             r'localhost|'  # localhost...
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
@@ -542,7 +541,7 @@ class PAtoolGUI(tk.Frame):
         begin = False
         end = False
         with open(file) as fd:
-            for l in f.readlines():
+            for l in fd.readlines():
                 if l == '-----BEGIN CERTIFICATE-----\n':
                     begin = True
                     continue
@@ -570,7 +569,7 @@ class PAtoolGUI(tk.Frame):
                 "Input file is invalid",
                 "Cannot open this file:\n%s" % self.get_selected_input())
             return
-        if self.is_valid_certfile:
+        if not self.is_valid_certfile(os.path.join(self.get_input_entry(), self.get_selected_input())):
             messagebox.showinfo(
                 "Invalid selection",
                 "Certificate must contain '-----BEGIN/END CERTIFICATE-----' delimiters conforming to RFC 7468. Cannot open this file\n%s" % self.get_selected_input())

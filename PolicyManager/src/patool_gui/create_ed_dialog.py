@@ -133,7 +133,8 @@ class CreateEDDialog(tk.Toplevel):
         else:
             return ""
         
-    def createED(self):
+    def createED(self, sign_after_create=False):
+        self.parent.sign_after_create = sign_after_create
         # Validate entityID i.e. url
         if not self.parent.validate_entityID(self.get_entityID_entry()):
             messagebox.showinfo("Invalid EntityID",
@@ -151,8 +152,7 @@ class CreateEDDialog(tk.Toplevel):
         self.destroy()
 
     def create_and_signED(self):
-        self.parent.sign_after_create = True
-        self.createED()
+        self.createED(sign_after_create=True)
 
     def cancel(self):
         self.destroy()

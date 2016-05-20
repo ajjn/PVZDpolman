@@ -1,7 +1,6 @@
 .idea
 **/.DS_Store
 **/*.pyc
-bin
 conf/conf.iml
 deploy
 dependent_pkg/**
