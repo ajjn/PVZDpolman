@@ -2,8 +2,14 @@
 # set paths for devl and test systems
 
 ostype=${OSTYPE//[0-9.]/}
-if [[ "$ostype" == "linux-gnu" ]]; then
-    #  tested with CentOS7
+if [[ "$HOSTNAME" == "pvzd-client" ]]; then
+    # docker container
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
+    export PROJ_HOME=/opt/PVZDpolman
+    source /opt/rh/rh-python34/enable
+    export py3=/opt/rh/rh-python34/root/usr/bin/python
+elif [[ "$ostype" == "linux-gnu" ]]; then
+    #  devl9
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
@@ -30,6 +36,7 @@ else
     exit 1
 fi
 
+export PYJNIUS_ACTIVATE
 # --- do not change below this line for target system configuration
 export CLASSPATH="$JAVA_HOME/lib/jconsole.jar:\
 $JAVA_HOME/lib/sa-jdi.jar:\

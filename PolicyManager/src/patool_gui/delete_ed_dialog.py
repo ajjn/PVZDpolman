@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 class DeleteEDDialog(tk.Toplevel):
     def __init__(self, master=None):
@@ -17,11 +18,11 @@ class DeleteEDDialog(tk.Toplevel):
 
         # Row 1 has entityID Entry and 
         # recent entityIDs dropdownlist
-        tk.Label(row1, text="entityID: ").pack(side=tk.LEFT,
+        tk.Label(row1, font=self.parent.custom_font, text="entityID: ").pack(side=tk.LEFT,
                                                     padx=self.parent.get_padding(),
                                                     pady=self.parent.get_padding())
 
-        self.entityID_entry = tk.Entry(row1)
+        self.entityID_entry = tk.Entry(row1, font=self.parent.custom_font)
         self.entityID_entry.pack(side=tk.LEFT, fill=tk.X,
                               expand=True, padx=self.parent.get_padding(),
                               pady=self.parent.get_padding())
@@ -31,21 +32,24 @@ class DeleteEDDialog(tk.Toplevel):
         # Track the value change to update the entity field
         self.recent_entityID.trace("w", self.update_entityID_entry)
 
-        tk.OptionMenu(row1, self.recent_entityID, 
-                      *self.parent.get_recent_entityIDs()).pack(side=tk.LEFT,
-                                                                padx=self.parent.get_padding(),
-                                                                pady=self.parent.get_padding(),
-                                                                fill=tk.X, expand=True)
+        w = tk.OptionMenu(row1, self.recent_entityID, 
+                      *self.parent.get_recent_entityIDs())
+        w.pack(side=tk.LEFT,
+               padx=self.parent.get_padding(),
+               pady=self.parent.get_padding(),
+               fill=tk.X, expand=True)
+        menu = w.nametowidget(w.menuname) 
+        menu.configure(font=self.parent.custom_font)
 
         # Row 2 has two buttons
         tk.Button(row2,
-                  text="Create and sign",
+                  font=self.parent.custom_font, text="Create and sign",
                   command=self.create_and_sign_deletion_request).pack(side=tk.LEFT,
                                                        padx=self.parent.get_padding(),
                                                        pady=self.parent.get_padding(),
                                                        expand=True)
         tk.Button(row2,
-                  text="Cancel",
+                  font=self.parent.custom_font, text="Cancel",
                   command=self.cancel).pack(side=tk.LEFT,
                                             padx=self.parent.get_padding(),
                                             pady=self.parent.get_padding(),

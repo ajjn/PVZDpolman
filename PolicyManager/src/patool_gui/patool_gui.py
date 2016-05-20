@@ -1,16 +1,27 @@
-from patool_gui_settings import *
-import tkinter as tk
-from CreateEDDialog import CreateEDDialog
-from DeleteEDDialog import DeleteEDDialog
-from Recents import Recents
-from tkinter import filedialog
-from tkinter import messagebox
-from send_mail import send_files_via_email
 import pickle
 import sys
 import os
 import re
 import logging
+try:
+    from patool_gui_settings import *
+except ImportError:
+    # After a fresh install we need to initialize the settings from the default file
+    import shutil
+    scriptdir = os.path.dirname(os.path.realpath(__file__))
+    src = os.path.join(scriptdir, "patool_gui_settings.py.default")
+    dest = os.path.join(scriptdir, "patool_gui_settings.py")
+    shutil.copy(src, dest)
+    from patool_gui_settings import *
+import tkinter as tk
+from create_ed_dialog import CreateEDDialog
+from delete_ed_dialog import DeleteEDDialog
+from recents import Recents
+from tkinter import filedialog
+from tkinter import messagebox
+from tkinter import font
+from send_mail import send_files_via_email
+sys.path.append('..')
 from PAtool import run_me
 
 class PAtoolGUI(tk.Frame):
@@ -19,23 +30,46 @@ class PAtoolGUI(tk.Frame):
         self.parent = master
         self.parent.title("Portal Admin Tool")
         self.pack( fill=tk.BOTH, expand=True)
+        self.custom_font = font.Font(family=FONT_FAMILY, size=FONT_SIZE)
         self.initialize_variables()
         self.create_widgets()
         self.define_bindings()
+        self.updateGUI()
 
-    def updateGUI():
-        self.update_directory_listing()
-        self.parent.after(1000, updateGUI) # run itself again after 1000 ms
-
+    def updateGUI(self):
+        self.conditional_update_directory_listing()
+        self.parent.after(1000, self.updateGUI) # run itself again after 1000 ms
+        return True
+    
+    def conditional_update_directory_listing(self):
+        #self.set_input_entry(self.get_input_dir())
+        #self.set_output_entry(self.get_output_dir())
+        if not self.any_input_file_selected():
+            try:
+                self.clear_input_list()
+                for file in os.listdir(self.get_input_dir()):
+                    self.add_input_file(file)
+            except:
+                logging.error("Could not list dir")
+        if not self.any_output_file_selected():
+            try:
+                self.clear_output_list()
+                for file in os.listdir(self.get_output_dir()):
+                    self.add_output_file(file)
+            except:
+                logging.error("Could not list dir")
+        
     def update_directory_listing(self):
         self.set_input_entry(self.get_input_dir())
         self.set_output_entry(self.get_output_dir())
         try:
+            self.clear_input_list()
             for file in os.listdir(self.get_input_dir()):
                 self.add_input_file(file)
         except:
             logging.error("Could not list dir")
         try:
+            self.clear_output_list()
             for file in os.listdir(self.get_output_dir()):
                 self.add_output_file(file)
         except:
@@ -49,7 +83,7 @@ class PAtoolGUI(tk.Frame):
         self.parent.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def on_closing(self):
-        print("Quiting")
+        print("Exiting")
         # Save settings
         self.save_variables()
         self.parent.destroy()
@@ -138,6 +172,8 @@ class PAtoolGUI(tk.Frame):
         # Create three rows as frames
         row1 = tk.Frame(self)
         row1.pack(fill=tk.BOTH, expand=True)
+        row1e = tk.Frame(self)
+        row1e.pack(fill=tk.BOTH, expand=True)
         row2 = tk.Frame(self, height=1, bd=1, relief=tk.RIDGE)
         row2.pack(fill=tk.X, expand=True)
         row3 = tk.Frame(self)
@@ -147,24 +183,25 @@ class PAtoolGUI(tk.Frame):
         row1c1 = tk.Frame(row1)
         row1c1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         row1c2 = tk.Frame(row1)
-        row1c2.pack(side=tk.LEFT, fill=tk.Y, expand=True)
+        row1c2.pack(side=tk.LEFT, fill=tk.Y, expand=False)
         row1c3 = tk.Frame(row1)
         row1c3.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         # First column on first row has text entry for input file and
         # browse button on top.
-        tk.Label(row1c1, text="Input").pack(anchor=tk.NW,
+        tk.Label(row1c1, text="Input", font=self.custom_font).pack(anchor=tk.NW,
                                                  padx=self.get_padding(),
                                                  pady=self.get_padding())
         input_entry_frame = tk.Frame(row1c1)
         input_entry_frame.pack(fill=tk.X, expand=True)
-        self.input_entry = tk.Entry(input_entry_frame)
+        self.input_entry = tk.Entry(input_entry_frame, font=self.custom_font)
         self.input_entry.pack(side=tk.LEFT, fill=tk.X,
                               expand=True, padx=self.get_padding(),
                               pady=self.get_padding())
 
         ## Image for browse object
-        self.browse_image = tk.PhotoImage(file="images/browse.gif")
+        scriptdir = os.path.dirname(os.path.realpath(__file__))
+        self.browse_image = tk.PhotoImage(file=os.path.join(scriptdir, "images/browse.gif"))
         self.browse_input_file = tk.Button(input_entry_frame,
                                          image=self.browse_image,
                                          command= self.browse_for_input)
@@ -179,6 +216,7 @@ class PAtoolGUI(tk.Frame):
                                  pady=self.get_padding())
 
         self.input_file_list = tk.Listbox(input_list_frame,
+                                          font=self.custom_font,
                                           exportselection=0,
                                           yscrollcommand=self.input_scrollbar.set)
         self.input_file_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True,
@@ -196,7 +234,7 @@ class PAtoolGUI(tk.Frame):
                        width=BUTTON_WIDTH)
         b1f.pack_propagate(0)
         b1f.pack(anchor=tk.CENTER, expand=True)
-        tk.Button(b1f, text="create ED\nfrom cert",
+        tk.Button(b1f, font=self.custom_font, text="create ED\nfrom cert",
                   command=self.createED_dialog).pack(fill=tk.BOTH,
                                                      expand=True,
                                                      padx=self.get_padding(),
@@ -206,7 +244,7 @@ class PAtoolGUI(tk.Frame):
                        width=BUTTON_WIDTH)
         b2f.pack_propagate(0)
         b2f.pack(anchor=tk.CENTER, expand=True)
-        tk.Button(b2f, text="sign ED",
+        tk.Button(b2f, font=self.custom_font, text="sign ED",
                   command=self.signED).pack(fill=tk.BOTH,
                                             expand=True,
                                             padx=self.get_padding(),
@@ -216,21 +254,21 @@ class PAtoolGUI(tk.Frame):
                        width=BUTTON_WIDTH)
         b3f.pack_propagate(0)
         b3f.pack(anchor=tk.CENTER, expand=True)
-        tk.Button(b3f, text='create request\n"delete ED"',
+        tk.Button(b3f, font=self.custom_font, text='create request\n"delete ED"',
                   command=self.deleteED_dialog).pack(fill=tk.BOTH,
                                                      expand=True,
                                                      padx=self.get_padding(),
                                                      pady=self.get_padding())
 
 
-        # Third column on first row has text entry for output file,
+        # Third column on first row has font=self.custom_font, text entry for output file,
         # list of output files and a send button
-        tk.Label(row1c3, text="Output").pack(anchor=tk.NW,
+        tk.Label(row1c3, font=self.custom_font, text="Output").pack(anchor=tk.NW,
                                                   padx=self.get_padding(),
                                                   pady=self.get_padding())
         output_entry_frame = tk.Frame(row1c3)
         output_entry_frame.pack(fill=tk.X, expand=True)
-        self.output_entry = tk.Entry(output_entry_frame)
+        self.output_entry = tk.Entry(output_entry_frame, font=self.custom_font)
         self.output_entry.pack(side=tk.LEFT, fill=tk.X, expand=True,
                               padx=self.get_padding(), pady=self.get_padding())
 
@@ -248,6 +286,7 @@ class PAtoolGUI(tk.Frame):
                                   pady=self.get_padding())
 
         self.output_file_list = tk.Listbox(output_list_frame,
+                                           font=self.custom_font,
                                            selectmode="multiple",
                                            exportselection=0,
                                            yscrollcommand=self.output_scrollbar.set)
@@ -256,14 +295,21 @@ class PAtoolGUI(tk.Frame):
 
         self.output_scrollbar.config(command=self.output_file_list.yview)
 
-        self.send_button = tk.Button(row1c3,
-                                     text="Send",
-                                     command=self.send)
-        self.send_button.pack(padx=self.get_padding(), pady=self.get_padding())
 
-        ## Second row has separators and label of history
+        # Second row has separators and label of history
 
-        tk.Label(row2, text="History").pack(anchor=tk.NW,
+        b4f = tk.Frame(row1e, height=BUTTON_HEIGHT,
+                       width=BUTTON_WIDTH)
+        b4f.pack_propagate(0)
+        b4f.pack(anchor=tk.E, expand=True,padx=60)
+        tk.Button(b4f, font=self.custom_font, text="Send",
+                  command=self.send).pack(fill=tk.BOTH,
+                                          expand=True,
+                                          padx=self.get_padding(),
+                                          pady=self.get_padding())
+
+
+        tk.Label(row2, font=self.custom_font, text="History").pack(anchor=tk.NW,
                                                  padx=self.get_padding(),
                                                  pady=self.get_padding())
    
@@ -272,8 +318,8 @@ class PAtoolGUI(tk.Frame):
         self.log_view_scrollbar = tk.Scrollbar(row3)
         self.log_view_scrollbar.pack(side=tk.RIGHT, fill=tk.Y,
                                    padx=self.get_padding(), pady=self.get_padding())
-        self.log_view = tk.Text(row3,
-                               yscrollcommand= self.log_view_scrollbar.set)
+        self.log_view = tk.Text(row3, font=self.custom_font,
+                                yscrollcommand= self.log_view_scrollbar.set)
         self.log_view.config(state='disabled')
         self.log_view.pack(side=tk.RIGHT, fill=tk.BOTH,
                           padx=self.get_padding(), pady=self.get_padding(), expand=True)
@@ -318,6 +364,20 @@ class PAtoolGUI(tk.Frame):
         indices = self.input_file_list.curselection()
         if len(indices) > 0:
             return self.input_file_list.get(indices[0])
+        else:
+            return False
+
+    def any_input_file_selected(self):
+        indices = self.input_file_list.curselection()
+        if len(indices) > 0:
+            return True
+        else:
+            return False
+
+    def any_output_file_selected(self):
+        indices = self.output_file_list.curselection()
+        if len(indices) > 0:
+            return True
         else:
             return False
 
@@ -421,7 +481,8 @@ class PAtoolGUI(tk.Frame):
 
     def browse_for_input(self):
         directory = filedialog.askdirectory()
-        if directory:
+        #validate directory
+        if self.validate_dir(directory):
             try:
                 self.clear_input_list()
                 for file in os.listdir(directory):
@@ -430,11 +491,11 @@ class PAtoolGUI(tk.Frame):
                 text = "Failed to read directory \n'%s'"%directory
                 self.log(text)
                 messagebox.showerror(text)
-        self.set_input_entry(directory)
+            self.set_input_entry(directory)
         
     def browse_for_output(self):
         directory = filedialog.askdirectory()
-        if directory:
+        if self.validate_dir(directory):
             try:
                 self.clear_output_list()
                 for file in os.listdir(directory):
@@ -443,10 +504,12 @@ class PAtoolGUI(tk.Frame):
                 text = "Failed to read directory \n'%s'"%directory
                 self.log(text)
                 messagebox.showerror(text)
-        self.set_output_entry(directory)
+            self.set_output_entry(directory)
 
     def validate_dir(self, dir):
         # Validate selected file and directory as a proper file
+        if not dir:
+            return False
         if os.path.isdir(dir):
             return True
         else:
@@ -539,7 +602,7 @@ class PAtoolGUI(tk.Frame):
         y = int(self.get_window_height()/3) + self.get_window_y()
         self.deleteED_window_geometry = "%dx%d+%d+%d" % (DELETE_ED_WINDOW_WIDTH,
                                                          DELETE_ED_WINDOW_HEIGHT,
-                                                         x,y)
+                                                         x, y)
         DeleteEDDialog(self)
 
     def createED(self):
@@ -549,26 +612,56 @@ class PAtoolGUI(tk.Frame):
         cli += " -r " + str(self.get_samlrole())
         if self.get_entityID_suffix() != "":
             cli += " -S " + str(self.get_entityID_suffix())
+        if self.sign_after_create:
+            cli += " -s "
         cli += " " + str(os.path.join(self.get_input_dir(),
                                       self.get_input_file()))
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
-        
+        self.update_directory_listing()
+
     def create_and_signED(self):
         cli = "PAtool.py createED"
         cli += " -e " + str(self.get_entityID())
         cli += " -o " + str(self.get_output_dir())
         cli += " -r " + str(self.get_samlrole())
-        cli += " -S " + str(self.get_entityID_suffix())
+        if self.get_entityID_suffix() != "":
+            cli += " -S " + str(self.get_entityID_suffix())
         cli += " -s " 
         cli += str(os.path.join(self.get_input_dir(),
                                 self.get_input_file()))
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
+        self.update_directory_listing()
         
     def signED(self):
+        # Validate input directory
+        if not self.validate_dir(self.get_input_entry()):
+            messagebox.showinfo("Input directory",
+                                "Cannot open input directory\n%s" % self.get_input_entry())
+            return
+            
+        # Validate selection
+        if not self.get_selected_input():
+            messagebox.showinfo("Input selection",
+                                "Please, select an input file")
+            return
+        # Validate file
+        if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
+            messagebox.showinfo(
+                "Input file is invalid",
+                "Cannot open this file\n%s" % self.get_selected_input())
+            return
+
+        # Validate output directory
+        if not self.validate_dir(self.get_output_entry()):
+            messagebox.showinfo("Output directory",
+                                "Cannot open output directory\n%s" % self.get_output_entry())
+            return
+
+        # Set user entries
         self.set_input_file(self.get_selected_input())
         self.set_input_dir(self.get_input_entry())
         self.set_output_dir(self.get_output_entry())
@@ -580,6 +673,7 @@ class PAtoolGUI(tk.Frame):
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
+        self.update_directory_listing()
 
         
     def deleteED(self):
@@ -589,10 +683,10 @@ class PAtoolGUI(tk.Frame):
         self.log(cli)
         self.rewrite_sys_argv(cli)
         self.invoke_PAtool()
+        self.update_directory_listing()
 
     def send(self):
         self.set_output_files(self.get_selected_output())
-        print (self.get_output_files())
         self.log("Invoking send")
         result = send_files_via_email(self.get_output_dir(), self.get_output_files())
         if result:
