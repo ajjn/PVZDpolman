@@ -1,4 +1,4 @@
-import pickle
+import json
 import sys
 import os
 import re
@@ -21,7 +21,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import font
 from send_mail import send_files_via_email
-sys.path.append('..')
+sys.path.append('..')  # TODO: make this directory a package
 from PAtool import run_me
 
 class PAtoolGUI(tk.Frame):
@@ -37,8 +37,9 @@ class PAtoolGUI(tk.Frame):
         self.updateGUI()
 
     def updateGUI(self):
+        # refresh display every second to updatedirectory listings
         self.conditional_update_directory_listing()
-        self.parent.after(1000, self.updateGUI) # run itself again after 1000 ms
+        self.parent.after(1000, self.updateGUI)
         return True
     
     def conditional_update_directory_listing(self):
@@ -90,9 +91,9 @@ class PAtoolGUI(tk.Frame):
 
     def load_variables(self):
         try:
-            f = open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'rb' )
-            settings = pickle.load(f)
-            f.close()
+            with open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'rb') as fd:
+                s = fd.read().decode('UTF-8')
+                settings = json.loads(s)
             self.set_input_dir(settings['input_dir'])
             self.set_output_dir(settings['output_dir'])
             self.set_padding(settings['padding'])
@@ -111,11 +112,11 @@ class PAtoolGUI(tk.Frame):
         settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
         settings['geometry'] = self.get_geometry()
         try:
-            f = open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'wb' )
-            pickle.dump( settings, f )
-            f.close()
-        except:
-            logging.warning("Could not save GUI settings")
+            with open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'wb') as fd:
+                j = json.dumps(settings, indent=2)
+                fd.write(j.encode('UTF-8'))
+        except Exception as e:
+            logging.warning("Could not save GUI settings: " + str(e))
             
     def initialize_saveable_variables(self):
         self.set_input_dir(".")
@@ -126,10 +127,7 @@ class PAtoolGUI(tk.Frame):
         # Put to the middle of the screen by default
         x = int((sw - MAIN_WINDOW_WIDTH) / 2)
         y = int((sh - MAIN_WINDOW_HEIGHT) / 2)
-        geometry = "%dx%d+%d+%d" % (MAIN_WINDOW_WIDTH,
-                                    MAIN_WINDOW_HEIGHT,
-                                    x, y)
-
+        geometry = "%dx%d+%d+%d" % (MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, x, y)
         self.parent.geometry(geometry)
         self.set_padding(PADDING)
         self.set_recent_entityIDs(Recents())
