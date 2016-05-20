@@ -135,8 +135,8 @@ class SAMLEntityDescriptor:
            </ds:X509Certificate>
         </ds:X509Data>
       </ds:KeyInfo>
-      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/acs/unused" index="0" isDefault="true"/>
     </md:KeyDescriptor>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="{eid}/acs/unused" index="0" isDefault="true"/>
   </md:SPSSODescriptor>
 </md:EntityDescriptor>""".format(eid=entityid, pem=cert_str)
         else:
