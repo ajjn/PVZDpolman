@@ -8,6 +8,7 @@ if [[ "$HOSTNAME" == "pvzd-client" ]]; then
     export PROJ_HOME=/opt/PVZDpolman
     source /opt/rh/rh-python34/enable
     export py3=/opt/rh/rh-python34/root/usr/bin/python
+    export PYJNIUS_ACTIVATE=
 elif [[ "$ostype" == "linux-gnu" ]]; then
     #  devl9
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0

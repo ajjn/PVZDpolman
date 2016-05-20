@@ -536,13 +536,29 @@ class PAtoolGUI(tk.Frame):
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
         return url is not None and regex.search(url)
 
+    def is_valid_certfile(self, file) -> bool:
+        """ take a file and check if it is a RFC 7468 conformant base64-encoded certificate
+        """
+        begin = False
+        end = False
+        with open(file) as fd:
+            for l in f.readlines():
+                if l == '-----BEGIN CERTIFICATE-----\n':
+                    begin = True
+                    continue
+                if begin:
+                    if l.startswith('-----END CERTIFICATE-----'):
+                        end = True
+                        break
+        return (begin and end)
+
     def createED_dialog(self):
         # Validate input directory
         if not self.validate_dir(self.get_input_entry()):
             messagebox.showinfo("Input directory",
-                                "Cannot open input directory\n%s" % self.get_input_entry())
+                                "Cannot open input directory:\n%s" % self.get_input_entry())
             return
-            
+
         # Validate selection
         if not self.get_selected_input():
             messagebox.showinfo("Input selection",
@@ -552,13 +568,18 @@ class PAtoolGUI(tk.Frame):
         if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
             messagebox.showinfo(
                 "Input file is invalid",
-                "Cannot open this file\n%s" % self.get_selected_input())
+                "Cannot open this file:\n%s" % self.get_selected_input())
+            return
+        if self.is_valid_certfile:
+            messagebox.showinfo(
+                "Invalid selection",
+                "Certificate must contain '-----BEGIN/END CERTIFICATE-----' delimiters conforming to RFC 7468. Cannot open this file\n%s" % self.get_selected_input())
             return
 
         # Validate output directory
         if not self.validate_dir(self.get_output_entry()):
             messagebox.showinfo("Output directory",
-                                "Cannot open output directory\n%s" % self.get_output_entry())
+                                "Cannot open output directory:\n%s" % self.get_output_entry())
             return
 
         # Set user entries
@@ -581,18 +602,6 @@ class PAtoolGUI(tk.Frame):
                                 "Cannot open directory\n%s" % self.get_input_entry())
             return
             
-        # Validate selection
-        if not self.get_selected_input():
-            messagebox.showinfo("Input selection",
-                                "Please, select an input file")
-            return
-        # Validate file
-        if not self.validate_dir_file(self.get_input_entry(), self.get_selected_input()):
-            messagebox.showinfo(
-                "Input file is invalid",
-                "Cannot open this file\n%s" % self.get_selected_input())
-            return
-
         # Set user entries
         self.set_input_file(self.get_selected_input())
         self.set_input_dir(self.get_input_entry())
