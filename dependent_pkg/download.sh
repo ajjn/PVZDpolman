@@ -4,8 +4,10 @@
 
 get_or_update_repo() {
     if [ -e $repodir ] ; then
+        echo "pulling updates from $repodir"
         cd $repodir && git pull && cd -    # already cloned
     else
+        echo "cloning $repodir"
         mkdir -p $repodir
         git clone $repourl $repodir        # first time
     fi

@@ -1,8 +1,17 @@
+__author__ = 'r2h2'
+
 import json
 import sys
 import os
 import re
 import logging
+import constants
+try:
+    loglevel = os.environ['PATOOLGUI_LOGLEVEL']
+    logging.basicConfig(filename=os.path.join(os.environ['HOME'], 'patoolgui.log'), level=loglevel)
+except Exception as e:
+    pass
+
 try:
     from patool_gui_settings import *
 except ImportError:
@@ -51,14 +60,14 @@ class PAtoolGUI(tk.Frame):
                 for file in os.listdir(self.get_input_dir()):
                     self.add_input_file(file)
             except:
-                logging.error("Could not list dir")
+                logging.error("Could not list dir " + self.get_input_dir())
         if not self.any_output_file_selected():
             try:
                 self.clear_output_list()
                 for file in os.listdir(self.get_output_dir()):
                     self.add_output_file(file)
             except:
-                logging.error("Could not list dir")
+                logging.error("Could not list dir " + self.get_output_dir())
         
     def update_directory_listing(self):
         self.set_input_entry(self.get_input_dir())
@@ -68,13 +77,13 @@ class PAtoolGUI(tk.Frame):
             for file in os.listdir(self.get_input_dir()):
                 self.add_input_file(file)
         except:
-            logging.error("Could not list dir")
+            logging.error("Could not list dir " + self.get_input_dir())
         try:
             self.clear_output_list()
             for file in os.listdir(self.get_output_dir()):
                 self.add_output_file(file)
         except:
-            logging.error("Could not list dir")
+            logging.error("Could not list dir " + self.get_output_dir())
         
     def define_bindings(self):
         # Define key bindings
@@ -112,9 +121,11 @@ class PAtoolGUI(tk.Frame):
         settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
         settings['geometry'] = self.get_geometry()
         try:
-            with open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'wb') as fd:
+            fpath = os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE)
+            with open(fpath, 'wb') as fd:
                 j = json.dumps(settings, indent=2)
                 fd.write(j.encode('UTF-8'))
+                logging.debug("saved profile in " + fpath)
         except Exception as e:
             logging.warning("Could not save GUI settings: " + str(e))
             
@@ -700,10 +711,11 @@ class PAtoolGUI(tk.Frame):
         self.set_output_files(self.get_selected_output())
         self.log("Invoking send")
         result = send_files_via_email(self.get_output_dir(), self.get_output_files())
-        if result:
-            self.log("Files sent.")
+        if result == 'OK':
+            self.log("Files mailed:" + ', '.join(self.get_output_files()))
+            logging.info("Files mailed:" + ', '.join(self.get_output_files()))
         else:
-            self.log("Failed to send files.")
+            self.log("Failed to send. " + result)
         
     def rewrite_sys_argv(self, command_line_string):
         sys.argv = command_line_string.split()

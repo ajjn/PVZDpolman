@@ -17,7 +17,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_files_via_email(dir, filenames):
+def send_files_via_email(dir, filenames) -> str:
+    """
+    Send a list of files to a pre-configured address
+    :param dir: input directory
+    :param filenames: files to be attachte to the mail
+    :return: success message: 'OK' or error message
+    """
 
     # Create the enclosing (outer) message
     outer = MIMEMultipart()
@@ -46,9 +52,6 @@ def send_files_via_email(dir, filenames):
         elif maintype == 'image':
             with open(filename, 'rb') as fp:
                 msg = MIMEImage(fp.read(), _subtype=subtype)
-        elif maintype == 'audio':
-            with open(filename, 'rb') as fp:
-                msg = MIMEAudio(fp.read(), _subtype=subtype)
         else:
             with open(filename, 'rb') as fp:
                 msg = MIMEBase(maintype, subtype)
@@ -60,37 +63,43 @@ def send_files_via_email(dir, filenames):
         outer.attach(msg)
     # Now send the message
     composed = outer.as_string()
-    smtp_server = smtplib.SMTP(SMTP_SMART_HOST, SMTP_PORT)
+    try:
+        smtp_server = smtplib.SMTP(SMTP_SMART_HOST, SMTP_PORT)
+    except Exception as e:
+        logging.error( str(e) + '\nMail sending.')
+        return str(e) + '\nMail sending.'
     if not USE_TLS:
-        smtp_server.sendmail(FROM, RECIPIENT, composed)
-    else:
-        # Taken from
-        # http://stackoverflow.com/questions/33857698/sending-email-from-python-using-starttls
-        _DEFAULT_CIPHERS = (
-            'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+HIGH:'
-            'DH+HIGH:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+HIGH:RSA+3DES:!aNULL:'
-            '!eNULL:!MD5')
-
-
-        # only TLSv1 or higher
-        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        context.options |= ssl.OP_NO_SSLv2
-        context.options |= ssl.OP_NO_SSLv3
-        
-        context.set_ciphers(_DEFAULT_CIPHERS)
-        context.set_default_verify_paths()
-        context.verify_mode = ssl.CERT_REQUIRED
-        smtp_server.ehlo()
-        if smtp_server.starttls(context=context)[0] != 220:
-            return False # cancel if connection is not encrypted
-        try:
-            smtp_server.login(ACCOUNT, PASSWORD)
-        except Exception as e:
-            logging.error( str(e) + '\nMail server authentication.')
-
         try:
             smtp_server.sendmail(FROM, RECIPIENT, composed)
         except Exception as e:
             logging.error( str(e) + '\nMail sending.')
+            return str(e) + '\nMail sending.'
+    else:
+        # only TLSv1 or higher
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        context.options |= ssl.OP_NO_SSLv2
+        context.options |= ssl.OP_NO_SSLv3
+        # Taken from http://stackoverflow.com/questions/33857698/sending-email-from-python-using-starttls
+        context.set_ciphers(
+            'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+HIGH:'
+            'DH+HIGH:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+HIGH:RSA+3DES:!aNULL:'
+            '!eNULL:!MD5')
+        context.set_default_verify_paths()
+        context.verify_mode = ssl.CERT_REQUIRED
+        smtp_server.ehlo()
+        if smtp_server.starttls(context=context)[0] != 220:
+            return "Connection is not encrypted"
+        try:
+            smtp_server.login(ACCOUNT, PASSWORD)
+        except Exception as e:
+            logging.error(str(e) + '\nMail server authentication.')
+            smtp_server.quit()
+            return str(e) + '\nMail server authentication.'
+        try:
+            smtp_server.sendmail(FROM, RECIPIENT, composed)
+        except Exception as e:
+            logging.error( str(e) + '\nMail sending.')
+            smtp_server.quit()
+            return str(e) + '\nMail sending.'
         smtp_server.quit()
-    return(True)
+    return "OK"
