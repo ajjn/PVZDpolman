@@ -7,8 +7,11 @@ import re
 import logging
 import constants
 try:
-    loglevel = os.environ['PATOOLGUI_LOGLEVEL']
-    logging.basicConfig(filename=os.path.join(os.environ['HOME'], 'patoolgui.log'), level=loglevel)
+    loglevel_str = os.environ['PATOOLGUI_LOGLEVEL']
+    loglevel_int = constants.LOGLEVELS[loglevel_str]
+    logging.basicConfig(filename=os.path.join(os.environ['HOME'], 'patoolgui.log'),
+                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        level=loglevel_int)
 except Exception as e:
     pass
 
@@ -21,6 +24,7 @@ except ImportError:
     src = os.path.join(scriptdir, "patool_gui_settings.py.default")
     dest = os.path.join(scriptdir, "patool_gui_settings.py")
     shutil.copy(src, dest)
+    logging.info('initialized patool_gui_settings.py')
     from patool_gui_settings import *
 import tkinter as tk
 from create_ed_dialog import CreateEDDialog
