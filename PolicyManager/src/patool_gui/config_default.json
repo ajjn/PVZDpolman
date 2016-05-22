@@ -1,0 +1,30 @@
+{
+    "Other GUI options": {
+        "GUI_SAVED_SETTINGS_FILE": ".patool_gui.json",
+        "RECENTS_MAX_SIZE": 8,
+        "TWO_LINES_BUTTON_HEIGHT": 60,
+        "BUTTON_HEIGHT": 45,
+        "BUTTON_WIDTH": 140,
+        "PADDING": 5,
+        "FONT_SIZE": 12,
+        "FONT_FAMILY": "Arial"
+    },
+    "EMail Account": {
+        "TITLE": "PVZD Admin Request",
+        "USE_TLS": true,
+        "SMTP_PORT": 587,
+        "ACCOUNT": "account",
+        "SMTP_SMART_HOST": "server",
+        "RECIPIENT": "recipient@domain.com",
+        "PASSWORD": "pass",
+        "FROM": "sender@domain.com"
+    },
+    "Default window sizes": {
+        "CREATE_ED_WINDOW_WIDTH": 350,
+        "MAIN_WINDOW_HEIGHT": 600,
+        "CREATE_ED_WINDOW_HEIGHT": 150,
+        "DELETE_ED_WINDOW_WIDTH": 350,
+        "DELETE_ED_WINDOW_HEIGHT": 120,
+        "MAIN_WINDOW_WIDTH": 900
+    }
+}
