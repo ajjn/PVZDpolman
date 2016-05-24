@@ -1,8 +1,12 @@
 from patool_gui_settings import RECENTS_MAX_SIZE
 
 class Recents(list):
-    def __init__(self):
-        self.add_recent("")
+    def __init__(self, initial_list = []):
+        if len(initial_list) > 0:
+            for item in initial_list:
+                self.add_recent(item)
+        else:
+            self.add_recent("")
 
     def add_recent(self, item):
         # Discard duplicate adding
@@ -11,4 +15,3 @@ class Recents(list):
         self.insert(0, item)
         if len(self) > RECENTS_MAX_SIZE:
             del self[-1]
-
