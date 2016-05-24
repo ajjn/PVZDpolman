@@ -14,18 +14,6 @@ try:
                         level=loglevel_int)
 except Exception as e:
     pass
-
-try:
-    from patool_gui_settings import *
-except ImportError:
-    # After a fresh install we need to initialize the settings from the default file
-    import shutil
-    scriptdir = os.path.dirname(os.path.realpath(__file__))
-    src = os.path.join(scriptdir, "patool_gui_settings.py.default")
-    dest = os.path.join(scriptdir, "patool_gui_settings.py")
-    shutil.copy(src, dest)
-    logging.info('initialized patool_gui_settings.py')
-    from patool_gui_settings import *
 import tkinter as tk
 from create_ed_dialog import CreateEDDialog
 from delete_ed_dialog import DeleteEDDialog
@@ -36,14 +24,16 @@ from tkinter import font
 from send_mail import send_files_via_email
 sys.path.append('..')  # TODO: make this directory a package
 from PAtool import run_me
+from config_reader import ConfigReader
 
 class PAtoolGUI(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.parent = master
         self.parent.title("Portal Admin Tool")
-        self.pack( fill=tk.BOTH, expand=True)
-        self.custom_font = font.Font(family=FONT_FAMILY, size=FONT_SIZE)
+        self.pack(fill=tk.BOTH, expand=True)
+        self.conf = ConfigReader()
+        self.custom_font = font.Font(family=self.conf.FONT_FAMILY, size=self.conf.FONT_SIZE)
         self.initialize_variables()
         self.create_widgets()
         self.define_bindings()
@@ -104,7 +94,7 @@ class PAtoolGUI(tk.Frame):
 
     def load_variables(self):
         try:
-            with open(os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE), 'rb') as fd:
+            with open(os.path.join(os.environ['HOME'], self.conf.GUI_SAVED_SETTINGS_FILE), 'rb') as fd:
                 s = fd.read().decode('UTF-8')
                 settings = json.loads(s)
             self.set_input_dir(settings['input_dir'])
@@ -125,7 +115,7 @@ class PAtoolGUI(tk.Frame):
         settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
         settings['geometry'] = self.get_geometry()
         try:
-            fpath = os.path.join(os.environ['HOME'], GUI_SAVED_SETTINGS_FILE)
+            fpath = os.path.join(os.environ['HOME'], self.conf.GUI_SAVED_SETTINGS_FILE)
             with open(fpath, 'wb') as fd:
                 j = json.dumps(settings, indent=2)
                 fd.write(j.encode('UTF-8'))
@@ -140,13 +130,13 @@ class PAtoolGUI(tk.Frame):
         sw = self.get_screen_width()
         sh = self.get_screen_height()
         # Put to the middle of the screen by default
-        x = int((sw - MAIN_WINDOW_WIDTH) / 2)
-        y = int((sh - MAIN_WINDOW_HEIGHT) / 2)
-        geometry = "%dx%d+%d+%d" % (MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, x, y)
+        x = int((sw - self.conf.MAIN_WINDOW_WIDTH) / 2)
+        y = int((sh - self.conf.MAIN_WINDOW_HEIGHT) / 2)
+        geometry = "%dx%d+%d+%d" % (self.conf.MAIN_WINDOW_WIDTH, self.conf.MAIN_WINDOW_HEIGHT, x, y)
         self.parent.geometry(geometry)
-        self.set_padding(PADDING)
-        self.set_recent_entityIDs(Recents())
-        self.set_recent_entityID_suffices(Recents())
+        self.set_padding(self.conf.PADDING)
+        self.set_recent_entityIDs(Recents(self.conf.RECENTS_MAX_SIZE))
+        self.set_recent_entityID_suffices(Recents(self.conf.RECENTS_MAX_SIZE))
         
     def initialize_variables(self):
         self.load_variables()
@@ -239,12 +229,12 @@ class PAtoolGUI(tk.Frame):
 
 
         # Middle column has tree buttons
-        b0f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
-                       width=BUTTON_WIDTH)
+        b0f = tk.Frame(row1c2, height=self.conf.TWO_LINES_BUTTON_HEIGHT,
+                       width=self.conf.BUTTON_WIDTH)
         b0f.pack_propagate(0)
         b0f.pack(anchor=tk.CENTER, expand=True)
-        b1f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
-                       width=BUTTON_WIDTH)
+        b1f = tk.Frame(row1c2, height=self.conf.TWO_LINES_BUTTON_HEIGHT,
+                       width=self.conf.BUTTON_WIDTH)
         b1f.pack_propagate(0)
         b1f.pack(anchor=tk.CENTER, expand=True)
         tk.Button(b1f, font=self.custom_font, text="create ED\nfrom cert",
@@ -253,8 +243,8 @@ class PAtoolGUI(tk.Frame):
                                                      padx=self.get_padding(),
                                                      pady=self.get_padding())
 
-        b2f = tk.Frame(row1c2, height=BUTTON_HEIGHT,
-                       width=BUTTON_WIDTH)
+        b2f = tk.Frame(row1c2, height=self.conf.BUTTON_HEIGHT,
+                       width=self.conf.BUTTON_WIDTH)
         b2f.pack_propagate(0)
         b2f.pack(anchor=tk.CENTER, expand=True)
         tk.Button(b2f, font=self.custom_font, text="sign ED",
@@ -263,8 +253,8 @@ class PAtoolGUI(tk.Frame):
                                             padx=self.get_padding(),
                                             pady=self.get_padding())
 
-        b3f = tk.Frame(row1c2, height=TWO_LINES_BUTTON_HEIGHT,
-                       width=BUTTON_WIDTH)
+        b3f = tk.Frame(row1c2, height=self.conf.TWO_LINES_BUTTON_HEIGHT,
+                       width=self.conf.BUTTON_WIDTH)
         b3f.pack_propagate(0)
         b3f.pack(anchor=tk.CENTER, expand=True)
         tk.Button(b3f, font=self.custom_font, text='create request\n"delete ED"',
@@ -311,8 +301,8 @@ class PAtoolGUI(tk.Frame):
 
         # Second row has separators and label of history
 
-        b4f = tk.Frame(row1e, height=BUTTON_HEIGHT,
-                       width=BUTTON_WIDTH)
+        b4f = tk.Frame(row1e, height=self.conf.BUTTON_HEIGHT,
+                       width=self.conf.BUTTON_WIDTH)
         b4f.pack_propagate(0)
         b4f.pack(anchor=tk.E, expand=True,padx=60)
         tk.Button(b4f, font=self.custom_font, text="Send",
@@ -602,8 +592,8 @@ class PAtoolGUI(tk.Frame):
         # Calculate the dialog position
         x = self.get_window_width() + self.get_window_x()
         y = int(self.get_window_height()/3) + self.get_window_y()
-        self.createED_window_geometry = "%dx%d+%d+%d" % (CREATE_ED_WINDOW_WIDTH,
-                                                         CREATE_ED_WINDOW_HEIGHT,
+        self.createED_window_geometry = "%dx%d+%d+%d" % (self.conf.CREATE_ED_WINDOW_WIDTH,
+                                                         self.conf.CREATE_ED_WINDOW_HEIGHT,
                                                          x,y)
         CreateEDDialog(self)
 
@@ -714,7 +704,7 @@ class PAtoolGUI(tk.Frame):
     def send(self):
         self.set_output_files(self.get_selected_output())
         self.log("Invoking send")
-        result = send_files_via_email(self.get_output_dir(), self.get_output_files())
+        result = send_files_via_email(self.conf, self.get_output_dir(), self.get_output_files())
         if result == 'OK':
             self.log("Files mailed:" + ', '.join(self.get_output_files()))
             logging.info("Files mailed:" + ', '.join(self.get_output_files()))

@@ -1,4 +1,3 @@
-from patool_gui_settings import *
 import logging
 import os
 import sys
@@ -17,9 +16,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_files_via_email(dir, filenames) -> str:
+def send_files_via_email(conf, dir, filenames) -> str:
     """
     Send a list of files to a pre-configured address
+    :param conf: ConfigReader
     :param dir: input directory
     :param filenames: files to be attachte to the mail
     :return: success message: 'OK' or error message
@@ -27,9 +27,9 @@ def send_files_via_email(dir, filenames) -> str:
 
     # Create the enclosing (outer) message
     outer = MIMEMultipart()
-    outer['Subject'] = TITLE
-    outer['To'] = RECIPIENT
-    outer['From'] = FROM
+    outer['Subject'] = conf.TITLE
+    outer['To'] = conf.RECIPIENT
+    outer['From'] = conf.FROM
     outer.preamble = 'You will not see this in a MIME-aware mail reader.\n'
 
     for file in filenames:
@@ -64,13 +64,13 @@ def send_files_via_email(dir, filenames) -> str:
     # Now send the message
     composed = outer.as_string()
     try:
-        smtp_server = smtplib.SMTP(SMTP_SMART_HOST, SMTP_PORT)
+        smtp_server = smtplib.SMTP(conf.SMTP_SMART_HOST, conf.SMTP_PORT)
     except Exception as e:
         logging.error( str(e) + '\nMail sending.')
         return str(e) + '\nMail sending.'
-    if not USE_TLS:
+    if not conf.USE_TLS:
         try:
-            smtp_server.sendmail(FROM, RECIPIENT, composed)
+            smtp_server.sendmail(conf.FROM, conf.RECIPIENT, composed)
         except Exception as e:
             logging.error( str(e) + '\nMail sending.')
             return str(e) + '\nMail sending.'
@@ -90,13 +90,13 @@ def send_files_via_email(dir, filenames) -> str:
         if smtp_server.starttls(context=context)[0] != 220:
             return "Connection is not encrypted"
         try:
-            smtp_server.login(ACCOUNT, PASSWORD)
+            smtp_server.login(conf.ACCOUNT, conf.PASSWORD)
         except Exception as e:
             logging.error(str(e) + '\nMail server authentication.')
             smtp_server.quit()
             return str(e) + '\nMail server authentication.'
         try:
-            smtp_server.sendmail(FROM, RECIPIENT, composed)
+            smtp_server.sendmail(conf.FROM, conf.RECIPIENT, composed)
         except Exception as e:
             logging.error( str(e) + '\nMail sending.')
             smtp_server.quit()
