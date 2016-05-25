@@ -135,8 +135,8 @@ class PAtoolGUI(tk.Frame):
         geometry = "%dx%d+%d+%d" % (self.conf.MAIN_WINDOW_WIDTH, self.conf.MAIN_WINDOW_HEIGHT, x, y)
         self.parent.geometry(geometry)
         self.set_padding(self.conf.PADDING)
-        self.set_recent_entityIDs(Recents(self.conf.RECENTS_MAX_SIZE))
-        self.set_recent_entityID_suffices(Recents(self.conf.RECENTS_MAX_SIZE))
+        self.set_recent_entityIDs(Recents(maxsize=self.conf.RECENTS_MAX_SIZE))
+        self.set_recent_entityID_suffices(Recents(maxsize=self.conf.RECENTS_MAX_SIZE))
         
     def initialize_variables(self):
         self.load_variables()

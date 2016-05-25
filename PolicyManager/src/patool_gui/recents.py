@@ -1,5 +1,6 @@
 class Recents(list):
-    def __init__(self, initial_list = []):
+    def __init__(self, initial_list = [], maxsize=8):
+        self.RECENTS_MAX_SIZE = maxsize
         if len(initial_list) > 0:
             for item in initial_list:
                 self.add_recent(item)
