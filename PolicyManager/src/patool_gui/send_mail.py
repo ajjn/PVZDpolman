@@ -63,43 +63,54 @@ def send_files_via_email(conf, dir, filenames) -> str:
         outer.attach(msg)
     # Now send the message
     composed = outer.as_string()
-    try:
-        smtp_server = smtplib.SMTP(conf.SMTP_SMART_HOST, conf.SMTP_PORT)
-    except Exception as e:
-        logging.error( str(e) + '\nMail sending.')
-        return str(e) + '\nMail sending.'
-    if not conf.USE_TLS:
-        try:
-            smtp_server.sendmail(conf.FROM, conf.RECIPIENT, composed)
-        except Exception as e:
-            logging.error( str(e) + '\nMail sending.')
-            return str(e) + '\nMail sending.'
-    else:
-        # only TLSv1 or higher
-        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        context.options |= ssl.OP_NO_SSLv2
-        context.options |= ssl.OP_NO_SSLv3
+    logging.info("connecting to smtp://%s:%s" %  (conf.SMTP_SMART_HOST, conf.SMTP_PORT))
+    if conf.USE_TLS:
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        ssl_context.options |= ssl.OP_NO_SSLv2
+        ssl_context.options |= ssl.OP_NO_SSLv3
         # Taken from http://stackoverflow.com/questions/33857698/sending-email-from-python-using-starttls
-        context.set_ciphers(
+        ssl_context.set_ciphers(
             'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+HIGH:'
             'DH+HIGH:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+HIGH:RSA+3DES:!aNULL:'
             '!eNULL:!MD5')
-        context.set_default_verify_paths()
-        context.verify_mode = ssl.CERT_REQUIRED
-        smtp_server.ehlo()
-        if smtp_server.starttls(context=context)[0] != 220:
-            return "Connection is not encrypted"
+        ssl_context.set_default_verify_paths()
+        ssl_context.verify_mode = ssl.CERT_REQUIRED
         try:
+            smtp_server = smtplib.SMTP_SSL(local_hostname='PVZDlivdCD', context=ssl_context)
+            #
+
+
+            # smtp_server.set_debuglevel(1)
+            smtp_server.connect (host=conf.SMTP_SMART_HOST, port=conf.SMTP_PORT)
+        except Exception as e:
+            errmsg = "Connection to mail server smtp://%s:%s failed: %s" %  (conf.SMTP_SMART_HOST, conf.SMTP_PORT, str(e))
+            logging.error(errmsg)
+            return errmsg
+        # only TLSv1 or higher
+        logging.info("sending EHLO")
+        smtp_server.ehlo()
+        try:
+            logging.info("authenticating to SMTP server")
             smtp_server.login(conf.ACCOUNT, conf.PASSWORD)
         except Exception as e:
-            logging.error(str(e) + '\nMail server authentication.')
+            logging.error("Authentication to mail server failed: " + str(e))
             smtp_server.quit()
-            return str(e) + '\nMail server authentication.'
+            return "Authentication to mail server failed: " + str(e)
+    else:
         try:
-            smtp_server.sendmail(conf.FROM, conf.RECIPIENT, composed)
+            smtp_server = smtplib.SMTP(local_hostname='PVZDliveCD')
+            smtp_server.set_debuglevel(1)
+            smtp_server.connect (host=conf.SMTP_SMART_HOST, port=conf.SMTP_PORT)
         except Exception as e:
-            logging.error( str(e) + '\nMail sending.')
-            smtp_server.quit()
-            return str(e) + '\nMail sending.'
+            errmsg = "Connection to mail server smtp://%s:%s failed: %s" %  (conf.SMTP_SMART_HOST, conf.SMTP_PORT, str(e))
+            logging.error(errmsg)
+            return errmsg
+    try:
+        logging.info("sending message")
+        smtp_server.sendmail(conf.FROM, conf.RECIPIENT, composed)
+    except Exception as e:
+        logging.error('Sending message failed: ' + str(e))
         smtp_server.quit()
+        return 'Sending message failed: ' + str(e)
+    smtp_server.quit()
     return "OK"
