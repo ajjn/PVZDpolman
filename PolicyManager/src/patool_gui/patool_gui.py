@@ -100,7 +100,7 @@ class PAtoolGUI(tk.Frame):
             self.set_input_dir(settings['input_dir'])
             self.set_output_dir(settings['output_dir'])
             self.set_padding(settings['padding'])
-            self.set_recent_entityIDs(settings['recent_entityIDs'])
+            self.set_recent_entityIDs(Recents(init=settings['recent_entityIDs']))
             self.set_recent_entityID_suffices(settings['recent_entityID_suffices'])
             self.set_geometry(settings['geometry'])
         except:
@@ -611,8 +611,8 @@ class PAtoolGUI(tk.Frame):
         # Calculate the dialog position
         x = self.get_window_width() + self.get_window_x()
         y = int(self.get_window_height()/3) + self.get_window_y()
-        self.deleteED_window_geometry = "%dx%d+%d+%d" % (DELETE_ED_WINDOW_WIDTH,
-                                                         DELETE_ED_WINDOW_HEIGHT,
+        self.deleteED_window_geometry = "%dx%d+%d+%d" % (self.conf.DELETE_ED_WINDOW_WIDTH,
+                                                         self.conf.DELETE_ED_WINDOW_HEIGHT,
                                                          x, y)
         DeleteEDDialog(self)
 
