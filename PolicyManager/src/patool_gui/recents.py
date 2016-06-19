@@ -1,5 +1,5 @@
 class Recents(list):
-    def __init__(maxsize, conf):
+    def __init__(self, maxsize, conf):
         self.add_recent("")
         self.RECENTS_MAX_SIZE = conf.maxsize
 
