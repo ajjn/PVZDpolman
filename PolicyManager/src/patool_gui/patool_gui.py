@@ -703,13 +703,13 @@ class PAtoolGUI(tk.Frame):
 
     def send(self):
         self.set_output_files(self.get_selected_output())
-        self.log("Invoking send")
+        self.log("Sending selected file(s)")
         result = send_files_via_email(self.conf, self.get_output_dir(), self.get_output_files())
         if result == 'OK':
-            self.log("Files mailed:" + ', '.join(self.get_output_files()))
-            logging.info("Files mailed:" + ', '.join(self.get_output_files()))
+            self.log("Files mailed: " + ', '.join(self.get_output_files()))
+            logging.info("Files mailed: " + ', '.join(self.get_output_files()))
         else:
-            self.log("Failed to send. " + result)
+            self.log("Failed to send: " + result)
         
     def rewrite_sys_argv(self, command_line_string):
         sys.argv = command_line_string.split()
