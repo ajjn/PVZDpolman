@@ -67,7 +67,7 @@ def send_files_via_email(conf, dir, filenames) -> str:
     if conf.USE_TLS:
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         ssl_context.options |= ssl.OP_NO_SSLv2
-        ssl_context.options |= ssl.OP_NO_SSLv3
+        # ssl_context.options |= ssl.OP_NO_SSLv3  # TODO: fix " tlsv1 alert decode error"
         # Taken from http://stackoverflow.com/questions/33857698/sending-email-from-python-using-starttls
         ssl_context.set_ciphers(
             'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+HIGH:'
