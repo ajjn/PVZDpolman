@@ -1,7 +1,7 @@
 class Recents(list):
-    def __init__(self, maxsize, conf):
+    def __init__(self, maxsize=8):
         self.add_recent("")
-        self.RECENTS_MAX_SIZE = conf.maxsize
+        self.RECENTS_MAX_SIZE = maxsize
 
     def add_recent(self, item):
         # Discard duplicate adding
