@@ -11,7 +11,7 @@ from lxml import etree as ET
 from OpenSSL import crypto
 from aodsfilehandler import AODSFileHandler
 from aodslisthandler import AodsListHandler
-from constants import LOGLEVELS, LOGLEVELS_BY_INT, PROJDIR_ABS, XMLNS_MD, XMLNS_PVZD
+from constants import LOGLEVELS, LOGLEVELS_BY_INT, PROJDIR_ABS, XMLNS_DSIG, XMLNS_MD, XMLNS_PVZD
 from githandler import GitHandler
 from invocation.clipep import CliPep
 import loggingconfig
@@ -133,8 +133,8 @@ class PEP:
         if role == 'IDP': xp = 'md:IDPSSODescriptor//ds:X509Certificate'
         if role == 'SP': xp = 'md:SPSSODescriptor//ds:X509Certificate'
         i = 0
-        for elem in ed.dom.xpath(xp, namespaces={'ds': 'http://www.w3.org/2000/09/xmldsig#',
-                                                  'md': 'urn:oasis:names:tc:SAML:2.0:metadata'}):
+        for elem in ed.dom.xpath(xp, namespaces={'ds': XMLNS_DSIG,
+                                                 'md': XMLNS_MD'}):
             certs.append(elem.text)
             i += 1
         return certs
