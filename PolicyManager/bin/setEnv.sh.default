@@ -2,8 +2,8 @@
 # set paths for devl and test systems
 
 ostype=${OSTYPE//[0-9.]/}
-if [[ "$HOSTNAME" == "pvzd-client" ]]; then
-    # docker container
+if [[ "$HOSTNAME" == "x11-app" ]]; then
+    # docker container from LieveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
     source /opt/rh/rh-python34/enable
