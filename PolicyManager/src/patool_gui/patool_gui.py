@@ -100,10 +100,10 @@ class PAtoolGUI(tk.Frame):
             self.set_input_dir(settings['input_dir'])
             self.set_output_dir(settings['output_dir'])
             self.set_padding(settings['padding'])
-            self.set_recent_entityIDs(Recents(init=settings['recent_entityIDs']))
-            self.set_recent_entityID_suffices(settings['recent_entityID_suffices'])
+            self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
+            self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
             self.set_geometry(settings['geometry'])
-        except:
+        except Exception as e:
             self.initialize_saveable_variables()
     
     def save_variables(self):
