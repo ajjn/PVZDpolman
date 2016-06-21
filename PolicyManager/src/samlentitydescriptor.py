@@ -1,6 +1,6 @@
 import logging, os, re, sys
 import lxml.etree as ET
-from constants import PROJDIR_ABS
+from constants import PROJDIR_ABS, XMLNS_MD
 from xmlschemavalidator import XmlSchemaValidator
 from userexceptions import *
 
@@ -32,7 +32,7 @@ class SAMLEntityDescriptor:
         else:
             self.xml_str = self.cert2entitydescriptor(createfromcertstr, entityid, samlrole)
         self.dom = ET.fromstring(self.xml_str.encode('utf-8'))
-        if self.dom.tag != '{urn:oasis:names:tc:SAML:2.0:metadata}EntityDescriptor':
+        if self.dom.tag != XMLNS_MD + 'EntityDescriptor':
             raise InputValueError('XML file must have md:EntityDescriptor as root element')
 
 
