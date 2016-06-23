@@ -104,6 +104,7 @@ class PAtoolGUI(tk.Frame):
             self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
             self.set_geometry(settings['geometry'])
         except Exception as e:
+            logging.warning("Could not read GUI settings, using defaults instead: " + str(e))
             self.initialize_saveable_variables()
     
     def save_variables(self):
@@ -124,8 +125,8 @@ class PAtoolGUI(tk.Frame):
             logging.warning("Could not save GUI settings: " + str(e))
             
     def initialize_saveable_variables(self):
-        self.set_input_dir(".")
-        self.set_output_dir(".")
+        self.set_input_dir(os.path.dirname('.'))
+        self.set_output_dir(os.path.expanduser('~'))
         # Default size
         sw = self.get_screen_width()
         sh = self.get_screen_height()
