@@ -100,9 +100,9 @@ class PAtoolGUI(tk.Frame):
             self.set_input_dir(settings['input_dir'])
             self.set_output_dir(settings['output_dir'])
             self.set_padding(settings['padding'])
-            self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
-            self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
             self.set_geometry(settings['geometry'])
+            #self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
+            #self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
         except Exception as e:
             logging.warning("Could not read GUI settings, using defaults instead: " + str(e))
             self.initialize_saveable_variables()
@@ -112,9 +112,9 @@ class PAtoolGUI(tk.Frame):
         settings['input_dir'] = self.get_input_dir()
         settings['output_dir'] = self.get_output_dir()
         settings['padding'] = self.get_padding()
+        settings['geometry'] = self.get_geometry()
         settings['recent_entityIDs'] = self.get_recent_entityIDs()
         settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
-        settings['geometry'] = self.get_geometry()
         try:
             fpath = os.path.join(os.environ['HOME'], self.conf.GUI_SAVED_SETTINGS_FILE)
             with open(fpath, 'wb') as fd:
