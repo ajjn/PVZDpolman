@@ -32,7 +32,7 @@ class SAMLEntityDescriptor:
             with open(self.ed_filename_abs) as f:
                 self.xml_str = f.read()
         elif createfromcertstr is not None:  #case 2
-            if entityid is None or samlerole is None:
+            if entityid is None or samlrole is None:
                 raise InputValueError('if creating ed from certstr, entityid and samlrole must be given.')
             self.xml_str = self.cert2entitydescriptor(createfromcertstr, entityid, samlrole)
         elif delete_entityid is not None: # case 3
