@@ -3,7 +3,7 @@ import logging
 import lxml.etree
 import re
 import sys
-import signxml
+#import signxml
 import tempfile
 
 from aodsfilehandler import *

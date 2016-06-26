@@ -79,8 +79,8 @@ class CliPatool(AbstractInvocation):
         # create the parser for the "exportCerts" command
         self._parser_exportCerts = _subparsers.add_parser('exportCerts',
              help='export certificates from metadata aggregate')
-        self._parser_exportCerts.add_argument('-m', '--md-cert', dest='md_cert', required=True,
-            help='Certificate for metadata signature')
+        #self._parser_exportCerts.add_argument('-m', '--md-cert', dest='md_cert', required=True,
+        #    help='Certificate for metadata signature')
         self._parser_exportCerts.add_argument('-o', '--outputdir', dest='output_dir', required=True,
             help='directory to output certificates. Filenames are derived from entityId')
         self._parser_exportCerts.add_argument('-r', '--samlrole', dest='pvprole',
