@@ -101,8 +101,8 @@ class PAtoolGUI(tk.Frame):
             self.set_output_dir(settings['output_dir'])
             self.set_padding(settings['padding'])
             self.set_geometry(settings['geometry'])
-            #self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
-            #self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
+            self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
+            self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
         except Exception as e:
             logging.warning("Could not read GUI settings, using defaults instead: " + str(e))
             self.initialize_saveable_variables()
