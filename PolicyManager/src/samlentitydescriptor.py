@@ -1,8 +1,9 @@
 import logging, os, re, sys
-import lxml.etree as ET
-from constants import PROJDIR_ABS, XMLNS_MD
-from xmlschemavalidator import XmlSchemaValidator
+import lxml.etree
+from constants import PROJDIR_ABS, XMLNS_DSIG, XMLNS_MD
 from userexceptions import *
+from xmlschemavalidator import XmlSchemaValidator
+from xy509cert import XY509cert
 
 __author__ = 'r2h2'
 
@@ -10,15 +11,18 @@ __author__ = 'r2h2'
 class SAMLEntityDescriptor:
     def __init__(self,
                  ed_file_handle=None,
+                 ed_bytes=None,
                  createfromcertstr=None, entityid=None, samlrole=None,
                  delete_entityid=None):
-        """ Create a SAMLEntityDescriptor with either of 3 methods:
+        """ Create a SAMLEntityDescriptor with either of 4 methods:
                 1. from a xml file with an EntityDescriptor as root element, or
                 2. from a certificate + a saml role, or
                 3. from an entityID as a delete request
+                4. from a string
         """
-        if sum(x is not None for x in (ed_file_handle, createfromcertstr, delete_entityid)) != 1:
-            raise InputValueError('only one argument out of (ed_file_handle, createfromcertstr, delete_entityid) allowed')
+        if sum(x is not None for x in (ed_file_handle, createfromcertstr, delete_entityid, ed_bytes)) != 1:
+            raise InputValueError('only one argument out of (ed_file_handle, createfromcertstr, '
+                                  'delete_entityid, ed_bytes) allowed')
         if ed_file_handle is not None:   # case 1
             self.ed_file_handle = ed_file_handle
             self.ed_filename_abs = os.path.abspath(ed_file_handle.name)
@@ -27,11 +31,15 @@ class SAMLEntityDescriptor:
             assert self.ed_filename_abs[-4:] == '.xml', 'input file must have the extension .xml'
             with open(self.ed_filename_abs) as f:
                 self.xml_str = f.read()
-        elif delete_entityid is not None:
-            self.xml_str = self.create_delete(delete_entityid)
-        else:
+        elif createfromcertstr is not None:  #case 2
+            if entityid is None or samlerole is None:
+                raise InputValueError('if creating ed from certstr, entityid and samlrole must be given.')
             self.xml_str = self.cert2entitydescriptor(createfromcertstr, entityid, samlrole)
-        self.dom = ET.fromstring(self.xml_str.encode('utf-8'))
+        elif delete_entityid is not None: # case 3
+            self.xml_str = self.create_delete(delete_entityid)
+        else:  #case 4
+            self.xml_str = ed_bytes
+        self.dom = lxml.etree.fromstring(self.xml_str.encode('utf-8'))
         if self.dom.tag != XMLNS_MD + 'EntityDescriptor':
             raise InputValueError('XML file must have md:EntityDescriptor as root element')
 
@@ -43,6 +51,23 @@ class SAMLEntityDescriptor:
     def get_xml_str(self):
         return self.xml_str
 
+
+    def get_signing_certs(self, samlrole='IDP') -> [XY509cert]:
+        x509certs = []
+        #if samlrole not in ('any', 'IDP', 'SP'):
+        #    raise InputValueError("samlrole must be on of 'any', 'IDP', 'SP'")
+        if samlrole not in ('IDP', ):
+            raise InputValueError("samlrole must be 'IDP'")
+        idpssodesc = self.dom.find(XMLNS_MD+'IDPSSODescriptor')
+        if idpssodesc is not None:
+            keydescriptors = idpssodesc.findall(XMLNS_MD+'KeyDescriptor')
+            for kd in keydescriptors:
+                if 'use' in kd.attrib and kd.attrib['use'] == 'encryption':
+                    pass
+                else:  # signing certs are those with use="signing" or have no use attribute
+                    for x509cert in kd.iter(XMLNS_DSIG+'X509Certificate'):
+                        x509certs.append(XY509cert(x509cert.text.strip()))
+        return x509certs
 
     def validate_xsd(self):
         if self.ed_file_handle is None:

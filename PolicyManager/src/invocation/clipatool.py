@@ -74,7 +74,16 @@ class CliPatool(AbstractInvocation):
              help='create a PMP input file to import an admin certificate')
         self._parser_adminCert.add_argument('-o', '--orgid', dest='orgid',
                                             required=True, help='Organization ID')
-        self._parser_adminCert.add_argument('output', type=argparse.FileType('w'), help='PMP input file)')
+        self._parser_adminCert.add_argument('output', type=argparse.FileType('w'), help='PMP input file')
+
+        # create the parser for the "exportCerts" command
+        self._parser_exportCerts = _subparsers.add_parser('exportCerts',
+             help='export certificates from metadata aggregate')
+        self._parser_exportCerts.add_argument('-r', '--samlrole', dest='pvprole',
+                                         choices=('IDP', 'SP'), help='IDP, SP')
+        self._parser_exportCerts.add_argument('-o', '--outputdir', dest='output_dir', required=True,
+            help='directory to output certificates. Filenames are derived from entityId')
+        self._parser_exportCerts.add_argument('metadata', type=argparse.FileType('r'), help='SAML Metadata aggregate file)')
 
         if testargs:
             self.args = self._parser.parse_args(testargs)
@@ -89,4 +98,8 @@ class CliPatool(AbstractInvocation):
         elif self.args.subcommand == 'signED':
             self.args.input_fn = self.args.input.name
             self.args.input.close()
-
+        elif self.args.subcommand == 'exportCerts':
+            # close file an pass it as name (handle open/close locally)
+            fn = self.args.metadata.name
+            self.args.metadata.close()
+            self.args.metadata = fn

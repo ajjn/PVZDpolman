@@ -92,10 +92,29 @@ class XY509cert:
         issuer_str = str(issuer_dn).replace("<X509Name object '", '')[:-2]
         return issuer_str
 
-    def notValidAfter(self) -> str:
-        return self.cert.get_notAfter().decode('ascii')
+    def notValidAfter(self, formatted=False) -> str:
+        raw = self.cert.get_notAfter().decode('ascii')
+        if formatted:
+            datestr = '%s-%s-%s %s:%s:%s' % (raw[0:4], raw[4:6], raw[6:8], raw[8:10], raw[10:12], raw[12:])
+        else:
+            datestr = raw
+        return datestr
 
     def isNotExpired(self) -> bool:
         notValidAfter_str = self.cert.get_notAfter().decode('ascii')
         notValidAfter_date = datetime.strptime(notValidAfter_str, '%Y%m%d%H%M%SZ')
         return notValidAfter_date > datetime.now()
+
+    def get_serial_number_int(self) -> int:
+        return self.cert.get_serial_number()
+
+    def get_serial_number_hex(self) -> int:
+        x = format(self.cert.get_serial_number(), 'x')
+        return ':'.join(x[i:i+2] for i in range(0, len(x), 2))
+
+    def get_pubkey(self) -> str:
+        return self.cert.get_pubkey().decode('ascii')
+
+
+    def digest(self, dgst='SHA1') -> str:
+        return self.cert.digest(dgst).decode('ascii')

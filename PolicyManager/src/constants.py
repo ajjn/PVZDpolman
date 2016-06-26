@@ -13,6 +13,7 @@ PROJDIR_REL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(_
 PROJDIR_ABS = os.path.abspath(PROJDIR_REL)
 
 #XML namespaces for etree
+XMLNS_DSIG = '{http://www.w3.org/2000/09/xmldsig#}'
 XMLNS_MD = '{urn:oasis:names:tc:SAML:2.0:metadata}'
 XMLNS_PVZD = '{http://egov.gv.at/pvzd1.xsd}'
 

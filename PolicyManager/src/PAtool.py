@@ -1,7 +1,8 @@
-import logging, sys, tempfile
+import logging, re, sys, tempfile
 from aodsfilehandler import *
-from constants import PROJDIR_ABS
+from constants import PROJDIR_ABS, XMLNS_DSIG, XMLNS_MD
 from invocation.clipatool import CliPatool
+import lxml.etree as ET
 from samlentitydescriptor import *
 from userexceptions import *
 from xmlsigverifyer import XmlSigVerifyer
@@ -139,6 +140,41 @@ class PAtool:
         self.args.output.write(pmp_input)
         self.args.output.close()
 
+    def export_certs_idp(self):
+        logging.debug('exporting IDP certs from metadata')
+        md_root = ET.parse(self.args.metadata).getroot()
+        print('EntityID | Subject | Issuer | Serial | Not valid after')
+        for e in md_root.findall(XMLNS_MD + 'EntityDescriptor'):
+            ed = SAMLEntityDescriptor(ed_bytes=ET.tostring(e).decode('utf-8'))
+            xy509certs = ed.get_signing_certs(samlrole='IDP')
+            outputdir = os.path.abspath(self.args.output_dir)
+            os.makedirs(outputdir, exist_ok=True)
+            i = 1
+            for xy509cert in xy509certs:
+                fname = re.sub(r'\.xml$', '', ed.get_filename()) + ('_idp_crt_%s.pem' % str(i))
+                if xy509cert.getIssuer_str() == xy509cert.getSubject_str():
+                    issuer = '//self-signed//'
+                else:
+                    issuer = xy509cert.getIssuer_str()
+                with open(os.path.join(outputdir, fname), 'w') as fd:
+                    fd.write('signing cert for IDP of entity ' + ed.get_entityid() + '\n')
+                    fd.write('subject: ' + xy509cert.getSubject_str() + '\n')
+                    fd.write('issuer: ' + issuer + '\n')
+                    fd.write('serial (hex): ' + xy509cert.get_serial_number_hex() + '\n')
+                    fd.write('serial (int): ' + str(xy509cert.get_serial_number_int()) + '\n')
+                    fd.write('notValidAfter: ' + xy509cert.notValidAfter(formatted=True) + '\n')
+                    fd.write('fingerfd.write (SHA1): ' + xy509cert.digest() + '\n')
+                    fd.write('fingerfd.write (MD5): ' + xy509cert.digest(dgst='MD5') + '\n')
+                    fd.write(xy509cert.pem_add_rfc7468_delimiters(xy509cert.cert_str) + '\n')
+                print(ed.get_entityid()  + ' | ' +
+                      xy509cert.getSubject_str() + ' | ' +
+                      issuer + ' | ' +
+                      xy509cert.get_serial_number_hex() + ' | ' +
+                      xy509cert.notValidAfter(formatted=True)
+                      )
+
+                i += 1
+
 
 def run_me(testrunnerInvocation=None):
     if sys.version_info < (3, 4):
@@ -164,6 +200,8 @@ def run_me(testrunnerInvocation=None):
         patool.caCert()
     elif (invocation.args.subcommand == 'adminCert'):
         patool.adminCert()
+    elif (invocation.args.subcommand == 'exportCerts'):
+        patool.export_certs_idp()
 
 
 if __name__ == '__main__':
