@@ -1,8 +1,14 @@
-import logging, re, sys, tempfile
+import base64
+import logging
+import lxml.etree
+import re
+import sys
+import signxml
+import tempfile
+
 from aodsfilehandler import *
 from constants import PROJDIR_ABS, XMLNS_DSIG, XMLNS_MD
 from invocation.clipatool import CliPatool
-import lxml.etree as ET
 from samlentitydescriptor import *
 from userexceptions import *
 from xmlsigverifyer import XmlSigVerifyer
@@ -141,11 +147,19 @@ class PAtool:
         self.args.output.close()
 
     def export_certs_idp(self):
+        #logging.debug('validating metadata signature')
+        #with open(self.args.md_cert, 'r') as fd:
+        #    md_cert_pem = fd.read()
+        #md_dom = lxml.etree.parse(self.args.metadata)
+        #asserted_metadata = signxml.xmldsig(md_dom.getroot()).verify(x509_cert=md_cert_pem)
+        # TODO: implement signature validation (xmlsectool, signxml)
+        asserted_metadata = lxml.etree.parse(self.args.metadata)
+
         logging.debug('exporting IDP certs from metadata')
-        md_root = ET.parse(self.args.metadata).getroot()
+        md_root = lxml.etree.fromstring(asserted_metadata).getroot()
         print('EntityID | Subject | Issuer | Serial | Not valid after')
         for e in md_root.findall(XMLNS_MD + 'EntityDescriptor'):
-            ed = SAMLEntityDescriptor(ed_bytes=ET.tostring(e).decode('utf-8'))
+            ed = SAMLEntityDescriptor(ed_bytes=lxml.etree.tostring(e).decode('utf-8'))
             xy509certs = ed.get_signing_certs(samlrole='IDP')
             outputdir = os.path.abspath(self.args.output_dir)
             os.makedirs(outputdir, exist_ok=True)
@@ -171,8 +185,7 @@ class PAtool:
                       issuer + ' | ' +
                       xy509cert.get_serial_number_hex() + ' | ' +
                       xy509cert.notValidAfter(formatted=True)
-                      )
-
+                     )
                 i += 1
 
 

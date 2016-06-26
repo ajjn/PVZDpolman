@@ -37,7 +37,19 @@ get_or_update_repo() {
     fi
 }
 
+
+get_from_ziparchive() {
+    if [ ! -e $pkgroot/$pkgdir ]; then
+        if [ "$update_pkg" == "True" ]; then
+            echo "downloading $pkgdir into $pkgroot"
+            wget -qO- -O tmp.zip $pkgurl && unzip tmp.zip && rm tmp.zip
+        fi
+    fi
+}
+
 cd $(dirname `which $0`)  # cd to script dir
+
+# --- install software from github ---
 
 # --- json2html ---
 repodir='json2html'
@@ -49,3 +61,10 @@ get_or_update_repo
 repodir='pyjnius'
 repourl='https://github.com/kivy/pyjnius.git'
 get_or_update_repo
+
+# --- install software as tar ball ---
+pkgroot="install/opt"
+pkgdir="xmlsectool-2.0.0-beta-2"  # must match dir when zip archive is unpacked!
+pkgurl='http://shibboleth.net/downloads/tools/xmlsectool/2.0.0-beta-2/xmlsectool-2.0.0-beta-2-bin.zip'
+get_from_ziparchive
+ln -s $pkgdir xmlsectool
