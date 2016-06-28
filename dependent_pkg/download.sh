@@ -64,7 +64,7 @@ get_or_update_repo
 
 # --- install software as tar ball ---
 pkgroot="install/opt"
-pkgdir="xmlsectool-2.0.0-beta-2"  # must match dir when zip archive is unpacked!
-pkgurl='http://shibboleth.net/downloads/tools/xmlsectool/2.0.0-beta-2/xmlsectool-2.0.0-beta-2-bin.zip'
+pkgdir="xmlsectool-2.0.0"  # must match dir when zip archive is unpacked!
+pkgurl='https://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip'
 get_from_ziparchive
 ln -s $pkgdir xmlsectool
