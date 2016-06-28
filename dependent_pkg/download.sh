@@ -67,4 +67,4 @@ pkgroot="install/opt"
 pkgdir="xmlsectool-2.0.0"  # must match dir when zip archive is unpacked!
 pkgurl='https://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip'
 get_from_ziparchive
-ln -s $pkgdir xmlsectool
+ln -s $pkgdir xmlsectool 2>/dev/null
