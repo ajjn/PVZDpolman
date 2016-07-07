@@ -133,8 +133,7 @@ class PEP:
         if role == 'IDP': xp = 'md:IDPSSODescriptor//ds:X509Certificate'
         if role == 'SP': xp = 'md:SPSSODescriptor//ds:X509Certificate'
         i = 0
-        for elem in ed.dom.xpath(xp, namespaces={'ds': XMLNS_DSIG,
-                                                 'md': XMLNS_MD'}):
+        for elem in ed.dom.xpath(xp, namespaces={'ds': XMLNS_DSIG, 'md': XMLNS_MD}):
             certs.append(elem.text)
             i += 1
         return certs
