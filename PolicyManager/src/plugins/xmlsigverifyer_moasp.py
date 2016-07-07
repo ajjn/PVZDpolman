@@ -8,6 +8,7 @@ from userexceptions import *
 
 __author__ = 'r2h2'
 
+
 # style sheet to filter ds:Signature elements
 xslt_str = """<?xml version="1.0" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -21,9 +22,13 @@ xslt_str = """<?xml version="1.0" ?>
 """
 
 class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
-    """ Python wrapper for the PvzdVerifySig Java class """
+    """ Python wrapper for the PvzdVerifySig Java class
+    The Python/Java bridge is implemented with 2 different libraries, to be on the save side :-)
+    If PYJNIUS_ACTIVATE is unset, it will use javabridge, otherwise pyjnius
+    """
     def __init__(self):
         # name of class in foo/bar/Baz form (not foo.bar.Baz)
+        # print(os.environ['CLASSPATH'])
         self.pvzd_verify_sig_pkg = 'at/wien/ma14/pvzd/verifysigapi'
         self.pvzd_verify_sig = self.pvzd_verify_sig_pkg + '/' + 'PvzdVerifySig'
         try:
@@ -63,22 +68,8 @@ class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
                     javabridge.get_field(response, "pvzdCode", "Ljava/lang/String;") + "; " +
                     javabridge.get_field(response, "pvzdMessage", "Ljava/lang/String;"))
 
-        # One should follow "see-what-you-signed" -> W3C XMLDsig Recommendenations
-        # MOA-SP does not return (?) signed data, hence we try to remove the ds:Signature element
-        # for enveloped signatures (ds:Signature is not root) from the input using a style sheet :-(
-        in_dom = ET.parse(xml_file_name)
-        if in_dom.getroot().tag == '{http://www.w3.org/2000/09/xmldsig#}Signature':  # don't touch enveloping ones
-            with open(xml_file_name) as fd:
-                signed_data_str = fd.read()
-        else:
-            xslt = ET.fromstring(xslt_str)
-            transform = ET.XSLT(xslt)
-            out_dom = transform(in_dom)
-            signed_data_bytes = ET.tostring(out_dom,
-                                            xml_declaration=True,
-                                            encoding=localconfig.XML_ENCODING)
-            signed_data_str = signed_data_bytes.decode(localconfig.XML_ENCODING)
-
+        # Following "see-what-you-signed" principle use returned data from sig library
+        signed_data_str = response.referencedata
         try:
             os.environ['PYJNIUS_ACTIVATE']
             r = XmlSigVerifyerResponse(signed_data_str, response.signerCertificateEncoded)
