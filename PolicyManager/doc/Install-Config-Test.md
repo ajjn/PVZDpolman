@@ -17,10 +17,9 @@ Following Java libraries need to be downloaded.
 
 ### PVZDjava
 
-    curl -LO https://github.com/rhoerbe/PVZDjava/files/260806/pvzdjava_1.0.zip
-    unzip -j pvzdjava_1.0.zip
-    rm pvzdjava_1.0.zip
-    
+    # download https://github.com/rhoerbe/PVZDjava and run ant to build the jar files 
+    # copy the jar files into the lib folder
+        
 ## Python Packages not to be installed from package index
 Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
 
@@ -28,6 +27,8 @@ Following packages need to be git cloned into $PROJ_HOME/dependent_pkg.
 kivy/master: python3 OK for OSX, RHEL6 and CentOS7
 
     https://github.com/kivy/pyjnius.git
+    
+To test the deployment use PolicyManager/test/xmltoolsTest.sh. This will raise classpath issues etc.
 
 ### json2html
 For has py3 fixes:
