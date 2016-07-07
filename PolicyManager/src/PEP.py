@@ -228,7 +228,8 @@ def run_me(testrunnerInvocation=None):
                 pep.validateDomainNames(ed, allowedDomains)
                 logging.debug('validating certificate(s): not expired & not blacklisted & issuer is valid ')
                 pep.checkCerts(ed, IDP_trustStore, SP_trustStore)
-                gitHandler.move_to_accepted(filename_abs, xml_sig_verifyer_response.sigdata)
+                # the first element in sigdata has the data object; (2nd is the XADES stuff)
+                gitHandler.move_to_accepted(filename_abs, xml_sig_verifyer_response.sigdata.get(0))
             pep.file_counter_accepted += 1
         except (ValidationError, signxml.InvalidInput, InputValueError) as e:
             logging.log(exception_lvl, str(e))
