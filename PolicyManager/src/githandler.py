@@ -35,7 +35,7 @@ class GitHandler:
         self.repo.index.commit('deleted')
 
     def move_to_accepted(self, file, sigdata):
-        """ the accepted directory must be outside git to prevent any manipulation from outside """
+        """ the accepted directory must be outside git to prevent any manipulation from remote repo """
         logging.debug('moving to accept path')
         with open(os.path.join(self.pepout_dir, os.path.basename(file)), 'w') as fd:
             fd.write(sigdata)
