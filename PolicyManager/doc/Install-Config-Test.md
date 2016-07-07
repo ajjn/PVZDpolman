@@ -16,7 +16,8 @@ Following Java libraries need to be downloaded.
     rm moa-spss-lib-2.0.3.zip
 
 ### PVZDjava
-
+    
+    # download from https://github.com/rhoerbe/PVZDjava/releases OR
     # download https://github.com/rhoerbe/PVZDjava and run ant to build the jar files 
     # copy the jar files into the lib folder
         
