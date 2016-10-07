@@ -531,7 +531,7 @@ class PAtoolGUI(tk.Frame):
     def validate_entityID(self, url):
         # Validate URL format
         regex = re.compile(
-            r'^https://'  # https://  only
+            r'^(https?|urn)://'  # https://  only
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
             r'localhost|'  # localhost...
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip

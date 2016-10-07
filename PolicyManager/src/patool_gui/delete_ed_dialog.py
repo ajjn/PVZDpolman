@@ -69,7 +69,7 @@ class DeleteEDDialog(tk.Toplevel):
         # Validate entityID i.e. url
         if not self.parent.validate_entityID(self.get_entityID_entry()):
             messagebox.showinfo("Invalid EntityID",
-                                "EntityID is not valid\n%s" % self.get_entityID_entry())
+                                "EntityID must be a valid URI, such as https://hostname/idp.xml")
             return
 
         # Let us add the entityID to the recents
