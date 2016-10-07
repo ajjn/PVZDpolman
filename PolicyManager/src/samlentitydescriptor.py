@@ -81,6 +81,7 @@ class SAMLEntityDescriptor:
             raise InvalidSamlXmlSchemaError('File ' + self.ed_filename_abs +
                                             ' is not schema valid:\n' + retmsg)
 
+                                "EntityID must be a valid URI, such as https://hostname/idp.xml")
 
     def validate_schematron(self):
         pass  # TODO: implement
@@ -150,7 +151,11 @@ class SAMLEntityDescriptor:
 </md:EntityDescriptor>""".format(eid=entityid, pem=cert_str)
         elif samlrole == 'SP':
             entityDescriptor = """\
-<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+<md:EntityDescriptor entityID="{eid}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:pvptype="R-Profile">
   <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo>
