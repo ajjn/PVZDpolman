@@ -81,8 +81,6 @@ class SAMLEntityDescriptor:
             raise InvalidSamlXmlSchemaError('File ' + self.ed_filename_abs +
                                             ' is not schema valid:\n' + retmsg)
 
-                                "EntityID must be a valid URI, such as https://hostname/idp.xml")
-
     def validate_schematron(self):
         pass  # TODO: implement
 
