@@ -1,20 +1,19 @@
 #!/bin/bash
 # set paths for devl and test systems
 
-ostype=${OSTYPE//[0-9.]/}
-if [[ "$HOSTNAME" == "pvzd-client-app" ]]; then
+if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
     # docker container from LieveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
     source /opt/rh/rh-python34/enable
     export py3=/opt/rh/rh-python34/root/usr/bin/python
     export PYJNIUS_ACTIVATE=
-elif [[ "$HOSTNAME" == "Kalypso" ]]; then
+elif [[ "$HOSTNAME" == "kalypso" ]]; then
     #  used for Linux development env
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
-elif [[ "$ostype" == "linux" ]]; then
+elif [[ "${OSTYPE//[0-9.]/}" == "linux" ]]; then
     #  vmdev9015.adv.magwien.gv.at on RHEL6
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
