@@ -2,15 +2,15 @@
 # set paths for devl and test systems
 
 ostype=${OSTYPE//[0-9.]/}
-if [[ "$HOSTNAME" == "x11-app" ]]; then
+if [[ "$HOSTNAME" == "pvzd-client-app" ]]; then
     # docker container from LieveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
     source /opt/rh/rh-python34/enable
     export py3=/opt/rh/rh-python34/root/usr/bin/python
     export PYJNIUS_ACTIVATE=
-elif [[ "$ostype" == "linux-gnu" ]]; then
-    #  devl9
+elif [[ "$HOSTNAME" == "Kalypso" ]]; then
+    #  used for Linux development env
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
@@ -19,7 +19,7 @@ elif [[ "$ostype" == "linux" ]]; then
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
     export py3='scl enable rh-python34 -- python'
-elif [[ "$ostype" == "darwin" ]]; then
+elif [[ "$HOSTNAME" == "devl8.local" ]]; then
     #  used for OSX development env
     if [[ `/bin/hostname` == "devl8.local" ]]; then  # r2h2 development env
         export devlhome=~/devl
