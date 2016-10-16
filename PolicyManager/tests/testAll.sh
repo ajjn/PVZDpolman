@@ -30,6 +30,7 @@ MOD_HOME=$(cd $(dirname $SCRIPTDIR) && pwd)
 PROJ_HOME=$(cd $(dirname $MOD_HOME) && pwd)
 export MOASPSS_LIB=$PROJ_HOME/lib/moa-spss-lib
 export POLMAN_TRUSTEDCERTS="$MODHOME/tests/testdata/trustedcerts.json"
+cd $SCRIPTDIR # required for relative reference to testdata
 
 sum=0
 
