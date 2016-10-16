@@ -32,7 +32,7 @@ elif [[ "$HOSTNAME" == "devl8.local" ]]; then
     export PROJ_HOME=$devlhome/pycharm/rhoerbe/PVZDpolman
     export py3=~/virtualenvs/pvzd34/bin/python
 else
-    echo "no environment defined for $ostype"
+    echo "no environment defined for this host"
     exit 1
 fi
 
