@@ -63,6 +63,9 @@ class CliPmp(AbstractInvocation):
 
         self.args.list_trustedcerts = False  # required by aodsfilehanlder.__init__(), but only used in PEP
 
+        if self.args.subcommand == 'append':
+            self.args.inputfilename = self.args.input.name
+            self.args.input.close()  # why? unittest comlpains about files left open -> close here and reopen later
         if self.args.subcommand == 'read':
             if getattr(self.args, 'journal', False):
                 # close file an pass it as name (handle open/close locally)
