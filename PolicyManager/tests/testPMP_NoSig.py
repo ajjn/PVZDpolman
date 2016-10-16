@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import unittest
+import warnings
 from assertNoDiff import assertNoDiff
 from invocation.clipmp import CliPmp
 import loggingconfig
@@ -17,6 +18,12 @@ __author__ = 'r2h2'
 logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
 logging_config = loggingconfig.LoggingConfig(logbasename, mode='w')
 logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
+
+def ignore_warnings(test_func):
+    def do_test(self, *args, **kwargs):
+        with warnings.catch_warnings():
+            test_func(self, *args, **kwargs)
+    return do_test
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):
@@ -30,6 +37,7 @@ class Test00_cli(unittest.TestCase):
 
 
 class Test01_basic_happy_cycle(unittest.TestCase):
+    @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify')
         policy_journal = os.path.abspath('work/PMP/ns01/aods.json')
@@ -103,6 +111,7 @@ class Test02_broken_hash_chain(unittest.TestCase):
 
 
 class Test03_broken_input_for_append(unittest.TestCase):
+    @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns03: handle broken json input for append')
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
@@ -115,6 +124,7 @@ class Test03_broken_input_for_append(unittest.TestCase):
 
 
 class Test04_broken_input_for_validation(unittest.TestCase):
+    @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns04/1: handle broken input for append/validation: JSON not an array')
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
