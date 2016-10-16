@@ -62,6 +62,13 @@ repodir='pyjnius'
 repourl='https://github.com/kivy/pyjnius.git'
 get_or_update_repo
 
+# --- signxml ---
+repodir='signxml'
+repourl='https://github.com/kislyuk/signxml.git'
+get_or_update_repo
+
+
+
 # --- install software as tar ball ---
 pkgroot="install/opt"
 pkgdir="xmlsectool-2.0.0"  # must match dir when zip archive is unpacked!
