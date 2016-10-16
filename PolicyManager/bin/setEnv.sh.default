@@ -5,32 +5,29 @@ if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
     # docker container from LieveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
-    source /opt/rh/rh-python34/enable
-    export py3=/opt/rh/rh-python34/root/usr/bin/python
+    # source /opt/rh/rh-python34/enable # uncomment this line for scl python
+    export py3=$PY3 # set in Dockerfile
     export PYJNIUS_ACTIVATE=
-elif [[ "$HOSTNAME" == "kalypso" ]]; then
-    #  used for Linux development env
-    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
-    export PROJ_HOME=/opt/PVZDpolman
-    export py3=/usr/bin/python3.4
+    export LOGDIR='/var/log/pvzd'
 elif [[ "${OSTYPE//[0-9.]/}" == "linux" ]]; then
     #  vmdev9015.adv.magwien.gv.at on RHEL6
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
     export py3='scl enable rh-python34 -- python'
+    export LOGDIR='/var/log/pvzd'
 elif [[ "$HOSTNAME" == "devl8.local" ]]; then
-    #  used for OSX development env
-    if [[ `/bin/hostname` == "devl8.local" ]]; then  # r2h2 development env
-        export devlhome=~/devl
-    elif [[ `/bin/hostname` == "ClapTsuNami.local" ]]; then
-        export devlhome=/Volumes/devl
-    else
-        echo "no environment defined for  host `/bin/hostname`"
-        exit 1
-    fi
+    #  used for OSX development env (r2h2)
+    export devlhome=~/devl
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home
     export PROJ_HOME=$devlhome/pycharm/rhoerbe/PVZDpolman
     export py3=~/virtualenvs/pvzd34/bin/python
+    export LOGDIR="$PROJ_HOME/PVZDpolman/log"
+elif [[ "$HOSTNAME" == "kalypso" ]]; then
+    #  used for Linux development env (r2h2)
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
+    export PROJ_HOME=/opt/PVZDpolman
+    export py3=/usr/bin/python3.4
+    export LOGDIR="$PROJ_HOME/PVZDpolman/log"
 else
     echo "no environment defined for this host"
     exit 1
