@@ -38,7 +38,7 @@ class GitHandler:
         """ the accepted directory must be outside git to prevent any manipulation from remote repo """
         logging.debug('moving to accept path')
         with open(os.path.join(self.pepout_dir, os.path.basename(file)), 'w') as fd:
-            fd.write(sigdata)
+            fd.write(str(sigdata))
         file_abs = os.path.abspath(file)
         self.repo.index.remove([file_abs])
         os.remove(file_abs)
