@@ -27,11 +27,11 @@ class AodsListHandler:
 
     def aods_append(self):
         try:
-            inputdataJSON = self.args.input.read()
+            with open(self.args.inputfilename, encoding='utf8') as fd:
+                inputdataJSON = fd.read()
         except (OSError, IOError) as e:
             logging.error('could not read inputfile, because: %s' %(repr(e)))
             sys.exit(1)
-        self.args.input.close()
         try:
             appendList = json.loads(inputdataJSON)
         except Exception as e:
