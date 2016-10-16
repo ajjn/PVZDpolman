@@ -9,3 +9,4 @@ numpy
 # javabridge only required if pyjnius is not used (PYJNIUS_ACTIVATE not set -> fallback)
 javabridge
 #json2html 1.0.1 had to be forked (py3 problems)
+#signxml
