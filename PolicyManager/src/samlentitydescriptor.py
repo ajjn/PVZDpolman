@@ -29,7 +29,7 @@ class SAMLEntityDescriptor:
             if not os.path.isfile(self.ed_filename_abs) or os.path.getsize(self.ed_filename_abs) == 0:
                 raise EmptySamlEDError(self.ed_filename_abs + ' empty or missing')
             assert self.ed_filename_abs[-4:] == '.xml', 'input file must have the extension .xml'
-            with open(self.ed_filename_abs) as f:
+            with open(self.ed_filename_abs, encoding='utf8') as f:
                 self.xml_str = f.read()
         elif createfromcertstr is not None:  #case 2
             if entityid is None or samlrole is None:
