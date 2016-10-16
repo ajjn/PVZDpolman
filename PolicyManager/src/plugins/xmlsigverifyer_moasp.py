@@ -1,4 +1,5 @@
 import base64, bz2, datetime, os, re, sys
+import logging
 import lxml.etree as ET
 from constants import PROJDIR_ABS
 import localconfig
@@ -43,6 +44,7 @@ class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
         moaspss_conf = os.path.join(PROJDIR_ABS, 'conf/moa-spss/MOASPSSConfiguration.xml')
         log4j_conf   = os.path.join(PROJDIR_ABS, 'conf/log4j.properties')
         sig_doc      = xml_file_name
+        logging.debug('verifying signature of %s using moa-sp, config path=%s' % (sig_doc, moaspss_conf))
 
         try:
             os.environ['PYJNIUS_ACTIVATE']
@@ -52,6 +54,8 @@ class XmlSigVerifyerMoasp(XmlSigVerifyerAbstract):
                 sig_doc)
             response  = pvzdverifysig.verify()
             if response.pvzdCode != 'OK':
+                logging.debug("Signature verification failed, code=" +
+                                      response.pvzdCode + "; " + response.pvzdMessage)
                 raise ValidationError("Signature verification failed, code=" +
                                       response.pvzdCode + "; " + response.pvzdMessage)
         except KeyError:
