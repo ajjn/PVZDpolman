@@ -8,7 +8,7 @@ from wrapperrecord import WrapperRecord
 from userexceptions import *
 from datetime import datetime
 __author__ = 'r2h2'
-assert sys.version_info >= (3,4), 'modules used here support unicode and require python 3. Tested version is 3.4.3'
+assert sys.version_info >= (3,4), 'modules used here support unicode and require python 3.'
 
 
 class AodsListHandler:
@@ -161,12 +161,10 @@ class AodsListHandler:
             html = '<html><head><meta charset="UTF-8"><link rel="stylesheet" type="text/css" ' \
                    'href="../tables.css"></head><body><h1>PVZD Policy Directory</h1>%s</body></html>'
             tabhtml = json2html.convert(json=policyDict, table_attributes='class="pure-table"')
-            with open(self.args.poldirhtml.name, 'w', encoding='utf8') as fd:
-                fd.write(html % tabhtml)
+            self.args.poldirhtml.write(html % tabhtml)
             self.args.poldirhtml.close()
         if getattr(self.args, 'poldirjson', False):
-            with open(self.args.poldirjson.name, 'w', encoding='utf8') as fd:
-                fd.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
+            self.args.poldirjson.write(json.dumps(policyDict, sort_keys=True, indent=2, separators=(', ', ': ')))
             self.args.poldirjson.close()
 
 

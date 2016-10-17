@@ -30,16 +30,16 @@ class CliPmp(AbstractInvocation):
 
         # create the subparser for the "append" command
         self._parser_append = _subparsers.add_parser('append', help='append a record to the journal')
-        self._parser_append.add_argument('input', type=argparse.FileType('r'),
+        self._parser_append.add_argument('input', type=argparse.FileType('r', encoding='utf8'),
              help='file containing the records to be added in JSON')
 
         # create the subparser for the "read" command
         self._parser_append = _subparsers.add_parser('read', help='read, verify and transform the journal')
-        self._parser_append.add_argument('-P', '--poldirhtml', type=argparse.FileType('w'),
+        self._parser_append.add_argument('-P', '--poldirhtml', type=argparse.FileType('w', encoding='utf8'),
              help='output policy directory as HTML)')
-        self._parser_append.add_argument('-p', '--poldirjson', type=argparse.FileType('w'),
+        self._parser_append.add_argument('-p', '--poldirjson', type=argparse.FileType('w', encoding='utf8'),
              help='dump policy directory as JSON)')
-        self._parser_append.add_argument('-j', '--journal', type=argparse.FileType('w'),
+        self._parser_append.add_argument('-j', '--journal', type=argparse.FileType('w', encoding='utf8'),
              help='output Journal as JSON)')
         # TODO: implement range and diff listings
         #self._parser_append.add_argument('-r', '--range', choices=['all', 'from', 'new'], default='all',
@@ -48,7 +48,7 @@ class CliPmp(AbstractInvocation):
 
         # create the subparser for the "revokeCert" command
         self._parser_revoke = _subparsers.add_parser('revokeCert', help='revoke certificate')
-        self._parser_revoke.add_argument('cert', type=argparse.FileType('r'), nargs='?', default=None,
+        self._parser_revoke.add_argument('cert', type=argparse.FileType('r', encoding='utf8'), nargs='?', default=None,
              help='certificate to be revoked')
 
         # post-processing: parse, get defaults from env, validate

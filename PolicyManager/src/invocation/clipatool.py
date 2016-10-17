@@ -26,20 +26,20 @@ class CliPatool(AbstractInvocation):
              help='sign after create')
         self._parser_create.add_argument('-S', '--entityidSuffix', dest='entityid_suffix', default='',
             help="used to distinguish multiple entities with a single FQDN")
-        self._parser_create.add_argument('cert', type=argparse.FileType('r'), help='certificate')
+        self._parser_create.add_argument('cert', type=argparse.FileType('r', encoding='utf8'), help='certificate')
 
         # create the parser for the "signED" command
         self._parser_sign = _subparsers.add_parser('signED',
              help='sign an EntityDescriptor using the Citizen Card')
         self._parser_sign.add_argument('-o', '--outputdir', dest='output_dir', required=True,
             help='Directory of signED output file')
-        self._parser_sign.add_argument('input', type=argparse.FileType('r'),
+        self._parser_sign.add_argument('input', type=argparse.FileType('r', encoding='utf8'),
             help='file containing the unsigned EntityDescriptor..')
 
         # create the parser for the "extractED" command
         #self._parser_extract = _subparsers.add_parser('extractED',
         #    help='extract certificate from EntityDescriptors in metadata')
-        #self._parser_extract.add_argument('input', type=argparse.FileType('r'),
+        #self._parser_extract.add_argument('input', type=argparse.FileType('r', encoding='utf8'),
         #    help='file containing the metadata aggregate')
 
         # create the parser for the "deleteED" command
@@ -54,19 +54,19 @@ class CliPatool(AbstractInvocation):
         self._parser_revoke = _subparsers.add_parser('revokeCert',
             help='create a PMP input file to revoke a certificate')
         self._parser_revoke.add_argument('-c', '--certfile', dest='certfile',
-                                         type=argparse.FileType('r'), required=True)
+                                         type=argparse.FileType('r', encoding='utf8'), required=True)
         self._parser_revoke.add_argument('-R', '--reason', dest='reason', required=True,
             help='test explaining the reason for the revocation')
-        self._parser_revoke.add_argument('output', type=argparse.FileType('w'), default=None,
+        self._parser_revoke.add_argument('output', type=argparse.FileType('w', encoding='utf8'), default=None,
             help='PMP input file')
 
         # create the parser for the "caCert" command
         self._parser_caCert = _subparsers.add_parser('caCert',
              help='create a PMP input file to import a ca certificate')
-        self._parser_caCert.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r'))
+        self._parser_caCert.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r', encoding='utf8'))
         self._parser_caCert.add_argument('-p', '--pvprole', dest='pvprole', required=True,
                                          choices=('IDP', 'SP'), help='IDP, SP')
-        self._parser_caCert.add_argument('output', type=argparse.FileType('w'), default=None,
+        self._parser_caCert.add_argument('output', type=argparse.FileType('w', encoding='utf8'), default=None,
             help='PMP input file)')
 
         # create the parser for the "adminCert" command
@@ -85,7 +85,7 @@ class CliPatool(AbstractInvocation):
             help='directory to output certificates. Filenames are derived from entityId')
         self._parser_exportCerts.add_argument('-r', '--samlrole', dest='pvprole',
                                          choices=('IDP', 'SP'), help='IDP, SP')
-        self._parser_exportCerts.add_argument('metadata', type=argparse.FileType('r'), help='SAML Metadata aggregate file)')
+        self._parser_exportCerts.add_argument('metadata', type=argparse.FileType('r', encoding='utf8'), help='SAML Metadata aggregate file)')
 
         if testargs:
             self.args = self._parser.parse_args(testargs)
