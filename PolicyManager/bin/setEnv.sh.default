@@ -9,8 +9,8 @@ if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
     export py3=$PY3 # set in Dockerfile
     export PYJNIUS_ACTIVATE=
     export LOGDIR='/var/log/pvzd'
-elif [[ "${OSTYPE//[0-9.]/}" == "linux" ]]; then
-    #  vmdev9015.adv.magwien.gv.at on RHEL6
+elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
+    #  RHEL6
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
     export py3='scl enable rh-python34 -- python'
@@ -19,7 +19,7 @@ elif [[ "$HOSTNAME" == "devl8.local" ]]; then
     #  used for OSX development env (r2h2)
     export devlhome=~/devl
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home
-    export PROJ_HOME=$devlhome/pycharm/rhoerbe/PVZDpolman
+    export PROJ_HOME=$devlhome/python/rhoerbe/PVZDpolman
     export py3=~/virtualenvs/pvzd34/bin/python
     export LOGDIR="$PROJ_HOME/PVZDpolman/log"
 elif [[ "$HOSTNAME" == "kalypso" ]]; then

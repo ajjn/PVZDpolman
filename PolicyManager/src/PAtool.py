@@ -128,7 +128,7 @@ class PAtool:
         os.remove(filename)
         return filename
 
-    def adminCert(self):
+    def adminCertSignChallenge(self) -> str:
         logging.debug('challenging admin to create a signature to extract signing cert')
         x = creSignedXML('sign this dummy text - result is used to extract signature certificate.')
         fn = self.mk_temp_filename() + '.xml'
@@ -136,12 +136,27 @@ class PAtool:
             f.write(x)
         xml_sig_verifyer = XmlSigVerifyer();
         xml_sig_verifyer_response = xml_sig_verifyer.verify(fn, verify_file_extension=False)
-        x509cert = XY509cert('-----BEGIN CERTIFICATE-----\n' + \
-             xml_sig_verifyer_response.signer_cert_pem + \
-             '\n-----END CERTIFICATE-----\n')
-        x509cert_pem = x509cert.getPEM_str().replace('\n', '') # JSON string: single line
+        return XY509cert('-----BEGIN CERTIFICATE-----\n' + \
+                         xml_sig_verifyer_response.signer_cert_pem + \
+                         '\n-----END CERTIFICATE-----\n')
+
+    def adminCertFromFile(self) -> str:
+        filecontent = self.args.certfile.read()
+        self.args.certfile.close()
+        if filecontent.startswith('-----BEGIN CERTIFICATE-----\n'):
+            return filecontent
+        else:
+            return '-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n' % filecontent
+
+    def adminCert(self):
+        if 'certfile' in self.args:
+            x509cert_pem_multiline = self.adminCertFromFile()
+        else:
+            x509cert_pem_multiline = self.adminCertSignChallenge()
+        x509cert = XY509cert(x509cert_pem_multiline)
+        x509cert_pem_singleline = x509cert_pem_multiline.replace('\n', '')  # JSON string must be a single line
         pmp_input = '[\n{"record": ["userprivilege", "{cert}%s", "%s", "%s"], "delete": false}\n]' % \
-                    (x509cert_pem, self.args.orgid, x509cert.getSubjectCN())
+                    (x509cert_pem_singleline, self.args.orgid, x509cert.getSubjectCN())
         logging.debug('writing PMP input file to ' + self.args.output.name)
         self.args.output.write(pmp_input)
         self.args.output.close()

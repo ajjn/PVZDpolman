@@ -7,32 +7,30 @@ if [ -z "$PROJ_HOME" ]; then
     exit 1
 fi
 
-export POLMAN_TRUSTEDCERTS=/etc/pki/sign/trustedcerts.json
-
-if [[ "$ostype" == "linux-gnu" ]]; then
-    #  tested with CentOS7
+if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
+    #  CentOS7, docker
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
     export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
     export LOGDIR=/var/log/pvzd
-elif [[ "$ostype" == "linux" ]]; then
-    # vmdev9015.adv.magwien.gv.at on RHEL6
+elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
+    # RHEL6
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
     export POLMAN_TRUSTEDCERTS=/etc/pki/sign/trustedcerts.json
     export LOGDIR=/var/log/pvzd
-elif [[ "$ostype" == "darwin" ]]; then
-    #  used for OSX development env
+elif [[ "$HOSTNAME" == "devl8.local" || "$HOSTNAME" == "kalypso" ]]; then
+    #  used for OSX/Fedora dev enc
     export POLMAN_REPODIR=$PROJ_HOME/PolicyManager/tests/work/policyDirectory
     export POLMAN_PEPOUTDIR=$PROJ_HOME/PolicyManager/tests/work/pepoutdir
     export POLMAN_AODS=$PROJ_HOME/PolicyManager/tests/work/PEP/03/policyDirectory_basic_MOA/policydir/pol_journal.xml
     export POLMAN_TRUSTEDCERTS=$PROJ_HOME/PolicyManager/tests/testdata/trustedcerts.json
     export LOGDIR=$PROJ_HOME/PolicyManager/tests/log
 else
-    echo "no environment defined for $ostype"
+    echo "no environment defined for host $HOSTNAME"
     exit 1
 fi
 
-PEPLOGLEVEL=INFO
+export PEPLOGLEVEL='INFO'

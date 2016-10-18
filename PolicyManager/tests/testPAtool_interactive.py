@@ -130,8 +130,8 @@ class Test06_caCert(unittest.TestCase):
 
 class Test07_adminCert(unittest.TestCase):
     def runTest(self):
-        logging.info('  -- Test PAT07: create PMP import file for admin certificate')
-        pmpinput_file = make_dirs(os.path.abspath('work/PAT/07_add_admincert.json'))  # output
+        logging.info('  -- Test PAT07: create PMP import file for admin certificate (challenge)')
+        pmpinput_file = make_dirs(os.path.abspath('work/PAT/07/add_admincert.json'))  # output
         cliClient = CliPatool(['-v', 'adminCert',
                                          '--orgid', '4711',
                                          pmpinput_file])

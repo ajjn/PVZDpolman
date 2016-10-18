@@ -72,7 +72,7 @@ class CliPatool(AbstractInvocation):
         # create the parser for the "adminCert" command
         self._parser_adminCert = _subparsers.add_parser('adminCert',
              help='create a PMP input file to import an admin certificate. Either sign a challenge or provide admin certificate via --certfile option')
-        self._parser_caCert.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r', encoding='utf8'))
+        self._parser_adminCert.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r', encoding='utf8'))
         self._parser_adminCert.add_argument('-o', '--orgid', dest='orgid',
                                             required=True, help='Organization ID')
         self._parser_adminCert.add_argument('output', type=argparse.FileType('w'), help='PMP input file')
