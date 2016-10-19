@@ -35,7 +35,7 @@ cd $SCRIPTDIR # required for relative reference to testdata
 sum=0
 
 function interactiveTests {
-  $py3 $MOD_HOME/tests/testPATool_interactive.py
+  $py3 $MOD_HOME/tests/testPAtool_interactive.py
   sum=$(($sum+$?))
   $py3 $MOD_HOME/tests/testPMP_interactive.py
   sum=$(($sum+$?))
@@ -44,7 +44,7 @@ function interactiveTests {
 }
 
 function noninteractiveTests {
-  $py3 $MOD_HOME/tests/testPATool_noninteractive.py
+  $py3 $MOD_HOME/tests/testPAtool_noninteractive.py
   sum=$(($sum+$?))
   $py3 $MOD_HOME/tests/testPMP_noninteractive.py
   sum=$(($sum+$?))
