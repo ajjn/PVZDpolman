@@ -38,8 +38,12 @@ For has py3 fixes:
 ## Run unittests (keep sequence because of test data dependencies)
 
     cd PolicyManager/tests
+    ./testAll.sh -s noninteractive
+    ./testAll.sh -s interactive  # requires signing with MOA-ID
+ 
+    # or per application:
     ./testPAtool.sh
-    ./testPMP.sh
+    ./testPEP.sh
     ./testPEP.sh
 
 ---

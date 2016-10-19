@@ -78,7 +78,8 @@ chain of root and intermediate issuer certificates must be included in the polic
         
 ### Create a PMP Request to add an Admin Certificate 
 
-    ./PAtool.sh adminCert --orgid L9 ../tests/work/add_L9_admin_cert.json
+    ./PAtool.sh adminCert --orgid L9 ../tests/work/add_L9_admin_cert.json   # requires a challenge to be signed
+    ./PAtool.sh adminCert --orgid L9 -c ../testdata/PAT/08/ecard_qcert.pem ../tests/work/add_L9_admin_cert.json   # requires a the signing cert as PEM or Base64 file
         
 
         

@@ -149,10 +149,10 @@ class PAtool:
             return '-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n' % filecontent
 
     def adminCert(self):
-        if 'certfile' in self.args:
+        if 'certfile' in self.args and self.args.certfile is not None:
             x509cert_pem_multiline = self.adminCertFromFile()
         else:
-            x509cert_pem_multiline = self.adminCertSignChallenge()
+            x509cert_pem_multiline = self.adminCertSignChallenge().cert_str
         x509cert = XY509cert(x509cert_pem_multiline)
         x509cert_pem_singleline = x509cert_pem_multiline.replace('\n', '')  # JSON string must be a single line
         pmp_input = '[\n{"record": ["userprivilege", "{cert}%s", "%s", "%s"], "delete": false}\n]' % \

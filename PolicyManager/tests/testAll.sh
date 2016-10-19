@@ -1,6 +1,7 @@
 #!/bin/bash
 # run all unit tests
 
+subset='all'
 while getopts ":hs:" opt; do
   case $opt in
     s)
@@ -39,14 +40,14 @@ function interactiveTests {
   sum=$(($sum+$?))
   $py3 $MOD_HOME/tests/testPMP_interactive.py
   sum=$(($sum+$?))
-  $py3 $MOD_HOME/tests/testPEP.py
-  sum=$(($sum+$?))
 }
 
 function noninteractiveTests {
   $py3 $MOD_HOME/tests/testPAtool_noninteractive.py
   sum=$(($sum+$?))
   $py3 $MOD_HOME/tests/testPMP_noninteractive.py
+  sum=$(($sum+$?))
+  $py3 $MOD_HOME/tests/testPEP.py
   sum=$(($sum+$?))
 }
 
