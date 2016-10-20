@@ -1,14 +1,5 @@
 # Policy Manager/PMP How-To
 
-## Allgemein
-
-Wechsel in das bin Directory
-```cd $PROJ_HOME/PolicyManager/bin```
-
-Commandline Hilfe anzeigen. Anmerkung: Die Optionen -x -a -t werden über Umgebungsvariable gesetzt 
-```./PMP.sh --help```
-```./PMP.sh <subcommand> --help```
-
 ## Policy Journal pflegen
 
 Initialisieren
