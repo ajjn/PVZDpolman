@@ -7,7 +7,9 @@ $py3 $PROJ_HOME/PolicyManager/src/PAtool.py --help
 
 echo << EOF
 
-Für die Dokumentaiton der funktionen siehe auch hier:
+Für die Dokumentation der funktionen siehe auch hier:
+
+https://github.com/rhoerbe/PVZDpolman/blob/master/PolicyManager/doc/PAtool%20HowTo_de.md
 
 EOF
 
