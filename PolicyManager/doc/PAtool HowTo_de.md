@@ -14,7 +14,9 @@ Befehle anzeigen:
 
     ./PAtool.sh --help
     # Subcommand
-    ./PAtool.sh <subcommand> --help    
+    ./PAtool.sh <subcommand> --help   
+
+Der Aufruf erfolgt immer mit ./PAtool.sh als Wrapper für PAtool.py
 
 Outputdateien müssen signiert werden - dafür ist ein Kartenleser und
 eine Bürgerkarte erforderlich. Wenn keine Bürgerkarte vorhanden ist,

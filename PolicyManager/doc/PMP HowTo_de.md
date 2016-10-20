@@ -1,5 +1,20 @@
 # Policy Manager/PMP How-To
 
+## Vorbereitung
+
+
+Wechsel ins bin Verzeichnis
+```cd $PROJ_HOME/PolicyManager/bin```
+
+Befehle anzeigen:
+
+    ./PMP.sh --help
+    # Subcommand
+    ./PMP.sh <subcommand> --help   
+
+Der Aufruf erfolgt immer mit ./PMP.sh als Wrapper für PMP.py
+
+
 ## Policy Journal pflegen
 
 Initialisieren
