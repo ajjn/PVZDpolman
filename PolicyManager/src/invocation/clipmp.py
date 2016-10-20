@@ -8,8 +8,12 @@ class CliPmp(AbstractInvocation):
     """ define CLI invocation for PMP. Test runner can use this by passing testargs """
     def __init__(self, testargs=None):
         self._parser = argparse.ArgumentParser(description='Policy Management Point')
-        self._parser.add_argument('-a', '--aods', dest='aods',
-             help='Policy journal (append only data strcuture)')
+        if 'POLMAN_AODS' in os.environ and os.path.isfile(os.environ['POLMAN_AODS']):
+            self._parser.add_argument('-a', '--aods', dest='aods', default=os.environ['POLMAN_AODS'],
+                                      help=argparse.SUPPRESS)
+        else:
+            self._parser.add_argument('-a', '--aods', dest='aods', required=True,
+                help='Policy journal (append only data strcuture). This value is optional if provided via POLMAN_AODS in env')
         self._parser.add_argument('-d', '--debug', dest='debug', action="store_true",
              help='trace hash chain computation')
         self._parser.add_argument('-n', '--noxmlsign', action="store_true",
@@ -20,8 +24,12 @@ class CliPmp(AbstractInvocation):
              help='Person adding the input record (current user)')
         self._parser.add_argument('-s', '--submitter', dest='submitter', default=getpass.getuser(),
              help='Person that submitted the input record')
-        self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts',
-             help='file containing json-array of PEM-formatted certificates trusted to sign the aods')
+        if 'POLMAN_TRUSTEDCERTS' in os.environ and os.path.isfile(os.environ['POLMAN_TRUSTEDCERTS']):
+            self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts',
+                 default=os.environ['POLMAN_TRUSTEDCERTS'], help=argparse.SUPPRESS)
+        else:
+            self._parser.add_argument('-t', '--trustedcerts', dest='trustedcerts',
+                 help='file containing json-array of PEM-formatted certificates trusted to sign the aods. This value is optional if provided via POLMAN_TRUSTEDCERTS in env')
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
 
@@ -58,9 +66,6 @@ class CliPmp(AbstractInvocation):
         else:
             self.args = self._parser.parse_args()  # regular case: use sys.argv
 
-        self.get_from_env('aods')
-        self.get_from_env('trustedcerts')
-
         self.args.list_trustedcerts = False  # required by aodsfilehanlder.__init__(), but only used in PEP
 
         if self.args.subcommand == 'append':
@@ -76,14 +81,3 @@ class CliPmp(AbstractInvocation):
         if self.args.printargs:
             for opt in [a for a in dir(self.args) if not a.startswith('_')]:
                 print(opt + '=' + str(getattr(self.args, opt)))
-
-
-    def get_from_env(self, argname):
-        if not getattr(self.args, argname, False):
-            env_name = 'POLMAN_%s' % argname.upper()
-            if env_name in os.environ:
-                setattr(self.args, argname, os.environ[env_name])
-            else:
-                raise InvalidArgumentValueError('neither --%s nor %s provided' % (argname, env_name))
-
-

@@ -39,7 +39,7 @@ class Test00_cli(unittest.TestCase):
 class Test01_basic_happy_cycle(unittest.TestCase):
     @ignore_warnings
     def runTest(self):
-        logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify')
+        logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify; aods via option')
         policy_journal = os.path.abspath('work/PMP/ns01/aods.json')
         logging.debug('=== removing existing aods file .. ')
         cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'scratch'])
@@ -90,12 +90,14 @@ class Test01_basic_happy_cycle(unittest.TestCase):
         PMP.run_me(cliClient)
         logging.debug('=== append done.')
 
-        logging.debug('=== reading & dumping policy journal as json, directory as json & html .. ')
-        cliClient = CliPmp(['-v', '-n', '-a', policy_journal, 'read',
+        logging.debug('=== reading & dumping policy journal as json, directory as json & html ..; aods via env var')
+        os.environ['POLMAN_AODS'] = policy_journal
+        cliClient = CliPmp(['-v', '-n', 'read',
                             '--poldirjson', os.path.abspath('work/PMP/ns01/poldir2.json'),
                             '--poldirhtml', os.path.abspath('work/PMP/ns01/poldir2.html'),
                             '--journal', os.path.abspath('work/PMP/ns01/pol_journal2.json')])
         PMP.run_me(cliClient)
+        os.environ.pop('POLMAN_AODS')
         assertNoDiff('poldir2.json', subdir='PMP/ns01')
 
 

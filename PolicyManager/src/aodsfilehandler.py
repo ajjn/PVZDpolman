@@ -21,7 +21,10 @@ class AODSFileHandler():
             self._aodsFile += '.xml'
         if cliClient.args.noxmlsign and self._aodsFile[-5:] != '.json':
             self._aodsFile += '.json'
-        self.trustCertsFile = os.path.abspath(cliClient.args.trustedcerts)
+        if cliClient.args.trustedcerts is None:
+            self.trustCertsFile = None
+        else:
+            self.trustCertsFile = os.path.abspath(cliClient.args.trustedcerts)
 
     def do_list_trustedcerts(self, trustCerts, signerCertificateEncoded):
         for cert in trustCerts:
