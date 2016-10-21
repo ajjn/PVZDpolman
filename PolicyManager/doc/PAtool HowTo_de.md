@@ -24,7 +24,7 @@ kann die eCard on-line über die Handysignatur dazu eingerichtet werden.
 
 ## Portal Administrator melden
 
-./PAtool.sh adminCert -o "Verwaltungskennezichen-ohne-AT:" output
+./PAtool.sh adminCert -o "Verwaltungskennzeichen-ohne-AT:" output
 
 Mit der Funktion wird eine Challenge signiert und daraus das BK-Zertifikat
 extrahiert. Die Output-Datei wird out-of-Band an den Depositar übermittelt.
