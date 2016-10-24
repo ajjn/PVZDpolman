@@ -1,9 +1,14 @@
 # Policy Manager/PMP How-To
 
+## Voraussetzungen
+
+- Im Backend System (PEP) ist das Signaturzertifikat des Depositors hinterlegt.
+- Das Policy Journal wurde initialisiert (`./PMP.sh create`)
+- Dem PMP steht die letzte Version des Policy Journals zur Verfügung (-> Git)
+
 ## Vorbereitung
 
-
-Wechsel ins bin Verzeichnis
+Wechsel ins bin Verzeichnis:
 ```cd $PROJ_HOME/PolicyManager/bin```
 
 Befehle anzeigen:
@@ -15,15 +20,21 @@ Befehle anzeigen:
 Der Aufruf erfolgt immer mit ./PMP.sh als Wrapper für PMP.py
 
 
-## Policy Journal pflegen
+## Meldungen ins Policy Journal einpflegen
 
-Initialisieren
+Policies (d.h. Organisationen, Domains, Portaladmins, ..) werden als
+.json-Datei vom Portalverantwortlichen außerhalb des Systems gesichert
+übermittelt. Wenn eine ordunungsgemäße Meldung eingeht, wird diese 
+vom Depositar signiert und das neue Policy Journal an das Backendsystem
+hochgeladen:
 
-    ./PMP.sh create
+    ./PMP.sh append /transfer/PMPns01_pmp_input1.json
+    git ..
+    
+TLS-Zertifikat für Stammportal melden
 
-Policies hinzufügen
-
-    ./PMP.sh append ../tests/testdata/PMPns01_pmp_input1.json
+Der vom Portaldamin übermittelte EntityDescriptor wird in den entsprechenden
+Directory in git hochgeladen.
 
 Eine Organization mit Domain & Signaturzertifikat hinzufügen 
 

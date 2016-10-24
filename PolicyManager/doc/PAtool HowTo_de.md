@@ -15,19 +15,15 @@ Befehle anzeigen:
     ./PAtool.sh --help
     # Subcommand
     ./PAtool.sh <subcommand> --help   
-
+    git add $POLMAN_REPODIR/policydir/aods.xml
+    git commit -m update
+    git push
+    
 Der Aufruf erfolgt immer mit ./PAtool.sh als Wrapper für PAtool.py
 
 Outputdateien müssen signiert werden - dafür ist ein Kartenleser und
 eine Bürgerkarte erforderlich. Wenn keine Bürgerkarte vorhanden ist,
 kann die eCard on-line über die Handysignatur dazu eingerichtet werden.
-
-## Portal Administrator melden
-
-./PAtool.sh adminCert -o "Verwaltungskennzeichen-ohne-AT:" output
-
-Mit der Funktion wird eine Challenge signiert und daraus das BK-Zertifikat
-extrahiert. Die Output-Datei wird out-of-Band an den Depositar übermittelt.
 
 
 ## TLS-Zertifikat für Stammportal melden
@@ -42,6 +38,8 @@ extrahiert. Die Output-Datei wird out-of-Band an den Depositar übermittelt.
 Mit diesem Befehl wird das TLS-Zertifikat in einen EntityDescriptor
 verpackt und signiert. Das STP muss mit einer entityID identifiziert werden,
 die im zentralen ldap.gv.at einzutragen ist.
+
+
         
 ### Sign EntityDescriptor
 For EntityDescriptor created with another tool, or edited ater creating with createED,
