@@ -5,8 +5,9 @@ import sys, os
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
-
-version = '0.4.0dev'
+#version = '0.5.0dev'
+version = open(os.path.join(here, 'VERSION')).read()
+projname = open(os.path.join(here, 'PROJNAME')).read()
 
 install_requires = open('requirements.txt'.readlines())
 # resolve these dependencies manually:
@@ -20,16 +21,17 @@ install_requires = open('requirements.txt'.readlines())
 
 
 
-setup(name='PolicyManager',
+setup(name=projname,
       version=version,
       description="PVZD Policy Manager",
       long_description=README,
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 3 - Beta",
         "Intended Audience :: Information Technology",
         "License :: OSI Approved :: European Union Public Licence 1.1 (EUPL 1.1)",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
         "Topic :: System :: Systems Administration",
       ],
       keywords='identity federation saml metadata',

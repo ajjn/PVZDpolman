@@ -18,6 +18,11 @@ __author__ = 'r2h2'
 logbasename = re.sub(r'\.py$', '', os.path.basename(__file__))
 logging_config = loggingconfig.LoggingConfig(logbasename, mode='w')
 logging.info('DEBUG log: ' + logging_config.LOGFILENAME)
+here = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+version = open(os.path.join(here, 'VERSION')).read()
+projname = open(os.path.join(here, 'PROJNAME')).read()
+logging.info(projname + ' V' + version)
+
 
 def ignore_warnings(test_func):
     def do_test(self, *args, **kwargs):

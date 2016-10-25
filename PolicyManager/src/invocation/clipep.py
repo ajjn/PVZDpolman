@@ -9,7 +9,9 @@ __author__ = 'r2h2'
 class CliPep(AbstractInvocation):
     """ define CLI invocation for PEP.  Test runner can use this by passing testargs """
     def __init__(self, testargs=None):
-        self._parser = argparse.ArgumentParser(description='Policy Enforcement Point')
+        here = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        version = open(os.path.join(here, 'VERSION')).read()
+        self._parser = argparse.ArgumentParser(description='Policy Enforcement Point V%s' % version)
         self._parser.add_argument('-a', '--aods', dest='aods',
              help='Policy journal (AODS = append only data strcuture)')
         self._parser.add_argument('-d', '--debug', dest='debug', action="store_true",

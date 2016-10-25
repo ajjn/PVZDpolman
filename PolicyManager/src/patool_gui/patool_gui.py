@@ -30,7 +30,9 @@ class PAtoolGUI(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.parent = master
-        self.parent.title("Portal Admin Tool")
+        here = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        self.version = open(os.path.join(here, 'VERSION')).read()
+        self.parent.title("Portal Admin Tool V" + self.version)
         self.pack(fill=tk.BOTH, expand=True)
         self.conf = ConfigReader()
         self.custom_font = font.Font(family=self.conf.FONT_FAMILY, size=self.conf.FONT_SIZE)

@@ -9,7 +9,9 @@ __author__ = 'r2h2'
 class GuiPatool(AbstractInvocation):
     """ define CLI invocation for PAtool. Test runner can use this by passing testargs  """
     def __init__(self, testargs=None):
-        self._parser = argparse.ArgumentParser(description='Portaladministrator Tool')
+        here = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        self.version = open(os.path.join(here, 'VERSION')).read()
+        self._parser = argparse.ArgumentParser(description='Portaladministrator Tool V%s' % self.version)
         self._parser.add_argument('-v', '--verbose', dest='verbose', action="store_true")
         _subparsers = self._parser.add_subparsers(dest='subcommand', help='sub-command help')
 
