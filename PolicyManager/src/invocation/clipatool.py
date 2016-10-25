@@ -75,7 +75,7 @@ class CliPatool(AbstractInvocation):
         self._parser_adminCert.add_argument('-c', '--certfile', dest='certfile', type=argparse.FileType('r', encoding='utf8'))
         self._parser_adminCert.add_argument('-o', '--orgid', dest='orgid',
                                             required=True, help='Organization ID')
-        self._parser_adminCert.add_argument('output', type=argparse.FileType('w'), help='PMP input file')
+        self._parser_adminCert.add_argument('output', type=argparse.FileType('w', encoding='utf8'), help='PMP input file')
 
         # create the parser for the "exportCerts" command
         self._parser_exportCerts = _subparsers.add_parser('exportCerts',
