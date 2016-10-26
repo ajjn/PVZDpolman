@@ -59,7 +59,8 @@ get_or_update_repo
 
 # --- pyjnius ---
 repodir='pyjnius'
-repourl='https://github.com/kivy/pyjnius.git'
+#repourl='https://github.com/kivy/pyjnius.git'
+repourl='https://github.com/identinetics/pyjnius.git'  # fork, because of https://github.com/kivy/pyjnius/issues/245
 get_or_update_repo
 
 # --- signxml ---
