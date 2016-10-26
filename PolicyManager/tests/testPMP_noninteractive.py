@@ -43,7 +43,7 @@ class Test00_cli(unittest.TestCase):
 
 
 class Test01_basic_happy_cycle(unittest.TestCase):
-    @ignore_warnings
+    # @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns01: happy cycle: create, append, read, verify; aods via option')
         policy_journal = os.path.abspath('work/PMP/ns01/aods.json')
@@ -119,7 +119,7 @@ class Test02_broken_hash_chain(unittest.TestCase):
 
 
 class Test03_broken_input_for_append(unittest.TestCase):
-    @ignore_warnings
+    # @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns03: handle broken json input for append')
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
@@ -132,7 +132,7 @@ class Test03_broken_input_for_append(unittest.TestCase):
 
 
 class Test04_broken_input_for_validation(unittest.TestCase):
-    @ignore_warnings
+    # @ignore_warnings
     def runTest(self):
         logging.info('  -- Test PMPns04/1: handle broken input for append/validation: JSON not an array')
         aodsfile = os.path.abspath('work/PMP/ns01/aods.json')
