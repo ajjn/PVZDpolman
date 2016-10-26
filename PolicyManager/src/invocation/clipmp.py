@@ -9,7 +9,7 @@ class CliPmp(AbstractInvocation):
     def __init__(self, testargs=None):
         here = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         version = open(os.path.join(here, 'VERSION')).read()
-        self._parser = argparse.ArgumentParser(description='Policy Management Point' V%s' % version)
+        self._parser = argparse.ArgumentParser(description='Policy Management Point V%s' % version)
         if 'POLMAN_AODS' in os.environ and os.path.isfile(os.environ['POLMAN_AODS']):
             self._parser.add_argument('-a', '--aods', dest='aods', default=os.environ['POLMAN_AODS'],
                                       help=argparse.SUPPRESS)
