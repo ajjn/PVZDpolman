@@ -199,4 +199,4 @@ class Test05_delete_ok_cycle(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(warnings='ignore')

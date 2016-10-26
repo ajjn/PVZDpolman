@@ -143,4 +143,4 @@ class Test07_adminCert(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(warnings='ignore')

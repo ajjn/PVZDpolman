@@ -65,4 +65,4 @@ class Test08_adminCert(unittest.TestCase):
         PAtool.run_me(cliClient)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(warnings='ignore')

@@ -24,11 +24,12 @@ projname = open(os.path.join(here, 'PROJNAME')).read()
 logging.info(projname + ' V' + version)
 
 
-def ignore_warnings(test_func):
-    def do_test(self, *args, **kwargs):
-        with warnings.catch_warnings():
-            test_func(self, *args, **kwargs)
-    return do_test
+#def ignore_warnings(test_func):
+# stub for function which could be used to selectively ignore "unclosed resrouce" warnings
+#    def do_test(self, *args, **kwargs):
+#        with warnings.catch_warnings():
+#            test_func(self, *args, **kwargs)
+#    return do_test
 
 class Test00_cli(unittest.TestCase):
     def runTest(self):
@@ -200,4 +201,4 @@ class Test04_broken_input_for_validation(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(warnings='ignore')
