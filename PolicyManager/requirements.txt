@@ -5,7 +5,9 @@ lxml
 pyOpenSSL>=0.15.1
 requests
 # numpy required for javabridge
-numpy
+# Numpy must be installed before installing javabridge.
+#    It cannot be installed automatically when pip-installing javabridge.
+#    See https://github.com/CellProfiler/python-javabridge/issues/30
 # javabridge only required if pyjnius is not used (PYJNIUS_ACTIVATE not set -> fallback)
 javabridge
 #json2html 1.0.1 had to be forked (py3 problems)

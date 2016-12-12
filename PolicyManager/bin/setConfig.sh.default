@@ -7,7 +7,7 @@ if [ -z "$PROJ_HOME" ]; then
     exit 1
 fi
 
-if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
+if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]; then
     #  CentOS7, docker
     export POLMAN_REPODIR=/var/lib/git/pvmd
     export POLMAN_PEPOUTDIR=/var/lib/pyff/input
