@@ -1,0 +1,28 @@
+2016-10-18 22:55:46,180 - INFO  [testPATool_noninteractive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPATool_noninteractive.debug
+2016-10-18 22:55:46,191 - INFO  [testPATool_noninteractive.py:34]   -- Test PAT08a: create PMP import file for admin certificate (import)
+2016-10-18 22:55:46,200 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-a.json
+2016-10-18 22:55:46,200 - INFO  [testPATool_noninteractive.py:44]   -- Test PAT08b: create PMP import file for admin certificate (import)
+2016-10-18 22:55:46,208 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-b.json
+2016-10-18 22:55:46,209 - INFO  [testPATool_noninteractive.py:54]   -- Test PAT08c: create PMP import file for admin certificate (import)
+2016-10-18 22:55:46,234 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-c.json
+2016-10-19 11:56:59,066 - INFO  [testPAtool_noninteractive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_noninteractive.debug
+2016-10-19 11:56:59,069 - INFO  [testPAtool_noninteractive.py:34]   -- Test PAT08a: create PMP import file for admin certificate (import)
+2016-10-19 11:56:59,592 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-a.json
+2016-10-19 11:56:59,595 - INFO  [testPAtool_noninteractive.py:44]   -- Test PAT08b: create PMP import file for admin certificate (import)
+2016-10-19 11:56:59,613 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-b.json
+2016-10-19 11:56:59,613 - INFO  [testPAtool_noninteractive.py:54]   -- Test PAT08c: create PMP import file for admin certificate (import)
+2016-10-19 11:56:59,817 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-c.json
+2016-10-19 12:36:53,641 - INFO  [testPAtool_noninteractive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_noninteractive.debug
+2016-10-19 12:36:53,643 - INFO  [testPAtool_noninteractive.py:34]   -- Test PAT08a: create PMP import file for admin certificate (import)
+2016-10-19 12:36:53,651 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-a.json
+2016-10-19 12:36:53,652 - INFO  [testPAtool_noninteractive.py:44]   -- Test PAT08b: create PMP import file for admin certificate (import)
+2016-10-19 12:36:53,659 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-b.json
+2016-10-19 12:36:53,659 - INFO  [testPAtool_noninteractive.py:54]   -- Test PAT08c: create PMP import file for admin certificate (import)
+2016-10-19 12:36:53,666 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-c.json
+2016-10-21 10:40:11,527 - INFO  [testPAtool_noninteractive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_noninteractive.debug
+2016-10-21 10:40:11,544 - INFO  [testPAtool_noninteractive.py:34]   -- Test PAT08a: create PMP import file for admin certificate (import)
+2016-10-21 10:40:11,722 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-a.json
+2016-10-21 10:40:11,784 - INFO  [testPAtool_noninteractive.py:44]   -- Test PAT08b: create PMP import file for admin certificate (import)
+2016-10-21 10:40:11,791 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-b.json
+2016-10-21 10:40:11,791 - INFO  [testPAtool_noninteractive.py:54]   -- Test PAT08c: create PMP import file for admin certificate (import)
+2016-10-21 10:40:11,799 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/08/add_admincert-c.json
