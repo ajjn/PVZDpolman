@@ -1,7 +1,7 @@
 #!/bin/bash
 # set paths for devl and test systems
 
-if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" ]]; then
+if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]; then
     # docker container from LieveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
