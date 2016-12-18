@@ -1,0 +1,1611 @@
+2016-10-19 11:57:01,615 - INFO  [testPAtool_interactive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_interactive.debug
+2016-10-19 11:57:01,620 - INFO  [testPAtool_interactive.py:32]   -- Test PAT01: create EntitDescriptor from certificate (pvzd:pvptype="R-Profile")
+2016-10-19 11:57:01,625 - DEBUG  [PAtool.py:50] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/01/redmineIdentineticsCom-cer.pem
+2016-10-19 11:57:01,639 - DEBUG  [PAtool.py:62] writing EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/01/redmineIdentineticsCom_idpXml.unsigned.xml
+2016-10-19 11:57:01,641 - ERROR  [assertNoDiff.py:21]      result (redmineIdentineticsCom_idpXml.unsigned.xml)is not equal to reference data.
+2016-10-19 11:57:01,652 - DEBUG  [assertNoDiff.py:22] result (redmineIdentineticsCom_idpXml.unsigned.xml) is not equal to reference data
+2016-10-19 11:57:01,656 - INFO  [testPAtool_interactive.py:47]   -- Test PAT02a: sign EntityDescriptor w/o xml header to default output
+2016-10-19 11:57:07,604 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 11:57:07,605 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 11:57:30,770 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile"><dsig:Signature Id="Signature-d2e408d6-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-d2e408d6-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-d2e408d6-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>9PnKdG6SBw6H8qgUlEtS0aMHSo9JIOm+cIk4C2gR72A=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-d2e408d6-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-d2e408d6-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>77dLiIv9opqPdp5iv7IWUlsxrH3JFpkTrD5fF6F2k3k=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-d2e408d6-1">+028AtVxaB2DbgeVIhar7xtzNSf2E5XTKW0R54HzQEgUkhKnGX7CTaaq2eH0/+2G
+b0qRT9aMkJRi8divwbEGfw==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-d2e408d6-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-d2e408d6-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-d2e408d6-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T09:57:12Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-d2e408d6-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 11:57:30,777 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/redmineIdentineticsCom_idp.xml
+2016-10-19 11:57:30,777 - INFO  [testPAtool_interactive.py:53]   -- Test PAT02b: sign EntityDescriptor with xml header to specified output
+2016-10-19 11:57:31,793 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+
+
+2016-10-19 11:57:31,793 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 11:57:36,049 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" entityID="https://idp.example.com/idp.xml"><dsig:Signature Id="Signature-8e8fcbb9-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-8e8fcbb9-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-8e8fcbb9-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>JvmW5vKjaTEVHzOdiC/H3HSGNocGamY9sDeU86ld6TA=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-8e8fcbb9-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-8e8fcbb9-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>faOnWgpgt0ZNJLpniI0aMttFxXDzMqRRk+wI5oWgTVo=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-8e8fcbb9-1">5lrTq7qgr3Na9AVQ2LceMHn/o7pNRtmhbXNjRCUl/X74bLvZ15JtVyHEyEC8XPUf
+hkH7UhMHSx0/bzGqKWMOYg==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-8e8fcbb9-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-8e8fcbb9-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-8e8fcbb9-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T09:57:32Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-8e8fcbb9-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256" MaxKeySize="511" MinKeySize="256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MaxKeySize="4096" MinKeySize="2048"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 11:57:36,050 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/idpExampleCom_idpXml.xml
+2016-10-19 11:57:36,051 - INFO  [testPAtool_interactive.py:62]   -- Test PAT03a: sign EntityDescriptor with invalid SAML schema (OK with xmllint, failing with xerces)
+2016-10-19 11:57:36,371 - INFO  [testPAtool_interactive.py:69]   -- Test PAT03b: root is not md:EntityDescriptor
+2016-10-19 11:57:36,375 - INFO  [testPAtool_interactive.py:75]   -- Test PAT03c: EntityDescriptor not root (enveloping signature)
+2016-10-19 11:57:36,382 - INFO  [testPAtool_interactive.py:85]   -- Test PAT04: create request to delete EntityDescriptor from metadata
+2016-10-19 11:57:36,386 - DEBUG  [PAtool.py:88] creating delete request for entityID https://redmine.identinetics.com/idp.xml
+2016-10-19 11:57:36,387 - DEBUG  [PAtool.py:92] writing unsigned ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmp3dbbftob.xml
+2016-10-19 11:57:36,388 - DEBUG  [PAtool.py:95] signing ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmp3dbbftob.xml
+2016-10-19 11:57:36,608 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 11:57:36,609 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 11:57:39,515 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><!-- DELETE entity descriptor from metadata --><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp.xml" pvzd:disposition="delete"><dsig:Signature Id="Signature-121297e2-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-121297e2-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-121297e2-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>d98nX4DIT7pYu3FglDHOGLdiLzXb9IcxeYhwD1d7K/c=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-121297e2-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-121297e2-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>stLxt2iAR8urhT6CpqO2pMs45TMvQZghcs0YSm3qnIc=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-121297e2-1">kPjRYFBgGexjmFbpnmywj7ltHz6B5dtMXQ4Tu7zvZ29lhbe1hz//xrkxF9+JgfDW
+ImevVchOTOR4pnXcNbPgnw==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-121297e2-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-121297e2-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-121297e2-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T09:57:36Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-121297e2-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 11:57:39,515 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/04/redmineIdentineticsCom_idpXml.xml
+2016-10-19 11:57:39,516 - INFO  [testPAtool_interactive.py:97]   -- Test PAT05: create PMP import file to revoke a certificate
+2016-10-19 11:57:39,525 - DEBUG  [PAtool.py:101] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/05/gondorMagwienGvAt_2011-cer.pem
+2016-10-19 11:57:39,530 - DEBUG  [PAtool.py:107] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/05/gondorMagwienGvAt_2011-cer_revoke.json
+2016-10-19 11:57:39,532 - INFO  [testPAtool_interactive.py:110]   -- Test PAT06a: create PMP import file for CA root certificate
+2016-10-19 11:57:39,535 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_root.pem
+2016-10-19 11:57:39,547 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_root.json
+2016-10-19 11:57:39,549 - INFO  [testPAtool_interactive.py:120]   -- Test PAT06b: create PMP import file for CA intermediate certificate
+2016-10-19 11:57:39,555 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_intermed.pem
+2016-10-19 11:57:39,566 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_intermed.json
+2016-10-19 11:57:39,568 - INFO  [testPAtool_interactive.py:133]   -- Test PAT07: create PMP import file for admin certificate (challenge)
+2016-10-19 12:13:38,862 - INFO  [testPAtool_interactive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_interactive.debug
+2016-10-19 12:13:38,866 - INFO  [testPAtool_interactive.py:32]   -- Test PAT01: create EntitDescriptor from certificate (pvzd:pvptype="R-Profile")
+2016-10-19 12:13:38,870 - DEBUG  [PAtool.py:50] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/01/redmineIdentineticsCom-cer.pem
+2016-10-19 12:13:38,879 - DEBUG  [PAtool.py:62] writing EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/01/redmineIdentineticsCom_idpXml.unsigned.xml
+2016-10-19 12:13:38,881 - INFO  [testPAtool_interactive.py:47]   -- Test PAT02a: sign EntityDescriptor w/o xml header to default output
+2016-10-19 12:13:41,151 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 12:13:41,152 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:13:46,374 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile"><dsig:Signature Id="Signature-6e998833-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-6e998833-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-6e998833-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>9PnKdG6SBw6H8qgUlEtS0aMHSo9JIOm+cIk4C2gR72A=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-6e998833-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-6e998833-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>7ORxCcwv1lll4A8RqIDDFIDo7FDi/djM1kamc7YXIfw=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-6e998833-1">zxzjh9LPmu0sQOqEV1wWcHOKdpHwb0YkiJ4sEaqr9mz7jnZpYg0omvrGCm8iqngf
+5gKqO37CwJ2nFwRNHF44zw==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-6e998833-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-6e998833-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-6e998833-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:13:41Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-6e998833-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:13:46,375 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/redmineIdentineticsCom_idp.xml
+2016-10-19 12:13:46,376 - INFO  [testPAtool_interactive.py:53]   -- Test PAT02b: sign EntityDescriptor with xml header to specified output
+2016-10-19 12:13:47,104 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+
+
+2016-10-19 12:13:47,104 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:13:50,120 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" entityID="https://idp.example.com/idp.xml"><dsig:Signature Id="Signature-40a1796f-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-40a1796f-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-40a1796f-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>JvmW5vKjaTEVHzOdiC/H3HSGNocGamY9sDeU86ld6TA=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-40a1796f-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-40a1796f-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>pLNvDhC1KNJCMDRpxn5gVq/odO3tZ0hNUG9axis1adg=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-40a1796f-1">ezYQEB3vz+Jn2jk1EqhHimMr0EvnVL8sEAwInvOhgJMHbgKgt2Yz1KDW59RZ0smv
+ewujsJXKOzsdsPdzL9Mxcg==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-40a1796f-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-40a1796f-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-40a1796f-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:13:47Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-40a1796f-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256" MaxKeySize="511" MinKeySize="256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MaxKeySize="4096" MinKeySize="2048"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:13:50,120 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/idpExampleCom_idpXml.xml
+2016-10-19 12:13:50,121 - INFO  [testPAtool_interactive.py:62]   -- Test PAT03a: sign EntityDescriptor with invalid SAML schema (OK with xmllint, failing with xerces)
+2016-10-19 12:13:50,501 - INFO  [testPAtool_interactive.py:69]   -- Test PAT03b: root is not md:EntityDescriptor
+2016-10-19 12:13:50,510 - INFO  [testPAtool_interactive.py:75]   -- Test PAT03c: EntityDescriptor not root (enveloping signature)
+2016-10-19 12:13:50,545 - INFO  [testPAtool_interactive.py:85]   -- Test PAT04: create request to delete EntityDescriptor from metadata
+2016-10-19 12:13:50,549 - DEBUG  [PAtool.py:88] creating delete request for entityID https://redmine.identinetics.com/idp.xml
+2016-10-19 12:13:50,550 - DEBUG  [PAtool.py:92] writing unsigned ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmp0so05qu_.xml
+2016-10-19 12:13:50,551 - DEBUG  [PAtool.py:95] signing ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmp0so05qu_.xml
+2016-10-19 12:13:50,793 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 12:13:50,794 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:13:53,805 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><!-- DELETE entity descriptor from metadata --><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp.xml" pvzd:disposition="delete"><dsig:Signature Id="Signature-c952d50e-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-c952d50e-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-c952d50e-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>d98nX4DIT7pYu3FglDHOGLdiLzXb9IcxeYhwD1d7K/c=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-c952d50e-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-c952d50e-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>j/x4Kjk2mkW3gRu5fv0pZSqx1vtzP+Z04Q0aqOZGxA4=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-c952d50e-1">L8lCyjUTfVhgLzw8yb4LKgWlKMquETdQ6F14W6bQOiqksgKlh/BuJINgi5JEizT3
+iBbb6x2GpHQocCmEjyRNMg==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-c952d50e-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-c952d50e-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-c952d50e-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:13:51Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-c952d50e-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:13:53,806 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/04/redmineIdentineticsCom_idpXml.xml
+2016-10-19 12:13:53,806 - INFO  [testPAtool_interactive.py:97]   -- Test PAT05: create PMP import file to revoke a certificate
+2016-10-19 12:13:53,810 - DEBUG  [PAtool.py:101] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/05/gondorMagwienGvAt_2011-cer.pem
+2016-10-19 12:13:53,814 - DEBUG  [PAtool.py:107] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/05/gondorMagwienGvAt_2011-cer_revoke.json
+2016-10-19 12:13:53,816 - INFO  [testPAtool_interactive.py:110]   -- Test PAT06a: create PMP import file for CA root certificate
+2016-10-19 12:13:53,820 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_root.pem
+2016-10-19 12:13:53,832 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_root.json
+2016-10-19 12:13:53,834 - INFO  [testPAtool_interactive.py:120]   -- Test PAT06b: create PMP import file for CA intermediate certificate
+2016-10-19 12:13:53,838 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_intermed.pem
+2016-10-19 12:13:53,845 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_intermed.json
+2016-10-19 12:13:53,847 - INFO  [testPAtool_interactive.py:133]   -- Test PAT07: create PMP import file for admin certificate (challenge)
+2016-10-19 12:36:54,115 - INFO  [testPAtool_interactive.py:20] DEBUG log: /Users/admin/devl/python/rhoerbe/PVZDpolman/PVZDpolman/log/testPAtool_interactive.debug
+2016-10-19 12:36:54,120 - INFO  [testPAtool_interactive.py:32]   -- Test PAT01: create EntitDescriptor from certificate (pvzd:pvptype="R-Profile")
+2016-10-19 12:36:54,123 - DEBUG  [PAtool.py:50] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/01/redmineIdentineticsCom-cer.pem
+2016-10-19 12:36:54,128 - DEBUG  [PAtool.py:62] writing EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/01/redmineIdentineticsCom_idpXml.unsigned.xml
+2016-10-19 12:36:54,131 - INFO  [testPAtool_interactive.py:47]   -- Test PAT02a: sign EntityDescriptor w/o xml header to default output
+2016-10-19 12:36:56,189 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 12:36:56,190 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:37:00,306 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp" pvzd:pvptype="R-Profile"><dsig:Signature Id="Signature-77fc95a2-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-77fc95a2-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-77fc95a2-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>9PnKdG6SBw6H8qgUlEtS0aMHSo9JIOm+cIk4C2gR72A=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-77fc95a2-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-77fc95a2-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>iNor7X74WR2KKFTA7DqR7bGHpi+8zHwdawZ8WQUgl68=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-77fc95a2-1">wOOV9yDqZ+M+SFCZLNAE8dzrHrnkR2dlY+E3D7kjzm6PpPKZz4+i09ULfpqZlK5z
+hpSdc03eDgKSNOSaYJHEgA==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-77fc95a2-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-77fc95a2-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-77fc95a2-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:36:56Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-77fc95a2-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+           <ds:X509Certificate>
+MIIGWTCCBUGgAwIBAgIHBePgB+cBPzANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UE
+BhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBE
+aWdpdGFsIENlcnRpZmljYXRlIFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENs
+YXNzIDEgUHJpbWFyeSBJbnRlcm1lZGlhdGUgU2VydmVyIENBMB4XDTE1MDYyMzIz
+MzcwOVoXDTE2MDYyMzE4NTMzMFowXDELMAkGA1UEBhMCQVQxITAfBgNVBAMTGHJl
+ZG1pbmUuaWRlbnRpbmV0aWNzLmNvbTEqMCgGCSqGSIb3DQEJARYbcG9zdG1hc3Rl
+ckBpZGVudGluZXRpY3MuY29tMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKC
+AQEAnXxrKNSei8bTKyLYrdTn3P1jiz6DFTX2yrs0hWOftiEYvvASipw4VmXIeSmh
+/vBG1S+TuLC4LpTKtk3wmp1teJ7EyyVvwodX4uMzX/22QoNgm99anN5YWrKM67NX
+wTj+ggbDtCuPldp38CZoe//dIE0bnwkYFHOVv029XUaE/OjN1cQOQWHce2SBhhEa
+FPacVyJ28G28WUU5SXwoH4dDF+vz6z4oLqoK5ziDMoG2QzfXMuEOT450SKVWx4h5
+tXAOMkF+r7f+ANtRu1T0ultlZsFnjQlbvQm3fCO/cXGWcmU+uEMMaQ9rsA/Et0q3
+1KfnM1aXjbyPH//wjxQDN2pDawIBA6OCAu8wggLrMAkGA1UdEwQCMAAwCwYDVR0P
+BAQDAgOoMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB0GA1UdDgQWBBSZfljkkzAE3aAS
+QCqATq18TJ7JMjAfBgNVHSMEGDAWgBTrQjTQmLCrn/Qbawj3zGQu7w4sRTA1BgNV
+HREELjAsghhyZWRtaW5lLmlkZW50aW5ldGljcy5jb22CEGlkZW50aW5ldGljcy5j
+b20wggFWBgNVHSAEggFNMIIBSTAIBgZngQwBAgEwggE7BgsrBgEEAYG1NwECAzCC
+ASowLgYIKwYBBQUHAgEWImh0dHA6Ly93d3cuc3RhcnRzc2wuY29tL3BvbGljeS5w
+ZGYwgfcGCCsGAQUFBwICMIHqMCcWIFN0YXJ0Q29tIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MAMCAQEagb5UaGlzIGNlcnRpZmljYXRlIHdhcyBpc3N1ZWQgYWNjb3Jk
+aW5nIHRvIHRoZSBDbGFzcyAxIFZhbGlkYXRpb24gcmVxdWlyZW1lbnRzIG9mIHRo
+ZSBTdGFydENvbSBDQSBwb2xpY3ksIHJlbGlhbmNlIG9ubHkgZm9yIHRoZSBpbnRl
+bmRlZCBwdXJwb3NlIGluIGNvbXBsaWFuY2Ugb2YgdGhlIHJlbHlpbmcgcGFydHkg
+b2JsaWdhdGlvbnMuMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly9jcmwuc3RhcnRz
+c2wuY29tL2NydDEtY3JsLmNybDCBjgYIKwYBBQUHAQEEgYEwfzA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3Auc3RhcnRzc2wuY29tL3N1Yi9jbGFzczEvc2VydmVyL2Nh
+MEIGCCsGAQUFBzAChjZodHRwOi8vYWlhLnN0YXJ0c3NsLmNvbS9jZXJ0cy9zdWIu
+Y2xhc3MxLnNlcnZlci5jYS5jcnQwIwYDVR0SBBwwGoYYaHR0cDovL3d3dy5zdGFy
+dHNzbC5jb20vMA0GCSqGSIb3DQEBCwUAA4IBAQBxCMlep+cG1iphOCWe0IydqcFy
+hcOFWAm9HDtx0EnK7gKM7z+E1zkpNpB4Ota4nk4kFKkAs5CiZcb3u3++J/CuNopW
+f4uJnqOn20RCKj3nBI70NEjpwvb+3/hTd84VifVuzZ2Bw8iJYBtsxAfM4UyKottn
+NOoNanEDSy7oEodCBEmLeYdOJTsKn7cVMa+3y8RBVAO0JmIoy6+qkLc95Plv+cw8
+AIUYMDYQygh9Zaew0cefHrOGiLUfs6Rz859ZSfCPkneQ/I7vAkLyj5LxmuQR4C7z
+WphkrMc9NaBfGgKEuFBdxdjM1m/r5+GP4m/rhqUSj293/wwM+jU5WY77XZnJ
+
+           </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:37:00,307 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/redmineIdentineticsCom_idp.xml
+2016-10-19 12:37:00,308 - INFO  [testPAtool_interactive.py:53]   -- Test PAT02b: sign EntityDescriptor with xml header to specified output
+2016-10-19 12:37:00,743 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+
+
+2016-10-19 12:37:00,744 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"           
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"   
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    entityID="https://idp.example.com/idp.xml">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod MinKeySize="256" MaxKeySize="511" Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+            <alg:SigningMethod MinKeySize="2048" MaxKeySize="4096" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:37:03,269 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" entityID="https://idp.example.com/idp.xml"><dsig:Signature Id="Signature-b161524a-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-b161524a-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-b161524a-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>JvmW5vKjaTEVHzOdiC/H3HSGNocGamY9sDeU86ld6TA=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-b161524a-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-b161524a-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>fik5ly3Q2xdr+nsF+AAKDapmqHgxYblb1YYxiu8h9Uk=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-b161524a-1">62L2+OKeSGDGaGACtIYdkCnmHY6AywU+cYdgp2ORmVShPwd3Rx3oDUCtQ/HQ2Vre
+V438nmFTH+YB0O/FFSTBgw==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-b161524a-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-b161524a-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-b161524a-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:37:00Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-b161524a-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+         <md:Extensions>
+            <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256" MaxKeySize="511" MinKeySize="256"/>
+            <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MaxKeySize="4096" MinKeySize="2048"/>
+            <!-- blacklisted: http://www.w3.org/2000/09/xmldsig#rsa-sha1 -->
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Test Driver IdP </mdui:DisplayName>
+                <mdui:Description xml:lang="en">Saml2Test Test Driver IdP</mdui:Description>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:DomainHint>https://github.com/rohe/fedlab/</mdui:DomainHint>
+                <mdui:IPHint>81.217.70.0/8</mdui:IPHint>
+                <mdui:GeolocationHint>geo:92.3308,17.0516</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC8jCCAlugAwIBAgIJAJHg2V5J31I8MA0GCSqGSIb3DQEBBQUAMFoxCzAJBgNVBAYTAlNFMQ0wCwYDVQQHEwRVbWVhMRgwFgYDVQQKEw9VbWVhIFVuaXZlcnNpdHkxEDAOBgNVBAsTB0lUIFVuaXQxEDAOBgNVBAMTB1Rlc3QgU1AwHhcNMDkxMDI2MTMzMTE1WhcNMTAxMDI2MTMzMTE1WjBaMQswCQYDVQQGEwJTRTENMAsGA1UEBxMEVW1lYTEYMBYGA1UEChMPVW1lYSBVbml2ZXJzaXR5MRAwDgYDVQQLEwdJVCBVbml0MRAwDgYDVQQDEwdUZXN0IFNQMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkJWP7bwOxtH+E15VTaulNzVQ/0cSbM5G7abqeqSNSs0l0veHr6/ROgW96ZeQ57fzVy2MCFiQRw2fzBs0n7leEmDJyVVtBTavYlhAVXDNa3stgvh43qCfLx+clUlOvtnsoMiiRmo7qf0BoPKTj7c0uLKpDpEbAHQT4OF1HRYVxMwIDAQABo4G/MIG8MB0GA1UdDgQWBBQ7RgbMJFDGRBu9o3tDQDuSoBy7JjCBjAYDVR0jBIGEMIGBgBQ7RgbMJFDGRBu9o3tDQDuSoBy7JqFepFwwWjELMAkGA1UEBhMCU0UxDTALBgNVBAcTBFVtZWExGDAWBgNVBAoTD1VtZWEgVW5pdmVyc2l0eTEQMA4GA1UECxMHSVQgVW5pdDEQMA4GA1UEAxMHVGVzdCBTUIIJAJHg2V5J31I8MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAMuRwwXRnsiyWzmRikpwinnhTmbooKm5TINPE7A7gSQ710RxioQePPhZOzkM27NnHTrCe2rBVg0EGz7QTd1JIwLPvgoj4VTi/fSha/tXrYUaqc9AqU1kWI4WN                        +vffBGQ09mo+6CffuFTZYeOhzP/2stAPwCTU4kxEoiy0KpZMANI=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/slo/post"/>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/slo/redirect"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/mni/post"/>
+        <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/mni/redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso/redirect"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.example.com/sso/post"/>
+        <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://idp.example.com/airs"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en">Saml2Test Harness</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Saml2Test Harness</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://github.com/rohe/saml2test/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Testiani</md:GivenName>
+        <md:SurName>Testosteroni</md:SurName>
+        <md:EmailAddress>testiani@example.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:37:03,269 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/02/idpExampleCom_idpXml.xml
+2016-10-19 12:37:03,271 - INFO  [testPAtool_interactive.py:62]   -- Test PAT03a: sign EntityDescriptor with invalid SAML schema (OK with xmllint, failing with xerces)
+2016-10-19 12:37:03,691 - INFO  [testPAtool_interactive.py:69]   -- Test PAT03b: root is not md:EntityDescriptor
+2016-10-19 12:37:03,696 - INFO  [testPAtool_interactive.py:75]   -- Test PAT03c: EntityDescriptor not root (enveloping signature)
+2016-10-19 12:37:03,700 - INFO  [testPAtool_interactive.py:85]   -- Test PAT04: create request to delete EntityDescriptor from metadata
+2016-10-19 12:37:03,704 - DEBUG  [PAtool.py:88] creating delete request for entityID https://redmine.identinetics.com/idp.xml
+2016-10-19 12:37:03,706 - DEBUG  [PAtool.py:92] writing unsigned ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmpribjlcxm.xml
+2016-10-19 12:37:03,707 - DEBUG  [PAtool.py:95] signing ED to /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmpribjlcxm.xml
+2016-10-19 12:37:03,947 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+
+
+2016-10-19 12:37:03,947 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="detached">
+    <sl:DataObject Reference=""></sl:DataObject>
+    <sl:TransformsInfo>
+	<dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>application/xml</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+  <sl:SignatureInfo>
+    <sl:SignatureEnvironment>
+      <sl:XMLContent>
+<!-- DELETE entity descriptor from metadata -->
+<md:EntityDescriptor entityID="https://redmine.identinetics.com/idp.xml" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:pvzd="http://egov.gv.at/pvzd1.xsd"
+    pvzd:disposition="delete">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+      </sl:XMLContent>
+    </sl:SignatureEnvironment>
+    <sl:SignatureLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Index="0">/md:EntityDescriptor</sl:SignatureLocation>
+  </sl:SignatureInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:37:06,452 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><!-- DELETE entity descriptor from metadata --><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:pvzd="http://egov.gv.at/pvzd1.xsd" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://redmine.identinetics.com/idp.xml" pvzd:disposition="delete"><dsig:Signature Id="Signature-474cbc01-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-474cbc01-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-474cbc01-1" URI=""><dsig:Transforms xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      </dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>d98nX4DIT7pYu3FglDHOGLdiLzXb9IcxeYhwD1d7K/c=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-474cbc01-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-474cbc01-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>s6HvTfEaAcwaumpYNH6ERieGwRPHscCeHa8x11pjprI=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-474cbc01-1">wvqeHLHQvGoXEYata5eryYRbScU2uYKRA95a/FrPr/U1hCkE+dp5Z8kuQ5kNPA2x
+lzRXDjm8axtXq+Cdlf+DYw==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-474cbc01-1"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-474cbc01-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-474cbc01-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:37:04Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-474cbc01-1"><xades:MimeType>application/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://redmine.identinetics.com/idp.xml/idp/unused"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:37:06,453 - DEBUG  [PAtool.py:82] writing signed EntityDescriptor to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/04/redmineIdentineticsCom_idpXml.xml
+2016-10-19 12:37:06,454 - INFO  [testPAtool_interactive.py:97]   -- Test PAT05: create PMP import file to revoke a certificate
+2016-10-19 12:37:06,457 - DEBUG  [PAtool.py:101] reading certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/05/gondorMagwienGvAt_2011-cer.pem
+2016-10-19 12:37:06,461 - DEBUG  [PAtool.py:107] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/05/gondorMagwienGvAt_2011-cer_revoke.json
+2016-10-19 12:37:06,463 - INFO  [testPAtool_interactive.py:110]   -- Test PAT06a: create PMP import file for CA root certificate
+2016-10-19 12:37:06,466 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_root.pem
+2016-10-19 12:37:06,482 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_root.json
+2016-10-19 12:37:06,483 - INFO  [testPAtool_interactive.py:120]   -- Test PAT06b: create PMP import file for CA intermediate certificate
+2016-10-19 12:37:06,486 - DEBUG  [PAtool.py:113] reading ca certificate from /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/testdata/PAT/06/StartComCa_intermed.pem
+2016-10-19 12:37:06,506 - DEBUG  [PAtool.py:119] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/06/StartComCa_intermed.json
+2016-10-19 12:37:06,507 - INFO  [testPAtool_interactive.py:133]   -- Test PAT07: create PMP import file for admin certificate (challenge)
+2016-10-19 12:37:06,514 - DEBUG  [PAtool.py:132] challenging admin to create a signature to extract signing cert
+2016-10-19 12:37:06,516 - DEBUG  [cresignedxml_seclay.py:85] data to be signed:
+{signed data format: base64(bzip2)}
+QlpoOTFBWSZTWWXX2OEAABmRgEADL+eeYCAAVEQZANpBoNUz1NqajTR5ETeYLU+nCd9dqGyqrp3JtfivlEIbY3oIG2OQembuGQmikxzSXIfF3JFOFCQZdfY4QA==
+
+
+2016-10-19 12:37:06,517 - DEBUG  [cresignedxml_seclay.py:87] SecLay request:
+<?xml version="1.0" encoding="UTF-8"?>
+<sl:CreateXMLSignatureRequest
+  xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#">
+  <sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>
+  <sl:DataObjectInfo Structure="enveloping">
+    <sl:DataObject>
+      <sl:XMLContent>{signed data format: base64(bzip2)}
+QlpoOTFBWSZTWWXX2OEAABmRgEADL+eeYCAAVEQZANpBoNUz1NqajTR5ETeYLU+nCd9dqGyqrp3JtfivlEIbY3oIG2OQembuGQmikxzSXIfF3JFOFCQZdfY4QA==</sl:XMLContent>
+    </sl:DataObject>
+    <sl:TransformsInfo>
+      <sl:FinalDataMetaInfo>
+        <sl:MimeType>text/plain</sl:MimeType>
+      </sl:FinalDataMetaInfo>
+    </sl:TransformsInfo>
+  </sl:DataObjectInfo>
+</sl:CreateXMLSignatureRequest> 
+
+2016-10-19 12:37:09,177 - DEBUG  [cresignedxml_seclay.py:105] security layer create signature response:
+<?xml version="1.0" encoding="UTF-8"?><sl:CreateXMLSignatureResponse xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:Signature Id="Signature-b2dd41f8-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"><dsig:SignedInfo Id="SignedInfo-b2dd41f8-1"><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/><dsig:Reference Id="Reference-b2dd41f8-1" URI="#Object-b2dd41f8-1"><dsig:Transforms><dsig:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"><XPath xmlns="http://www.w3.org/2002/06/xmldsig-filter2" Filter="intersect">id("Object-b2dd41f8-1")/node()</XPath></dsig:Transform><dsig:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>kso/9nZjb2NKJzJwRhKRgRP68uiNrE9fERRmDOxAjmM=</dsig:DigestValue></dsig:Reference><dsig:Reference Id="Reference-b2dd41f8-2" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-b2dd41f8-1"><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>TYOHfwdkFIQNUsVjmLnuB1VolljZHwHmSS1NKLUJxM4=</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue Id="SignatureValue-b2dd41f8-1">rGCX63hsXb0+cg2NDcp/RwI249bxhUEgrybre4IIEVcdjtNfQBKQX1kVi35Cys7i
+YZJ1IssGQEz48HS++LtWug==</dsig:SignatureValue><dsig:KeyInfo><dsig:X509Data><dsig:X509Certificate>MIIEjzCCA3egAwIBAgIDGP0iMA0GCSqGSIb3DQEBBQUAMIGXMQswCQYDVQQGEwJB
+VDFIMEYGA1UECgw/QS1UcnVzdCBHZXMuIGYuIFNpY2hlcmhlaXRzc3lzdGVtZSBp
+bSBlbGVrdHIuIERhdGVudmVya2VociBHbWJIMR4wHAYDVQQLDBVhLXNpZ24tUHJl
+bWl1bS1TaWctMDIxHjAcBgNVBAMMFWEtc2lnbi1QcmVtaXVtLVNpZy0wMjAeFw0x
+NTA3MTAxMDI0MTNaFw0yMDA3MTAwODI0MTNaMF4xCzAJBgNVBAYTAkFUMRYwFAYD
+VQQDDA1SYWluZXIgSMO2cmJlMQ8wDQYDVQQEDAZIw7ZyYmUxDzANBgNVBCoMBlJh
+aW5lcjEVMBMGA1UEBRMMODkxMzQ4MDYxMzEwMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEitOBhEXzDGJ1V9idI3RvmHl4g5FYTqB0sp+KcvbwEFg1briOreGj2zXN
+OOhEzM+mDljuCv5D7QkHlHCk1Evc3KOCAeUwggHhMBEGA1UdDgQKBAhB3LUFPwWu
+4jAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0jBAwwCoAITd/h/0vZyd8wCQYDVR0TBAIw
+ADB7BggrBgEFBQcBAQRvMG0wQgYIKwYBBQUHMAKGNmh0dHA6Ly93d3cuYS10cnVz
+dC5hdC9jZXJ0cy9hLXNpZ24tUHJlbWl1bS1TaWctMDJhLmNydDAnBggrBgEFBQcw
+AYYbaHR0cDovL29jc3AuYS10cnVzdC5hdC9vY3NwMFkGA1UdIARSMFAwRAYGKigA
+EQELMDowOAYIKwYBBQUHAgEWLGh0dHA6Ly93d3cuYS10cnVzdC5hdC9kb2NzL2Nw
+L2Etc2lnbi1QcmVtaXVtMAgGBgQAizABATAnBggrBgEFBQcBAwEB/wQYMBYwCAYG
+BACORgEBMAoGCCsGAQUFBwsBMIGaBgNVHR8EgZIwgY8wgYyggYmggYaGgYNsZGFw
+Oi8vbGRhcC5hLXRydXN0LmF0L291PWEtc2lnbi1QcmVtaXVtLVNpZy0wMixvPUEt
+VHJ1c3QsYz1BVD9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0P2Jhc2U/b2JqZWN0
+Y2xhc3M9ZWlkQ2VydGlmaWNhdGlvbkF1dGhvcml0eTANBgkqhkiG9w0BAQUFAAOC
+AQEA08DFHxU01lhHnx/5s/n+Ue/LUQFNLaTxQYbmKuQ2zdiJBI33TQptMCQQITGZ
+vJJBeTBgGguVu5547+BdnxonyULw+GkfBqR0ZBcS7ejEx9ujRnTZdUYNAXkTMnk2
+5YAAX4DDgm3CHV850LVUt++ofaYgzv+HNSPGvu3gD3qGp6tJ1nlns0SVCIMBE+LH
+Fh+9lBjCHCmPWosfEcCv2vSmL/PkQGtXKhegUPnnAJFzDqK4xrRm3uj53TXZwdWz
+YUWYeUggnvzck5sUQCtGlFLkaiAvS4dtnS9DuRuq82kqzHoTTSb6hWcVCoVBx4Os
+woOXeF6xhaCm7oYL6Q9fPi1zCQ==</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo><dsig:Object Id="Object-b2dd41f8-1">{signed data format: base64(bzip2)}
+QlpoOTFBWSZTWWXX2OEAABmRgEADL+eeYCAAVEQZANpBoNUz1NqajTR5ETeYLU+nCd9dqGyqrp3JtfivlEIbY3oIG2OQembuGQmikxzSXIfF3JFOFCQZdfY4QA==</dsig:Object><dsig:Object Id="Object-b2dd41f8-2"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-b2dd41f8-1" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#"><xades:SignedProperties Id="SignedProperties-b2dd41f8-1"><xades:SignedSignatureProperties><xades:SigningTime>2016-10-19T10:37:06Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><dsig:DigestValue>LHR6mkaPTEpnE8VKRFnHDKIutB/Z+ZLmmMGxQRvtKFE=</dsig:DigestValue></xades:CertDigest><xades:IssuerSerial><dsig:X509IssuerName>CN=a-sign-Premium-Sig-02,OU=a-sign-Premium-Sig-02,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</dsig:X509IssuerName><dsig:X509SerialNumber>1637666</dsig:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-b2dd41f8-1"><xades:MimeType>text/plain</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></dsig:Object></dsig:Signature></sl:CreateXMLSignatureResponse>
+
+2016-10-19 12:37:09,183 - DEBUG  [xmlsigverifyer_moasp.py:47] verifying signature of /var/folders/qb/rz_y77fn17ngdfkxq3f5fwcc0000gp/T/tmp2a7k0gor.xml using moa-sp, config path=/Users/admin/devl/python/rhoerbe/PVZDpolman/conf/moa-spss/MOASPSSConfiguration.xml
+2016-10-19 12:37:15,531 - DEBUG  [PAtool.py:160] writing PMP input file to /Users/admin/devl/python/rhoerbe/PVZDpolman/PolicyManager/tests/work/PAT/07/add_admincert.json
