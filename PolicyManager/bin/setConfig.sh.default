@@ -8,12 +8,13 @@ if [ -z "$PROJ_HOME" ]; then
 fi
 
 if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]; then
-    #  CentOS7, docker
-    export POLMAN_REPODIR=/var/lib/git/pvmd
-    export POLMAN_PEPOUTDIR=/var/lib/pyff/input
+    # docker container LiveCD/PVZDclient
+    PMP_HOME=~transfer/PMP
+    export LOGDIR=~transfer/log/pvzd
+    export POLMAN_REPODIR=$PMP_HOME/git/pvmd
+    export POLMAN_PEPOUTDIR=$PMP_HOME/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
-    export POLMAN_TRUSTEDCERTS=/etc/pki/pvzd/trustedcerts.json
-    export LOGDIR=/var/log/pvzd
+    # export POLMAN_TRUSTEDCERTS=./PMP/trustedcerts.json
 elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
     # RHEL6
     export POLMAN_REPODIR=/var/lib/git/pvmd
@@ -21,7 +22,7 @@ elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
     export POLMAN_TRUSTEDCERTS=/etc/pki/sign/trustedcerts.json
     export LOGDIR=/var/log/pvzd
-elif [[ "$HOSTNAME" == "devl8.local" || "$HOSTNAME" == "kalypso" ]]; then
+elif [[ "$HOSTNAME" == "devl10.local" || "$HOSTNAME" == "kalypso" ]]; then
     #  used for OSX/Fedora dev enc
     export POLMAN_REPODIR=$PROJ_HOME/PolicyManager/tests/work/policyDirectory
     export POLMAN_PEPOUTDIR=$PROJ_HOME/PolicyManager/tests/work/pepoutdir
@@ -34,3 +35,5 @@ else
 fi
 
 export PEPLOGLEVEL='INFO'
+
+mkdir -p $POLMAN_PEPOUTDIR $POLMAN_REPODIR/policydir/ LOGDIR

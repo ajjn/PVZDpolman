@@ -1,8 +1,10 @@
 # Policy Manager/PAtool How-To
 
-PAtool hat 2 Funktionen:
- a) SAML Metadaten erstellen (create, sign, delete EntityDescriptors)
- b) PMP Inputdaten für das Policy Store erzeugen (Organisationen, Domains, Admin Zertifikate, Issuer Zertifiakte und Zertifikatssperren)
+PAtool hat 2 Funktionen um die Portalmeldungen und Meldungen von Portaladmins zu unterstützen:
+
+ 1. SAML Metadaten erstellen (create, sign, delete EntityDescriptors)
+ 2. PMP Inputdaten für das Policy Store erzeugen (Organisationen, Domains, Admin Zertifikate, 
+    Issuer Zertifiakte und Zertifikatssperren)
 
 ## Vorbereitung
 

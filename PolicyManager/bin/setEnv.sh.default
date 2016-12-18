@@ -2,32 +2,27 @@
 # set paths for devl and test systems
 
 if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]; then
-    # docker container from LieveCD
+    # docker container from LiveCD
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
     export PROJ_HOME=/opt/PVZDpolman
     # source /opt/rh/rh-python34/enable # uncomment this line for scl python
     export py3=$PY3 # set in Dockerfile
-    export PYJNIUS_ACTIVATE=
-    export LOGDIR='/var/log/pvzd'
 elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
     #  RHEL6
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
     export PROJ_HOME=/home/gal/pvpmeta/PVZDbackend/opt/PVZDpolman
     export py3='scl enable rh-python34 -- python'
-    export LOGDIR='/var/log/pvzd'
-elif [[ "$HOSTNAME" == "devl8.local" ]]; then
+elif [[ "$HOSTNAME" == "devl10.local" ]]; then
     #  used for OSX development env (r2h2)
     export devlhome=~/devl
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home
-    export PROJ_HOME=$devlhome/python/rhoerbe/PVZDpolman
+    export PROJ_HOME=$devlhome/python/identinetics/PVZDpolman
     export py3=~/virtualenvs/pvzd34/bin/python
-    export LOGDIR="$PROJ_HOME/PVZDpolman/log"
 elif [[ "$HOSTNAME" == "kalypso" ]]; then
     #  used for Linux development env (r2h2)
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PROJ_HOME=/opt/PVZDpolman
     export py3=/usr/bin/python3.4
-    export LOGDIR="$PROJ_HOME/PVZDpolman/log"
 else
     echo "no environment defined for this host"
     exit 1
@@ -106,3 +101,6 @@ $PROJ_HOME/lib/pvzdVerifySig.jar"
 
 export DYLD_LIBRARY_PATH=$JAVA_HOME/jre/lib/server
 export PYTHONPATH=$PYTHONPATH:$PROJ_HOME/PolicyManager/src
+export PATH=$PATH:$PROJ_HOME/PolicyManager/bin
+
+export PVZDPOLMAN_VERSION=$(echo "PolicyManager Version $(cat $PROJ_HOME/PolicyManager/VERSION)")
