@@ -28,7 +28,7 @@ else
     exit 1
 fi
 
-export PYJNIUS_ACTIVATE     # remove this line to use javabridge instead of pyjnius
+export PYJNIUS_ACTIVATE=     # remove this line to use javabridge instead of pyjnius
 
 # --- do not change below this line for target system configuration
 export CLASSPATH="$JAVA_HOME/lib/jconsole.jar:\

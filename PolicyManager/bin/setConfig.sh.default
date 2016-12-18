@@ -9,8 +9,8 @@ fi
 
 if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]; then
     # docker container LiveCD/PVZDclient
-    PMP_HOME=~transfer/PMP
-    export LOGDIR=~transfer/log/pvzd
+    PMP_HOME=~/transfer/PMP
+    export LOGDIR=~/transfer/log/pvzd
     export POLMAN_REPODIR=$PMP_HOME/git/pvmd
     export POLMAN_PEPOUTDIR=$PMP_HOME/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
@@ -36,4 +36,4 @@ fi
 
 export PEPLOGLEVEL='INFO'
 
-mkdir -p $POLMAN_PEPOUTDIR $POLMAN_REPODIR/policydir/ LOGDIR
+mkdir -p $POLMAN_PEPOUTDIR $POLMAN_REPODIR/policydir/ $LOGDIR
