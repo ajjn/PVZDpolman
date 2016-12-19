@@ -21,7 +21,7 @@ class AODSFileHandler():
             self._aodsFile += '.xml'
         if cliClient.args.noxmlsign and self._aodsFile[-5:] != '.json':
             self._aodsFile += '.json'
-        if not os.path.isfile(self._aodsFile):
+        if not os.path.isfile(self._aodsFile) and cliClient.args.subcommand not in ('create', 'scratch'):
             errmsg = '--- Policy journal not found: ' + self._aodsFile + ' fix path or create'
             logging.error(errmsg)
             raise InvalidArgumentValueError(errmsg)
