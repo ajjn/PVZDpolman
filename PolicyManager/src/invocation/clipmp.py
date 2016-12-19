@@ -1,11 +1,22 @@
 import argparse, getpass, os, sys
 from . import AbstractInvocation
+from constants import LOGLEVELS
 from userexceptions import *
 
 __author__ = 'r2h2'
 
 class CliPmp(AbstractInvocation):
     """ define CLI invocation for PMP. Test runner can use this by passing testargs """
+
+    def get_from_env(self, argname):
+        # argname must be _lowercase_ (for self.args); the env var mnust be uppercase
+        if not getattr(self.args, argname, False):
+            env_name = 'POLMAN_%s' % argname.upper()
+            if env_name in os.environ:
+                setattr(self.args, argname, os.environ[env_name])
+            else:
+                raise InvalidArgumentValueError('neither --%s nor %s provided' % (argname, env_name))
+
     def __init__(self, testargs=None):
         here = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         version = open(os.path.join(here, 'VERSION')).read()
@@ -20,6 +31,8 @@ class CliPmp(AbstractInvocation):
              help='trace hash chain computation')
         self._parser.add_argument('-n', '--noxmlsign', action="store_true",
              help='do not sign policy journal with xml signature')
+        self._parser.add_argument('-L', '--loglevel', dest='loglevel_str', choices=LOGLEVELS.keys(),
+             help='Level for file logging')
         self._parser.add_argument('-p', '--print-args', dest='printargs', action="store_true",
              help='print invocation arguments')
         self._parser.add_argument('-r', '--registrant', dest='registrant', default='',
@@ -70,6 +83,9 @@ class CliPmp(AbstractInvocation):
 
         self.args.list_trustedcerts = False  # required by aodsfilehanlder.__init__(), but only used in PEP
 
+        if not hasattr(self.args, 'loglevel_str') or self.args.loglevel_str is None:
+            self.args.loglevel_str = 'INFO'
+
         if self.args.subcommand == 'append':
             self.args.inputfilename = self.args.input.name
             self.args.input.close()  # why? unittest comlpains about files left open -> close here and reopen later
@@ -83,3 +99,6 @@ class CliPmp(AbstractInvocation):
         if self.args.printargs:
             for opt in [a for a in dir(self.args) if not a.startswith('_')]:
                 print(opt + '=' + str(getattr(self.args, opt)))
+
+        self.get_from_env('aods')
+        self.get_from_env('trustedcerts')

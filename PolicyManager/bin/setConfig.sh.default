@@ -14,7 +14,8 @@ if [[ "$HOSTNAME" == pvzd-client* || "$HOSTNAME" == "x11-app" || -e "/DOCKER" ]]
     export POLMAN_REPODIR=$PMP_HOME/git/pvmd
     export POLMAN_PEPOUTDIR=$PMP_HOME/pyff/input
     export POLMAN_AODS=$POLMAN_REPODIR/policydir/aods.xml
-    # export POLMAN_TRUSTEDCERTS=./PMP/trustedcerts.json
+    export POLMAN_XFER=/home/liveuser/transfer
+    export POLMAN_TRUSTEDCERTS=./PMP/policydir/trustedcerts.json
 elif [[ "$HOSTNAME" == "vmdev9015.adv.magwien.gv.at" ]]; then
     # RHEL6
     export POLMAN_REPODIR=/var/lib/git/pvmd
