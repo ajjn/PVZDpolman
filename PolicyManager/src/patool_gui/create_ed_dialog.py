@@ -15,8 +15,6 @@ class CreateEDDialog(tk.Toplevel):
         row1.pack(fill=tk.BOTH, expand=True)
         row2 = tk.Frame(self)
         row2.pack(fill=tk.X, expand=True)
-        row3 = tk.Frame(self)
-        row3.pack(fill=tk.BOTH, expand=True)
         row4 = tk.Frame(self)
         row4.pack(fill=tk.BOTH, expand=True)
 
@@ -58,29 +56,7 @@ class CreateEDDialog(tk.Toplevel):
         w.pack(side=tk.LEFT,
                padx=self.parent.get_padding(),
                pady=self.parent.get_padding(),
-               fill=tk.X, expand=True)
-        menu = w.nametowidget(w.menuname) 
-        menu.configure(font=self.parent.custom_font)
-        # Row 3 has entityID suffix entry and dropdownlist
-        tk.Label(row3, font=self.parent.custom_font, text="entityID Suffix: ").pack(side=tk.LEFT,
-                                                           padx=self.parent.get_padding(),
-                                                           pady=self.parent.get_padding())
-
-        self.entityID_suffix_entry = tk.Entry(row3, font=self.parent.custom_font)
-        self.entityID_suffix_entry.pack(side=tk.LEFT, fill=tk.X,
-                              expand=True, padx=self.parent.get_padding(),
-                              pady=self.parent.get_padding())
-
-        self.entityID_suffix = tk.StringVar()
-        self.entityID_suffix.set("") # default value
-        # Track the value change to update the entity field
-        self.entityID_suffix.trace("w", self.update_entityID_suffix_entry)
-        w = tk.OptionMenu(row3, self.entityID_suffix,
-                      *self.parent.get_recent_entityID_suffices())
-        w.pack(side=tk.LEFT,
-               padx=self.parent.get_padding(),
-               pady=self.parent.get_padding(),
-               fill=tk.X, expand=True)
+               fill=tk.X, expand=False)
         menu = w.nametowidget(w.menuname) 
         menu.configure(font=self.parent.custom_font)
 
@@ -109,21 +85,11 @@ class CreateEDDialog(tk.Toplevel):
         self.entityID_entry.delete(0, "end")
         self.entityID_entry.insert(0, text)
 
-    def set_entityID_suffix_entry(self, text):
-        self.entityID_suffix_entry.delete(0, "end")
-        self.entityID_suffix_entry.insert(0, text)
-
     def get_entityID_entry(self):
         return self.entityID_entry.get()
 
-    def get_entityID_suffix_entry(self):
-        return self.entityID_suffix_entry.get()
-
     def update_entityID_entry(self, *args):
         self.set_entityID_entry(self.recent_entityID.get())
-        
-    def update_entityID_suffix_entry(self, *args):
-        self.set_entityID_suffix_entry(self.entityID_suffix.get())
         
     def get_samlrole(self):
         if self.saml.get() == 1:
@@ -142,11 +108,9 @@ class CreateEDDialog(tk.Toplevel):
             return
         # Let us add the entityID to the recents
         self.parent.get_recent_entityIDs().add_recent(self.get_entityID_entry())
-        self.parent.get_recent_entityID_suffices().add_recent(self.get_entityID_suffix_entry())
 
         # Invoke the creation and destroy the dialog
         self.parent.set_entityID(self.get_entityID_entry())
-        self.parent.set_entityID_suffix(self.get_entityID_suffix_entry())
         self.parent.set_samlrole(self.get_samlrole())
         self.parent.createED()
         self.destroy()

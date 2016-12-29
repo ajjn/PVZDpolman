@@ -3,6 +3,7 @@ __author__ = 'r2h2'
 import json
 import sys
 import os
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))  # TODO: make this directory a package
 import re
 import logging
 import constants
@@ -22,7 +23,6 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import font
 from send_mail import send_files_via_email
-sys.path.append('..')  # TODO: make this directory a package
 from PAtool import run_me
 from config_reader import ConfigReader
 
@@ -46,6 +46,19 @@ class PAtoolGUI(tk.Frame):
         self.conditional_update_directory_listing()
         self.parent.after(1000, self.updateGUI)
         return True
+
+    def on_double_click_input_list(self, event):
+        selection = self.get_selected_input()
+        if os.path.isdir(os.path.join(self.get_input_entry(), selection)):
+            self.set_input_dir(os.path.join(self.get_input_entry(), selection))
+            self.update_directory_listing()
+
+    def on_double_click_output_list(self, event):
+        selection = self.get_selected_output()[0]
+        if os.path.isdir(os.path.join(self.get_output_entry(), selection)):
+            self.set_output_dir(os.path.join(self.get_output_entry(), selection))
+            self.update_directory_listing()
+
     
     def conditional_update_directory_listing(self):
         #self.set_input_entry(self.get_input_dir())
@@ -53,6 +66,9 @@ class PAtoolGUI(tk.Frame):
         if not self.any_input_file_selected():
             try:
                 self.clear_input_list()
+                # Add dir up (two points)
+                if os.path.isdir(os.path.join(self.get_input_dir(), '..')):
+                    self.add_input_file('..')
                 for file in os.listdir(self.get_input_dir()):
                     self.add_input_file(file)
             except:
@@ -60,6 +76,9 @@ class PAtoolGUI(tk.Frame):
         if not self.any_output_file_selected():
             try:
                 self.clear_output_list()
+                # Add dir up (two points)
+                if os.path.isdir(os.path.join(self.get_output_dir(), '..')):
+                    self.add_output_file('..')
                 for file in os.listdir(self.get_output_dir()):
                     self.add_output_file(file)
             except:
@@ -70,12 +89,18 @@ class PAtoolGUI(tk.Frame):
         self.set_output_entry(self.get_output_dir())
         try:
             self.clear_input_list()
+            # Add dir up (two points)
+            if os.path.isdir(os.path.join(self.get_input_dir(), '..')):
+                self.add_input_file('..')
             for file in os.listdir(self.get_input_dir()):
                 self.add_input_file(file)
         except:
             logging.error("Could not list dir " + self.get_input_dir())
         try:
             self.clear_output_list()
+            # Add dir up (two points)
+            if os.path.isdir(os.path.join(self.get_output_dir(), '..')):
+                self.add_output_file('..')
             for file in os.listdir(self.get_output_dir()):
                 self.add_output_file(file)
         except:
@@ -87,7 +112,10 @@ class PAtoolGUI(tk.Frame):
         self.output_entry.bind("<Return>", self.add_output_file_from_entry)
         # Bind window closing event
         self.parent.protocol("WM_DELETE_WINDOW", self.on_closing)
-
+        # Double click event on directory listings
+        self.input_file_list.bind('<Double-Button-1>', self.on_double_click_input_list)
+        self.output_file_list.bind('<Double-Button-1>', self.on_double_click_output_list)
+        
     def on_closing(self):
         print("Exiting")
         # Save settings
@@ -99,12 +127,21 @@ class PAtoolGUI(tk.Frame):
             with open(os.path.join(os.environ['HOME'], self.conf.GUI_SAVED_SETTINGS_FILE), 'rb') as fd:
                 s = fd.read().decode('UTF-8')
                 settings = json.loads(s)
-            self.set_input_dir(settings['input_dir'])
-            self.set_output_dir(settings['output_dir'])
+            # Set input and output dirs from environment variables
+            scriptdir = os.path.dirname(os.path.realpath(__file__))
+            if 'PATOOL_INDIR' in os.environ:
+                self.set_input_dir(os.environ['PATOOL_INDIR'])
+            else:
+                # Fallback to default
+                self.set_input_dir(os.path.join(scriptdir, '../test/testdata'))
+            if 'PATOOL_OUTDIR' in os.environ:
+                self.set_output_dir(os.environ['PATOOL_OUTDIR'])
+            else:
+                # Fallback to default
+                self.set_output_dir(os.path.join(scriptdir, '../test/work'))
             self.set_padding(settings['padding'])
             self.set_geometry(settings['geometry'])
             self.set_recent_entityIDs(Recents(items=settings['recent_entityIDs']))
-            self.set_recent_entityID_suffices(Recents(items=settings['recent_entityID_suffices']))
         except Exception as e:
             logging.warning("Could not read GUI settings, using defaults instead: " + str(e))
             self.initialize_saveable_variables()
@@ -116,7 +153,6 @@ class PAtoolGUI(tk.Frame):
         settings['padding'] = self.get_padding()
         settings['geometry'] = self.get_geometry()
         settings['recent_entityIDs'] = self.get_recent_entityIDs()
-        settings['recent_entityID_suffices'] = self.get_recent_entityID_suffices()
         try:
             fpath = os.path.join(os.environ['HOME'], self.conf.GUI_SAVED_SETTINGS_FILE)
             with open(fpath, 'wb') as fd:
@@ -139,14 +175,12 @@ class PAtoolGUI(tk.Frame):
         self.parent.geometry(geometry)
         self.set_padding(self.conf.PADDING)
         self.set_recent_entityIDs(Recents(self.conf.RECENTS_MAX_SIZE))
-        self.set_recent_entityID_suffices(Recents(self.conf.RECENTS_MAX_SIZE))
         
     def initialize_variables(self):
         self.load_variables()
         self.set_input_file("")
         self.set_output_files([])
         self.set_entityID("")
-        self.set_entityID_suffix("")
         self.set_samlrole("")
         
     def get_window_x(self):
@@ -342,12 +376,6 @@ class PAtoolGUI(tk.Frame):
     def get_recent_entityIDs(self):
         return self.recent_entityIDs
 
-    def set_recent_entityID_suffices(self, recents):
-        self.recent_entityID_suffices = recents
-
-    def get_recent_entityID_suffices(self):
-        return self.recent_entityID_suffices
-
     def set_padding(self, padding):
         self.padding = padding
 
@@ -359,12 +387,6 @@ class PAtoolGUI(tk.Frame):
 
     def get_entityID(self):
         return self.entityID
-
-    def set_entityID_suffix(self, id_suffix):
-        self.entityID_suffix = id_suffix
-
-    def get_entityID_suffix(self):
-        return self.entityID_suffix
 
     def get_selected_input(self):
         indices = self.input_file_list.curselection()
@@ -624,8 +646,6 @@ class PAtoolGUI(tk.Frame):
         cli += " -e " + str(self.get_entityID())
         cli += " -o " + str(self.get_output_dir())
         cli += " -r " + str(self.get_samlrole())
-        if self.get_entityID_suffix() != "":
-            cli += " -S " + str(self.get_entityID_suffix())
         if self.sign_after_create:
             cli += " -s "
         cli += " " + str(os.path.join(self.get_input_dir(),
@@ -640,8 +660,6 @@ class PAtoolGUI(tk.Frame):
         cli += " -e " + str(self.get_entityID())
         cli += " -o " + str(self.get_output_dir())
         cli += " -r " + str(self.get_samlrole())
-        if self.get_entityID_suffix() != "":
-            cli += " -S " + str(self.get_entityID_suffix())
         cli += " -s " 
         cli += str(os.path.join(self.get_input_dir(),
                                 self.get_input_file()))
@@ -718,8 +736,13 @@ class PAtoolGUI(tk.Frame):
         sys.argv = command_line_string.split()
 
     def invoke_PAtool(self):
-        self.log("Invoking PAtool.py")
-        run_me()
+        try:
+            run_me()
+        except Exception as e:
+            messagebox.showerror("Error", str(e.args))
+        self.log("Operation completed")
+
+            
     
 root = tk.Tk()
 app = PAtoolGUI(master=root)

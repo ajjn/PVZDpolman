@@ -20,10 +20,10 @@
         "FROM": "sender@domain.com"
     },
     "Default window sizes": {
-        "CREATE_ED_WINDOW_WIDTH": 350,
+        "CREATE_ED_WINDOW_WIDTH": 950,
         "MAIN_WINDOW_HEIGHT": 600,
         "CREATE_ED_WINDOW_HEIGHT": 150,
-        "DELETE_ED_WINDOW_WIDTH": 350,
+        "DELETE_ED_WINDOW_WIDTH": 950,
         "DELETE_ED_WINDOW_HEIGHT": 120,
         "MAIN_WINDOW_WIDTH": 900
     }

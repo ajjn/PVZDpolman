@@ -37,7 +37,7 @@ class DeleteEDDialog(tk.Toplevel):
         w.pack(side=tk.LEFT,
                padx=self.parent.get_padding(),
                pady=self.parent.get_padding(),
-               fill=tk.X, expand=True)
+               fill=tk.X, expand=False)
         menu = w.nametowidget(w.menuname) 
         menu.configure(font=self.parent.custom_font)
 
