@@ -61,6 +61,10 @@ class PAtoolGUI(tk.Frame):
 
     
     def conditional_update_directory_listing(self):
+        if self.input_scrollbar.get()[0] != 0:
+            return
+        if self.output_scrollbar.get()[0] != 0:
+            return
         #self.set_input_entry(self.get_input_dir())
         #self.set_output_entry(self.get_output_dir())
         if not self.any_input_file_selected():
@@ -508,7 +512,7 @@ class PAtoolGUI(tk.Frame):
             self.add_output_file(file)
 
     def browse_for_input(self):
-        directory = filedialog.askdirectory()
+        directory = filedialog.askdirectory(initialdir=self.get_input_dir())
         #validate directory
         if self.validate_dir(directory):
             try:
@@ -522,7 +526,7 @@ class PAtoolGUI(tk.Frame):
             self.set_input_entry(directory)
         
     def browse_for_output(self):
-        directory = filedialog.askdirectory()
+        directory = filedialog.askdirectory(initialdir=self.get_output_dir())
         if self.validate_dir(directory):
             try:
                 self.clear_output_list()
@@ -739,6 +743,7 @@ class PAtoolGUI(tk.Frame):
         try:
             run_me()
         except Exception as e:
+            self.log("Error: " + str(e.args))
             messagebox.showerror("Error", str(e.args))
         self.log("Operation completed")
 
